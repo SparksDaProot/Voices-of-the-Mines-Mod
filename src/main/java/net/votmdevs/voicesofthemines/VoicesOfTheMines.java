@@ -14,6 +14,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.votmdevs.voicesofthemines.block.ModBlocks;
+import net.votmdevs.voicesofthemines.item.ModCreativeModeTabs;
+import net.votmdevs.voicesofthemines.item.ModItems;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -27,6 +30,12 @@ public class VoicesOfTheMines
 
     public VoicesOfTheMines(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
+
+
+        ModCreativeModeTabs.register(modEventBus);
+
+        ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
@@ -43,6 +52,7 @@ public class VoicesOfTheMines
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
+
 
     }
 
