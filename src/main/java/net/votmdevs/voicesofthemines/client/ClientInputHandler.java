@@ -31,7 +31,7 @@ public class ClientInputHandler {
     private static net.minecraft.client.resources.sounds.SoundInstance atvSoundInstance = null;
     private static String currentAtvSoundState = "none"; // none, idle, drive_start, drive_loop
     private static int atvSoundTimer = 0;
-    
+
     private static DroneLoopSound droneSoundInstance = null;
 
     public static int knockdownTicks = 0;

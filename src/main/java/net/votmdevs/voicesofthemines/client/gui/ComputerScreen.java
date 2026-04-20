@@ -21,11 +21,19 @@ import java.util.Map;
 public class ComputerScreen extends Screen {
     private static final ResourceLocation LOADING_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/loading_sheet.png");
 
+    private static final ResourceLocation DELETE_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/delete.png");
+    private static final ResourceLocation EMAIL_USER_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/email_user_generic.png");
+
     public static int POINTS = 0;
     public static int UPG_CURSOR = 0;
     public static int UPG_PING = 0;
     public static int UPG_PROC_SPEED = 0;
     public static int UPG_PROC_LVL = 0;
+
+    public static List<net.votmdevs.voicesofthemines.world.PlayerData.Email> EMAILS = new ArrayList<>();
+    private int selectedEmailIndex = -1;
+    private float emailListScroll = 0f;
+    private float emailTextScroll = 0f;
 
     private final BlockPos blockPos;
 
@@ -187,40 +195,28 @@ public class ComputerScreen extends Screen {
         searchBox.setVisible(activeTab == 1);
 
         if (activeTab == 0) {
+            // upgrades
             guiGraphics.drawString(this.font, "TERMINAL_FIND", startX + 20, startY + 40, 0xFFFFFF, false);
             drawUpgradeRow(guiGraphics, startX + 20, startY + 55, "cursor_speed", UPG_CURSOR, 16, getCost("cursor_speed", UPG_CURSOR, 16), mouseX, mouseY);
             drawUpgradeRow(guiGraphics, startX + 20, startY + 75, "ping_cooldown", UPG_PING, 16, getCost("ping_cooldown", UPG_PING, 16), mouseX, mouseY);
-
             guiGraphics.drawString(this.font, "TERMINAL_PROCESSING", startX + 20, startY + 105, 0xFFFFFF, false);
             drawUpgradeRow(guiGraphics, startX + 20, startY + 120, "processing_speed", UPG_PROC_SPEED, 16, getCost("processing_speed", UPG_PROC_SPEED, 16), mouseX, mouseY);
             drawUpgradeRow(guiGraphics, startX + 20, startY + 140, "processing_level", UPG_PROC_LVL, 3, getCost("processing_level", UPG_PROC_LVL, 3), mouseX, mouseY);
         }
         else if (activeTab == 1) {
             // store
-            int listX = startX + 20;
-            int listY = startY + 55;
-            int listW = 170;
-            int listH = 160;
-
-            int cartX = startX + 200;
-            int cartY = startY + 35;
-            int cartW = 180;
-            int cartH = 180;
+            int listX = startX + 20; int listY = startY + 55; int listW = 170; int listH = 160;
+            int cartX = startX + 200; int cartY = startY + 35; int cartW = 180; int cartH = 180;
 
             double scale = this.minecraft.getWindow().getGuiScale();
             RenderSystem.enableScissor((int)(listX * scale), (int)((this.height - listY - listH) * scale), (int)(listW * scale), (int)(listH * scale));
-
             for (int i = 0; i < filteredItems.size(); i++) {
                 StoreItem item = filteredItems.get(i);
                 int itemY = listY + (i * 24) - (int)storeScroll;
-
-                if (itemY > listY + listH || itemY + 24 < listY) continue; // Не рисуем то, что за кадром
-
+                if (itemY > listY + listH || itemY + 24 < listY) continue;
                 boolean isHovered = mouseX >= listX && mouseX <= listX + listW && mouseY >= itemY && mouseY <= itemY + 22;
-
                 guiGraphics.fill(listX, itemY, listX + listW, itemY + 22, isHovered ? 0xFF333333 : 0xFF111111);
                 guiGraphics.renderItem(item.icon, listX + 2, itemY + 3);
-
                 guiGraphics.drawString(this.font, item.name, listX + 22, itemY + 2, 0xFFFFFF, false);
                 guiGraphics.drawString(this.font, "Price: " + item.price, listX + 22, itemY + 12, 0x00FFFF, false);
                 guiGraphics.drawString(this.font, "Size: " + item.size, listX + 110, itemY + 12, 0x00FFFF, false);
@@ -235,50 +231,87 @@ public class ComputerScreen extends Screen {
 
             guiGraphics.drawString(this.font, "Shopping cart", cartX + 5, cartY + 5, 0xFFFFAA00, false);
             guiGraphics.drawString(this.font, totalSize + "/50", cartX + cartW - 35, cartY + 5, 0xFF00FFFF, false);
-            guiGraphics.fill(cartX, cartY + 16, cartX + cartW, cartY + 17, 0xFFFFFFFF); // Линия
+            guiGraphics.fill(cartX, cartY + 16, cartX + cartW, cartY + 17, 0xFFFFFFFF);
 
             Map<StoreItem, Integer> cartCounts = new HashMap<>();
-            for (StoreItem item : shoppingCart) {
-                cartCounts.put(item, cartCounts.getOrDefault(item, 0) + 1);
-            }
+            for (StoreItem item : shoppingCart) cartCounts.put(item, cartCounts.getOrDefault(item, 0) + 1);
 
             RenderSystem.enableScissor((int)(cartX * scale), (int)((this.height - cartY - cartH + 25) * scale), (int)(cartW * scale), (int)((cartH - 45) * scale));
             int yOff = 0;
             for (Map.Entry<StoreItem, Integer> entry : cartCounts.entrySet()) {
-                StoreItem item = entry.getKey();
-                int count = entry.getValue();
+                StoreItem item = entry.getKey(); int count = entry.getValue();
                 int drawY = cartY + 20 + yOff - (int)cartScroll;
-
-                if (drawY > cartY + cartH - 25 || drawY + 10 < cartY + 20) {
-                    yOff += 12; continue;
-                }
-
+                if (drawY > cartY + cartH - 25 || drawY + 10 < cartY + 20) { yOff += 12; continue; }
                 boolean hoverRemove = mouseX >= cartX && mouseX <= cartX + cartW && mouseY >= drawY && mouseY < drawY + 12;
                 if (hoverRemove) guiGraphics.fill(cartX + 1, drawY, cartX + cartW - 1, drawY + 12, 0xFF550000);
-
                 guiGraphics.drawString(this.font, item.name + " x" + count, cartX + 5, drawY + 2, 0xFFFFFF, false);
                 guiGraphics.drawString(this.font, (item.price * count) + " pts", cartX + cartW - 40, drawY + 2, 0x00FFFF, false);
                 yOff += 12;
             }
             RenderSystem.disableScissor();
 
-            // buy
-            guiGraphics.fill(cartX, cartY + cartH - 20, cartX + cartW, cartY + cartH - 19, 0xFFFFFFFF); // Линия
+            guiGraphics.fill(cartX, cartY + cartH - 20, cartX + cartW, cartY + cartH - 19, 0xFFFFFFFF);
             guiGraphics.drawString(this.font, totalPrice + " pts", cartX + 5, cartY + cartH - 13, 0x00FFFF, false);
 
-            int buyBtnX = cartX + cartW - 50;
-            int buyBtnY = cartY + cartH - 16;
+            int buyBtnX = cartX + cartW - 50; int buyBtnY = cartY + cartH - 16;
             boolean canBuy = totalPrice > 0 && POINTS >= totalPrice;
             boolean hoverBuy = mouseX >= buyBtnX && mouseX <= buyBtnX + 45 && mouseY >= buyBtnY && mouseY <= buyBtnY + 12;
-
             int buyColor = canBuy ? (hoverBuy ? 0xFF00FF00 : 0xFFFFAA00) : 0xFF555555;
 
             guiGraphics.fill(buyBtnX - 1, buyBtnY - 1, buyBtnX + 46, buyBtnY + 13, buyColor);
             guiGraphics.fill(buyBtnX, buyBtnY, buyBtnX + 45, buyBtnY + 12, 0xFF000000);
             guiGraphics.drawString(this.font, "BUY", buyBtnX + 13, buyBtnY + 2, buyColor, false);
+        }
+        else if (activeTab == 2) {
+            // e-mail
+            int leftX = startX + 10; int leftY = startY + 35; int leftW = 120; int leftH = 195;
+            int rightX = startX + 140; int rightY = startY + 35; int rightW = 250; int rightH = 195;
 
-        } else if (activeTab == 2) {
-            guiGraphics.drawString(this.font, "No new emails.", startX + 20, startY + 40, 0x888888, false);
+            guiGraphics.fill(leftX - 1, leftY - 1, leftX + leftW + 1, leftY + leftH + 1, 0xFFFFFFFF);
+            guiGraphics.fill(leftX, leftY, leftX + leftW, leftY + leftH, 0xFF000000);
+
+            double scale = this.minecraft.getWindow().getGuiScale();
+            RenderSystem.enableScissor((int)(leftX * scale), (int)((this.height - leftY - leftH) * scale), (int)(leftW * scale), (int)(leftH * scale));
+            for (int i = 0; i < EMAILS.size(); i++) {
+                net.votmdevs.voicesofthemines.world.PlayerData.Email e = EMAILS.get(i);
+                int emailY = leftY + (i * 30) - (int)emailListScroll;
+
+                if (emailY > leftY + leftH || emailY + 30 < leftY) continue;
+
+                boolean isHovered = mouseX >= leftX && mouseX <= leftX + leftW && mouseY >= emailY && mouseY <= emailY + 28;
+                boolean isSelected = selectedEmailIndex == i;
+
+                guiGraphics.fill(leftX, emailY, leftX + leftW, emailY + 28, isSelected ? 0xFF333333 : (isHovered ? 0xFF1A1A1A : 0xFF000000));
+
+                boolean hoverDelete = mouseX >= leftX + 2 && mouseX <= leftX + 26 && mouseY >= emailY + 2 && mouseY <= emailY + 26;
+                RenderSystem.setShaderColor(hoverDelete ? 1.0F : 0.7F, hoverDelete ? 0.5F : 0.7F, hoverDelete ? 0.5F : 0.7F, 1.0F);
+                guiGraphics.blit(DELETE_TEX, leftX + 2, emailY + 2, 0, 0, 24, 24, 24, 24);
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+
+                guiGraphics.drawString(this.font, e.sender, leftX + 30, emailY + 4, 0x55FF55, false);
+                guiGraphics.drawString(this.font, e.title, leftX + 30, emailY + 16, e.isRead ? 0x888888 : 0xFFFFFF, false);
+                guiGraphics.fill(leftX, emailY + 29, leftX + leftW, emailY + 30, 0xFF333333); // Линия
+            }
+            RenderSystem.disableScissor();
+
+            guiGraphics.fill(rightX - 1, rightY - 1, rightX + rightW + 1, rightY + rightH + 1, 0xFFFFFFFF);
+            guiGraphics.fill(rightX, rightY, rightX + rightW, rightY + rightH, 0xFF000000);
+
+            if (selectedEmailIndex >= 0 && selectedEmailIndex < EMAILS.size()) {
+                net.votmdevs.voicesofthemines.world.PlayerData.Email e = EMAILS.get(selectedEmailIndex);
+
+                guiGraphics.blit(EMAIL_USER_TEX, rightX + 5, rightY + 3, 0, 0, 24, 24, 24, 24);
+                guiGraphics.drawString(this.font, e.sender, rightX + 35, rightY + 10, 0xFFFFAA00, false);
+                guiGraphics.fill(rightX, rightY + 32, rightX + rightW, rightY + 33, 0xFFFFFFFF); // Линия
+
+                guiGraphics.drawString(this.font, e.title, rightX + 5, rightY + 38, 0x55FF55, false);
+                guiGraphics.fill(rightX, rightY + 52, rightX + rightW, rightY + 53, 0xFFFFFFFF); // Линия
+
+                RenderSystem.enableScissor((int)(rightX * scale), (int)((this.height - rightY - rightH) * scale), (int)(rightW * scale), (int)((rightH - 55) * scale));
+                int textDrawY = rightY + 58 - (int)emailTextScroll;
+                guiGraphics.drawWordWrap(this.font, Component.literal(e.text), rightX + 5, textDrawY, rightW - 10, 0xFFFFFF);
+                RenderSystem.disableScissor();
+            }
         }
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
@@ -313,18 +346,36 @@ public class ComputerScreen extends Screen {
                 return true;
             }
 
-            // Скроллинг корзины
             if (mouseX >= cartX && mouseX <= cartX + cartW && mouseY >= cartY + 20 && mouseY <= cartY + cartH - 20) {
                 cartScroll -= delta * 15f;
-                // Считаем уникальные предметы для скролла
                 long uniqueItems = shoppingCart.stream().distinct().count();
                 float maxScroll = Math.max(0, (uniqueItems * 12) - (cartH - 45));
                 if (cartScroll < 0) cartScroll = 0;
                 if (cartScroll > maxScroll) cartScroll = maxScroll;
                 return true;
             }
-        }
+        } else if (activeTab == 2) {
+            int leftX = startX + 10; int leftY = startY + 35; int leftW = 120; int leftH = 195;
+            int rightX = startX + 140; int rightY = startY + 35; int rightW = 250; int rightH = 195;
 
+            if (mouseX >= leftX && mouseX <= leftX + leftW && mouseY >= leftY && mouseY <= leftY + leftH) {
+                emailListScroll -= delta * 15f;
+                float maxScroll = Math.max(0, (EMAILS.size() * 30) - leftH);
+                if (emailListScroll < 0) emailListScroll = 0;
+                if (emailListScroll > maxScroll) emailListScroll = maxScroll;
+                return true;
+            }
+            if (mouseX >= rightX && mouseX <= rightX + rightW && mouseY >= rightY + 55 && mouseY <= rightY + rightH) {
+                if (selectedEmailIndex >= 0 && selectedEmailIndex < EMAILS.size()) {
+                    emailTextScroll -= delta * 15f;
+                    int lines = this.font.split(Component.literal(EMAILS.get(selectedEmailIndex).text), rightW - 10).size();
+                    float maxScroll = Math.max(0, (lines * this.font.lineHeight) - (rightH - 55));
+                    if (emailTextScroll < 0) emailTextScroll = 0;
+                    if (emailTextScroll > maxScroll) emailTextScroll = maxScroll;
+                    return true;
+                }
+            }
+        }
         return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
@@ -467,8 +518,36 @@ public class ComputerScreen extends Screen {
                 }
                 return true;
             }
-        }
+        } else if (activeTab == 2) {
+            int leftX = startX + 10; int leftY = startY + 35; int leftW = 120; int leftH = 195;
 
+            if (mouseX >= leftX && mouseX <= leftX + leftW && mouseY >= leftY && mouseY <= leftY + leftH) {
+                for (int i = 0; i < EMAILS.size(); i++) {
+                    int emailY = leftY + (i * 30) - (int)emailListScroll;
+                    if (emailY > leftY + leftH || emailY + 30 < leftY) continue;
+
+                    if (mouseX >= leftX + 2 && mouseX <= leftX + 26 && mouseY >= emailY + 2 && mouseY <= emailY + 26) {
+                        net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.DeleteEmailPacket(i));
+                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 0.8F));
+                        if (selectedEmailIndex == i) selectedEmailIndex = -1;
+                        else if (selectedEmailIndex > i) selectedEmailIndex--;
+                        return true;
+                    }
+
+                    if (mouseY >= emailY && mouseY <= emailY + 28) {
+                        selectedEmailIndex = i;
+                        emailTextScroll = 0f;
+                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.2F));
+
+                        if (!EMAILS.get(i).isRead) {
+                            EMAILS.get(i).isRead = true;
+                            net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.ReadEmailPacket(i));
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

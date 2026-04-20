@@ -104,23 +104,39 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
                 flyTowards(targetVec, 1.2);
                 if (currentPos.distanceToSqr(new Vec3(targetPos.getX(), currentPos.y, targetPos.getZ())) > 15000.0) {
 
-                    // === ЛОГИКА ПРОДАЖИ ===
                     int earnedPoints = 0;
+                    boolean soldAnything = false;
+                    StringBuilder receipt = new StringBuilder("The package has been successfully delivered.\n\nSelling list:\n");
+
                     for (int i = 0; i < this.inventory.getContainerSize(); i++) {
                         net.minecraft.world.item.ItemStack stack = this.inventory.getItem(i);
                         if (!stack.isEmpty()) {
                             int price = getSellPrice(stack.getItem());
-                            earnedPoints += price * stack.getCount();
+                            if (price > 0) {
+                                int itemTotal = price * stack.getCount();
+                                earnedPoints += itemTotal;
+                                soldAnything = true;
+                                // X | N |: for A points
+                                receipt.append("- ").append(stack.getCount()).append(" | ").append(stack.getHoverName().getString()).append(" |: for ").append(itemTotal).append(" points\n");
+                            }
                         }
                     }
 
-                    if (earnedPoints > 0) {
-                        net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get((net.minecraft.server.level.ServerLevel)this.level());
+                    if (soldAnything) {
+                        net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get((net.minecraft.server.level.ServerLevel) this.level());
                         manager.getGlobalPlayerData().addPoints(earnedPoints);
+
+                        receipt.append("\n").append(earnedPoints).append(" points in total has been sent to your account balance.");
+                        manager.getGlobalPlayerData().addEmail("Auto", "Package received", receipt.toString());
+
                         manager.setDirty();
+                        net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.send(
+                                net.minecraftforge.network.PacketDistributor.ALL.noArg(),
+                                new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.EmailNotificationPacket()
+                        );
                     }
 
-                    this.discard(); // Улетаем и пропадаем
+                    this.discard();
                 }
                 break;
         }

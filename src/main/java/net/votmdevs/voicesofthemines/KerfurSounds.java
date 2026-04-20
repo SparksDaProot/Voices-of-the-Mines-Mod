@@ -9,6 +9,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class KerfurSounds {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, KerfurMod.MODID);
 
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> EMAIL_ALERT = registerSoundEvent("email");
     public static final RegistryObject<net.minecraft.sounds.SoundEvent> DRONE_AMBIENT = registerSoundEvent("drone");
     public static final RegistryObject<SoundEvent> IDLE = registerSoundEvent("idle");
     public static final RegistryObject<SoundEvent> JUMP = registerSoundEvent("jump");

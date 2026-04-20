@@ -67,7 +67,7 @@ public class VotvTerminalBlock extends BaseEntityBlock {
                 net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
 
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
-                        new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl()),
+                        new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl(),pd.getEmails()),
                         serverPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
                 );
             }

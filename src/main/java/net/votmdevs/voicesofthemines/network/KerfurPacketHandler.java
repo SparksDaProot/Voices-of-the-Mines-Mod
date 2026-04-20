@@ -29,6 +29,9 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, EmailNotificationPacket.class, EmailNotificationPacket::encode, EmailNotificationPacket::decode, EmailNotificationPacket::handle);
+        INSTANCE.registerMessage(id++, ReadEmailPacket.class, ReadEmailPacket::encode, ReadEmailPacket::decode, ReadEmailPacket::handle);
+        INSTANCE.registerMessage(id++, DeleteEmailPacket.class, DeleteEmailPacket::encode, DeleteEmailPacket::decode, DeleteEmailPacket::handle);
         INSTANCE.registerMessage(id++, SyncCalibrateTargetPacket.class, SyncCalibrateTargetPacket::encode, SyncCalibrateTargetPacket::decode, SyncCalibrateTargetPacket::handle);
         INSTANCE.registerMessage(id++, SyncProcessingStatePacket.class, SyncProcessingStatePacket::encode, SyncProcessingStatePacket::decode, SyncProcessingStatePacket::handle);
         INSTANCE.registerMessage(id++, SyncSignalsPacket.class, SyncSignalsPacket::encode, SyncSignalsPacket::decode, SyncSignalsPacket::handle);
@@ -800,21 +803,29 @@ public class KerfurPacketHandler {
     public static class SyncComputerDataPacket {
         private final int points;
         private final int cursorLvl, pingLvl, procSpeedLvl, procLvlLvl;
+        private final java.util.List<net.votmdevs.voicesofthemines.world.PlayerData.Email> emails; // Новое!
 
-        public SyncComputerDataPacket(int points, int cursorLvl, int pingLvl, int procSpeedLvl, int procLvlLvl) {
-            this.points = points;
-            this.cursorLvl = cursorLvl; this.pingLvl = pingLvl;
-            this.procSpeedLvl = procSpeedLvl; this.procLvlLvl = procLvlLvl;
+        public SyncComputerDataPacket(int points, int cursorLvl, int pingLvl, int procSpeedLvl, int procLvlLvl, java.util.List<net.votmdevs.voicesofthemines.world.PlayerData.Email> emails) {
+            this.points = points; this.cursorLvl = cursorLvl; this.pingLvl = pingLvl;
+            this.procSpeedLvl = procSpeedLvl; this.procLvlLvl = procLvlLvl; this.emails = emails;
         }
 
         public static void encode(SyncComputerDataPacket msg, FriendlyByteBuf buffer) {
             buffer.writeInt(msg.points);
             buffer.writeInt(msg.cursorLvl); buffer.writeInt(msg.pingLvl);
             buffer.writeInt(msg.procSpeedLvl); buffer.writeInt(msg.procLvlLvl);
+            buffer.writeInt(msg.emails.size());
+            for (net.votmdevs.voicesofthemines.world.PlayerData.Email e : msg.emails) {
+                buffer.writeUtf(e.sender); buffer.writeUtf(e.title); buffer.writeUtf(e.text); buffer.writeBoolean(e.isRead);
+            }
         }
 
         public static SyncComputerDataPacket decode(FriendlyByteBuf buffer) {
-            return new SyncComputerDataPacket(buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt());
+            int pts = buffer.readInt(); int c = buffer.readInt(); int p = buffer.readInt(); int ps = buffer.readInt(); int pl = buffer.readInt();
+            int size = buffer.readInt();
+            java.util.List<net.votmdevs.voicesofthemines.world.PlayerData.Email> emails = new java.util.ArrayList<>();
+            for (int i = 0; i < size; i++) emails.add(new net.votmdevs.voicesofthemines.world.PlayerData.Email(buffer.readUtf(), buffer.readUtf(), buffer.readUtf(), buffer.readBoolean()));
+            return new SyncComputerDataPacket(pts, c, p, ps, pl, emails);
         }
 
         public static void handle(SyncComputerDataPacket msg, Supplier<NetworkEvent.Context> ctx) {
@@ -824,6 +835,7 @@ public class KerfurPacketHandler {
                 net.votmdevs.voicesofthemines.client.gui.ComputerScreen.UPG_PING = msg.pingLvl;
                 net.votmdevs.voicesofthemines.client.gui.ComputerScreen.UPG_PROC_SPEED = msg.procSpeedLvl;
                 net.votmdevs.voicesofthemines.client.gui.ComputerScreen.UPG_PROC_LVL = msg.procLvlLvl;
+                net.votmdevs.voicesofthemines.client.gui.ComputerScreen.EMAILS = msg.emails; // Принимаем письма на клиент!
             });
             ctx.get().setPacketHandled(true);
         }
@@ -846,7 +858,7 @@ public class KerfurPacketHandler {
                         player.level().playSound(null, player.blockPosition(), net.minecraft.sounds.SoundEvents.EXPERIENCE_ORB_PICKUP, net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 1.0F);
 
                         net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
-                        KerfurPacketHandler.INSTANCE.sendTo(new SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl()), player.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
+                        KerfurPacketHandler.INSTANCE.sendTo(new SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl(),pd.getEmails()), player.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
                     } else {
                         player.level().playSound(null, player.blockPosition(), KerfurSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 1.0F);
                     }
@@ -899,7 +911,7 @@ public class KerfurPacketHandler {
                         player.level().playSound(null, player.blockPosition(), net.minecraft.sounds.SoundEvents.NOTE_BLOCK_CHIME.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.2F);
 
                         net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
-                        KerfurPacketHandler.INSTANCE.sendTo(new SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl()), player.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
+                        KerfurPacketHandler.INSTANCE.sendTo(new SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl(),pd.getEmails()), player.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
                     } else {
                         player.level().playSound(null, player.blockPosition(), KerfurSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 1.0F);
                     }
@@ -930,6 +942,83 @@ public class KerfurPacketHandler {
                 case "painter_yellow": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_YELLOW.get();
                 default: return null;
             }
+        }
+    }
+    // email
+    public static class ReadEmailPacket {
+        private final int index;
+        public ReadEmailPacket(int index) { this.index = index; }
+        public static void encode(ReadEmailPacket msg, FriendlyByteBuf buffer) { buffer.writeInt(msg.index); }
+        public static ReadEmailPacket decode(FriendlyByteBuf buffer) { return new ReadEmailPacket(buffer.readInt()); }
+        public static void handle(ReadEmailPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel());
+                    java.util.List<net.votmdevs.voicesofthemines.world.PlayerData.Email> emails = manager.getGlobalPlayerData().getEmails();
+                    if (msg.index >= 0 && msg.index < emails.size()) {
+                        emails.get(msg.index).isRead = true;
+                        manager.setDirty();
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public static class DeleteEmailPacket {
+        private final int index;
+        public DeleteEmailPacket(int index) { this.index = index; }
+        public static void encode(DeleteEmailPacket msg, FriendlyByteBuf buffer) { buffer.writeInt(msg.index); }
+        public static DeleteEmailPacket decode(FriendlyByteBuf buffer) { return new DeleteEmailPacket(buffer.readInt()); }
+        public static void handle(DeleteEmailPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel());
+                    java.util.List<net.votmdevs.voicesofthemines.world.PlayerData.Email> emails = manager.getGlobalPlayerData().getEmails();
+                    if (msg.index >= 0 && msg.index < emails.size()) {
+                        emails.remove(msg.index);
+                        manager.setDirty();
+                        net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
+                        KerfurPacketHandler.INSTANCE.sendTo(new SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl(), pd.getEmails()), player.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    // EMAIL NOTIF
+    public static class EmailNotificationPacket {
+        public EmailNotificationPacket() {}
+
+        public static void encode(EmailNotificationPacket msg, FriendlyByteBuf buffer) {}
+
+        public static EmailNotificationPacket decode(FriendlyByteBuf buffer) { return new EmailNotificationPacket(); }
+
+        public static void handle(EmailNotificationPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+                if (mc.player != null && mc.level != null) {
+                    BlockPos playerPos = mc.player.blockPosition();
+                    BlockPos tablePos = null;
+
+                    for (BlockPos pos : BlockPos.betweenClosed(playerPos.offset(-32, -16, -32), playerPos.offset(32, 16, 32))) {
+                        if (mc.level.getBlockState(pos).getBlock() == net.votmdevs.voicesofthemines.KerfurMod.TABLE.get()) {
+                            tablePos = pos;
+                            break;
+                        }
+                    }
+
+                    if (tablePos != null) {
+                        mc.level.playLocalSound(tablePos.getX() + 0.5, tablePos.getY() + 0.5, tablePos.getZ() + 0.5,
+                                net.votmdevs.voicesofthemines.KerfurSounds.EMAIL_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F, false);
+                    } else {
+                        mc.player.playSound(net.votmdevs.voicesofthemines.KerfurSounds.EMAIL_ALERT.get(), 1.0F, 1.0F);
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
         }
     }
 }
