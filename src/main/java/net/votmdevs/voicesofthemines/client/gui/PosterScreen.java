@@ -32,9 +32,9 @@ public class PosterScreen extends Screen {
         int centerY = this.height / 2;
 
         this.urlEditBox = new EditBox(this.font, centerX - 150, centerY - 20, 300, 20, Component.literal("Image URL"));
-        this.urlEditBox.setMaxLength(500); // Длинные ссылки Imgur
+        this.urlEditBox.setMaxLength(500);
         this.urlEditBox.setValue(this.initialUrl);
-        this.urlEditBox.setTextColor(0xFFA500); // Оранжевый текст
+        this.urlEditBox.setTextColor(0xFFA500);
         this.addRenderableWidget(this.urlEditBox);
         this.setInitialFocus(this.urlEditBox);
 

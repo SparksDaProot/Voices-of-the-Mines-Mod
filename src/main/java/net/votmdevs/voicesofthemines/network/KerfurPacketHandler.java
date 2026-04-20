@@ -49,6 +49,7 @@ public class KerfurPacketHandler {
         INSTANCE.registerMessage(id++, InsertDrivePacket.class, InsertDrivePacket::encode, InsertDrivePacket::decode, InsertDrivePacket::handle);
         INSTANCE.registerMessage(id++, HookDetachPacket.class, HookDetachPacket::encode, HookDetachPacket::decode, HookDetachPacket::handle);
         INSTANCE.registerMessage(id++, KnockdownPacket.class, KnockdownPacket::encode, KnockdownPacket::decode, KnockdownPacket::handle);
+        INSTANCE.registerMessage(id++, BuyStorePacket.class, BuyStorePacket::encode, BuyStorePacket::decode, BuyStorePacket::handle);
         INSTANCE.registerMessage(id++, SyncProcessingTargetPacket.class, SyncProcessingTargetPacket::encode, SyncProcessingTargetPacket::decode, SyncProcessingTargetPacket::handle);
         INSTANCE.registerMessage(id++, FinishProcessingPacket.class, FinishProcessingPacket::encode, FinishProcessingPacket::decode, FinishProcessingPacket::handle);
     }
@@ -649,14 +650,14 @@ public class KerfurPacketHandler {
                         if (terminal.hasDrive()) {
                             String sigId = terminal.getDriveSignalId();
                             String sigType = terminal.getDriveSignalType();
-                            int sigLevel = terminal.getDriveSignalLevel(); // === ИСПРАВЛЕНИЕ: Читаем уровень из памяти терминала! ===
+                            int sigLevel = terminal.getDriveSignalLevel();
 
                             net.votmdevs.voicesofthemines.entity.DriveEntity drive = KerfurMod.DRIVE.get().create(player.serverLevel());
                             if (drive != null) {
                                 drive.moveTo(msg.pos.getX() + 0.5, msg.pos.getY() + 1.2, msg.pos.getZ() + 0.5, 0, 0);
                                 drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID, sigId != null ? sigId : "");
                                 drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_TYPE, sigType != null ? sigType : "");
-                                drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL, sigLevel); // === ИСПРАВЛЕНИЕ: Записываем уровень обратно на диск! ===
+                                drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL, sigLevel);
 
                                 net.minecraft.world.phys.Vec3 playerPos = player.getEyePosition();
                                 net.minecraft.world.phys.Vec3 blockPos = new net.minecraft.world.phys.Vec3(msg.pos.getX() + 0.5, msg.pos.getY() + 1.2, msg.pos.getZ() + 0.5);
@@ -715,7 +716,7 @@ public class KerfurPacketHandler {
                                 return; // Прерываем выполнение! Диск не вставится.
                             }
                             String sigType = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_TYPE);
-                            int sigLevel = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL); // === ИСПРАВЛЕНИЕ: Читаем уровень с диска! ===
+                            int sigLevel = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL);
 
                             terminal.setDrive(true, sigId != null ? sigId : "", sigType != null ? sigType : "", sigLevel);
 
@@ -838,7 +839,6 @@ public class KerfurPacketHandler {
             ctx.get().enqueueWork(() -> {
                 ServerPlayer player = ctx.get().getSender();
                 if (player != null) {
-                    // Пока мы не сделали Provider для игрока, сохраняем данные в SignalManager для всего сервера (упрощенный вариант, раз игра одиночная)
                     net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel());
 
                     if (manager.getGlobalPlayerData().buyUpgrade(msg.upgradeType)) {
@@ -853,6 +853,83 @@ public class KerfurPacketHandler {
                 }
             });
             ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public static class BuyStorePacket {
+        private final int totalCost;
+        private final java.util.List<String> items;
+
+        public BuyStorePacket(int totalCost, java.util.List<String> items) {
+            this.totalCost = totalCost;
+            this.items = items;
+        }
+
+        public static void encode(BuyStorePacket msg, FriendlyByteBuf buffer) {
+            buffer.writeInt(msg.totalCost);
+            buffer.writeInt(msg.items.size());
+            for (String s : msg.items) buffer.writeUtf(s);
+        }
+
+        public static BuyStorePacket decode(FriendlyByteBuf buffer) {
+            int cost = buffer.readInt();
+            int size = buffer.readInt();
+            java.util.List<String> items = new java.util.ArrayList<>();
+            for (int i = 0; i < size; i++) items.add(buffer.readUtf());
+            return new BuyStorePacket(cost, items);
+        }
+
+        public static void handle(BuyStorePacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel());
+
+
+                    if (manager.getGlobalPlayerData().spendPoints(msg.totalCost)) {
+
+                        for (String itemId : msg.items) {
+                            net.minecraft.world.item.Item mcItem = getItemById(itemId);
+                            if (mcItem != null) {
+                                manager.getGlobalPlayerData().addDelivery(new net.minecraft.world.item.ItemStack(mcItem));
+                            }
+                        }
+
+                        manager.setDirty();
+                        player.level().playSound(null, player.blockPosition(), net.minecraft.sounds.SoundEvents.NOTE_BLOCK_CHIME.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.2F);
+
+                        net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
+                        KerfurPacketHandler.INSTANCE.sendTo(new SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl()), player.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
+                    } else {
+                        player.level().playSound(null, player.blockPosition(), KerfurSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 1.0F);
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+
+        private static net.minecraft.world.item.Item getItemById(String id) {
+            switch(id) {
+                case "hazard_suit": return net.votmdevs.voicesofthemines.KerfurMod.HAZARD_HELMET.get();
+                case "hook": return net.votmdevs.voicesofthemines.KerfurMod.HOOK_ITEM.get();
+                case "trash_roll": return net.votmdevs.voicesofthemines.KerfurMod.TRASH_ROLL.get();
+                case "glasses": return net.votmdevs.voicesofthemines.KerfurMod.ACCESSORY_GLASSES.get();
+                case "jacket": return net.votmdevs.voicesofthemines.KerfurMod.ACCESSORY_JACKET.get();
+                case "keypad": return net.votmdevs.voicesofthemines.KerfurMod.KEYPAD_ITEM.get();
+                case "poster": return net.votmdevs.voicesofthemines.KerfurMod.POSTER_ITEM.get();
+                case "taco": return net.votmdevs.voicesofthemines.KerfurMod.TACO.get();
+                case "toblerone": return net.votmdevs.voicesofthemines.KerfurMod.TOBLERONE.get();
+                case "cheese": return net.votmdevs.voicesofthemines.KerfurMod.CHEESE.get();
+                case "burger": return net.votmdevs.voicesofthemines.KerfurMod.BURGER.get();
+                case "painter_black": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_BLACK.get();
+                case "painter_blue": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_BLUE.get();
+                case "painter_red": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_RED.get();
+                case "painter_green": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_GREEN.get();
+                case "painter_pink": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_PINK.get();
+                case "painter_white": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_WHITE.get();
+                case "painter_yellow": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_YELLOW.get();
+                default: return null;
+            }
         }
     }
 }

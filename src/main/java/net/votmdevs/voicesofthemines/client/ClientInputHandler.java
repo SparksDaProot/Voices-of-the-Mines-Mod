@@ -31,6 +31,8 @@ public class ClientInputHandler {
     private static net.minecraft.client.resources.sounds.SoundInstance atvSoundInstance = null;
     private static String currentAtvSoundState = "none"; // none, idle, drive_start, drive_loop
     private static int atvSoundTimer = 0;
+    
+    private static DroneLoopSound droneSoundInstance = null;
 
     public static int knockdownTicks = 0;
     public static float vignetteAlpha = 0.0f;
@@ -138,6 +140,28 @@ public class ClientInputHandler {
                 atvSoundInstance = null;
             }
             currentAtvSoundState = "none";
+        }
+
+        net.votmdevs.voicesofthemines.entity.DroneEntity activeDrone = null;
+        double closestDroneDist = Double.MAX_VALUE;
+        for (Entity e : mc.level.getEntitiesOfClass(net.votmdevs.voicesofthemines.entity.DroneEntity.class, mc.player.getBoundingBox().inflate(300.0D))) {
+            double dist = e.distanceToSqr(mc.player);
+            if (dist < closestDroneDist) {
+                closestDroneDist = dist;
+                activeDrone = (net.votmdevs.voicesofthemines.entity.DroneEntity) e;
+            }
+        }
+
+        if (activeDrone != null) {
+            if (droneSoundInstance == null || !mc.getSoundManager().isActive(droneSoundInstance)) {
+                droneSoundInstance = new DroneLoopSound(activeDrone, KerfurSounds.DRONE_AMBIENT.get());
+                mc.getSoundManager().play(droneSoundInstance);
+            }
+        } else {
+            if (droneSoundInstance != null) {
+                mc.getSoundManager().stop(droneSoundInstance);
+                droneSoundInstance = null;
+            }
         }
 
         if (mc.player.getVehicle() instanceof net.votmdevs.voicesofthemines.entity.AtvEntity) {
@@ -363,6 +387,49 @@ public class ClientInputHandler {
                 event.getGuiGraphics().drawString(mc.font, hpStr, x + 10, y + 25, 0xFFFFFF, false);
                 event.getGuiGraphics().drawString(mc.font, brakeStr, x + 10, y + 40, 0xFFFFFF, false);
             }
+            // drone overlay
+            if (mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult blockHit) {
+                if (mc.level.getBlockState(blockHit.getBlockPos()).getBlock() == KerfurMod.DRONE_PANEL.get()) {
+
+                    int width = event.getWindow().getGuiScaledWidth();
+                    int height = event.getWindow().getGuiScaledHeight();
+                    int boxWidth = 140;
+                    int boxHeight = 55;
+                    int x = width - boxWidth - 15;
+                    int y = (height - boxHeight) / 2;
+
+                    event.getGuiGraphics().fill(x, y, x + boxWidth, y + boxHeight, 0xDD222222);
+
+                    net.votmdevs.voicesofthemines.entity.DroneEntity activeDrone = null;
+                    double closestDist = Double.MAX_VALUE;
+                    for (Entity e : mc.level.getEntitiesOfClass(net.votmdevs.voicesofthemines.entity.DroneEntity.class, mc.player.getBoundingBox().inflate(300.0D))) {
+                        double d = e.distanceTo(mc.player);
+                        if (d < closestDist) {
+                            closestDist = d;
+                            activeDrone = (net.votmdevs.voicesofthemines.entity.DroneEntity) e;
+                        }
+                    }
+
+                    if (activeDrone != null) {
+                        event.getGuiGraphics().drawString(mc.font, "Drone is active", x + 10, y + 10, 0x55FF55, false);
+                        event.getGuiGraphics().drawString(mc.font, String.format("Distance: %.1f blocks", closestDist), x + 10, y + 25, 0xFFFFFF, false);
+
+                        int state = activeDrone.getEntityData().get(net.votmdevs.voicesofthemines.entity.DroneEntity.STATE);
+                        String statusStr = "Status: Unknown";
+                        if (state == 0) statusStr = "Status: Approaching";
+                        else if (state == 1) statusStr = "Status: Descending";
+                        else if (state == 2) statusStr = "Status: Waiting";
+                        else if (state == 3) statusStr = "Status: Ascending";
+                        else if (state == 4) statusStr = "Status: Returning";
+
+                        event.getGuiGraphics().drawString(mc.font, statusStr, x + 10, y + 40, 0xFFAA00, false);
+                    } else {
+                        event.getGuiGraphics().drawString(mc.font, "Drone is inactive", x + 10, y + 10, 0xFF5555, false);
+                        event.getGuiGraphics().drawString(mc.font, "Distance: N/A", x + 10, y + 25, 0x888888, false);
+                        event.getGuiGraphics().drawString(mc.font, "Status: Standby", x + 10, y + 40, 0x888888, false);
+                    }
+                }
+            }
         }
     }
 
@@ -389,6 +456,34 @@ public class ClientInputHandler {
                 this.x = this.atv.getX();
                 this.y = this.atv.getY();
                 this.z = this.atv.getZ();
+            }
+        }
+    }
+
+    // drone sound
+    public static class DroneLoopSound extends net.minecraft.client.resources.sounds.AbstractTickableSoundInstance {
+        private final net.votmdevs.voicesofthemines.entity.DroneEntity drone;
+
+        public DroneLoopSound(net.votmdevs.voicesofthemines.entity.DroneEntity drone, net.minecraft.sounds.SoundEvent sound) {
+            super(sound, net.minecraft.sounds.SoundSource.NEUTRAL, net.minecraft.util.RandomSource.create());
+            this.drone = drone;
+            this.looping = true;
+            this.delay = 0;
+            this.volume = 2.0F;
+            this.pitch = 1.0F;
+            this.x = drone.getX();
+            this.y = drone.getY();
+            this.z = drone.getZ();
+        }
+
+        @Override
+        public void tick() {
+            if (!this.drone.isAlive()) {
+                this.stop();
+            } else {
+                this.x = this.drone.getX();
+                this.y = this.drone.getY();
+                this.z = this.drone.getZ();
             }
         }
     }

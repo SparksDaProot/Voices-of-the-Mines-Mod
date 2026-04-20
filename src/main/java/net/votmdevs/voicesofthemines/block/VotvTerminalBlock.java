@@ -66,10 +66,6 @@ public class VotvTerminalBlock extends BaseEntityBlock {
             else if (this == KerfurMod.TABLE.get()) {
                 net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
 
-                // cheat for money (for tests)
-                pd.addPoints(100);
-                manager.setDirty();
-
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
                         new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl()),
                         serverPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT

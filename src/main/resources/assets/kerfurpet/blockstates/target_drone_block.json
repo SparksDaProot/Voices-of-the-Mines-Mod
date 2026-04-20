@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "kerfurpet:block/target_drone_block" }
+  }
+}

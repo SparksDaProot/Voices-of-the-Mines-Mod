@@ -240,5 +240,6 @@
   "drive_in": { "sounds": [ "kerfurpet:drive_in" ] },
   "impact_drive_0001": { "sounds": [ "kerfurpet:impact_drive_0001" ] },
   "impact_drive_0002": { "sounds": [ "kerfurpet:impact_drive_0002" ] },
-  "impact_drive_0003": { "sounds": [ "kerfurpet:impact_drive_0003" ] }
+  "impact_drive_0003": { "sounds": [ "kerfurpet:impact_drive_0003" ] },
+  "drone": { "sounds": [ "kerfurpet:drone" ] }
 }

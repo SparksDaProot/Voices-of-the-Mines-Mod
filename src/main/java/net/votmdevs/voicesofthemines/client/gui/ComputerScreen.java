@@ -5,11 +5,18 @@ import net.votmdevs.voicesofthemines.KerfurSounds;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ComputerScreen extends Screen {
     private static final ResourceLocation LOADING_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/loading_sheet.png");
@@ -32,6 +39,22 @@ public class ComputerScreen extends Screen {
     private SimpleSoundInstance startupSound;
     private GuiLoopSound workingSound;
 
+    // store system
+    private static class StoreItem {
+        String id; String name; ItemStack icon; int price; int size;
+        public StoreItem(String id, String name, ItemStack icon, int price, int size) {
+            this.id = id; this.name = name; this.icon = icon; this.price = price; this.size = size;
+        }
+    }
+
+    private final List<StoreItem> allItems = new ArrayList<>();
+    private List<StoreItem> filteredItems = new ArrayList<>();
+    private final List<StoreItem> shoppingCart = new ArrayList<>();
+
+    private EditBox searchBox;
+    private float storeScroll = 0f;
+    private float cartScroll = 0f;
+
     public ComputerScreen(BlockPos pos) {
         super(Component.literal("Base Computer"));
         this.blockPos = pos;
@@ -49,6 +72,50 @@ public class ComputerScreen extends Screen {
         if (workingSound == null) {
             workingSound = new GuiLoopSound(KerfurSounds.PC_WORKING_LOOP.get(), 0.5f);
             Minecraft.getInstance().getSoundManager().play(workingSound);
+        }
+
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+        int startX = centerX - 200;
+        int startY = centerY - 120;
+
+        searchBox = new EditBox(this.font, startX + 20, startY + 35, 170, 15, Component.literal("Search"));
+        searchBox.setMaxLength(30);
+        searchBox.setBordered(true);
+        searchBox.setVisible(false);
+        this.addRenderableWidget(searchBox);
+
+        // what player can buy
+        if (allItems.isEmpty()) {
+            allItems.add(new StoreItem("hazard_suit", "Hazard Suit", new ItemStack(KerfurMod.HAZARD_HELMET.get()), 300, 1));
+            allItems.add(new StoreItem("hook", "Hook", new ItemStack(KerfurMod.HOOK_ITEM.get()), 50, 1));
+            allItems.add(new StoreItem("trash_roll", "Trash bag roll", new ItemStack(KerfurMod.TRASH_ROLL.get()), 16, 1));
+            allItems.add(new StoreItem("glasses", "Glasses", new ItemStack(KerfurMod.ACCESSORY_GLASSES.get()), 10, 1));
+            allItems.add(new StoreItem("jacket", "Jacket", new ItemStack(KerfurMod.ACCESSORY_JACKET.get()), 10, 1));
+            allItems.add(new StoreItem("keypad", "Keypad", new ItemStack(KerfurMod.KEYPAD_ITEM.get()), 30, 1));
+            allItems.add(new StoreItem("poster", "Poster", new ItemStack(KerfurMod.POSTER_ITEM.get()), 10, 1));
+            allItems.add(new StoreItem("taco", "Taco", new ItemStack(KerfurMod.TACO.get()), 5, 1));
+            allItems.add(new StoreItem("toblerone", "Toblerone", new ItemStack(KerfurMod.TOBLERONE.get()), 10, 1));
+            allItems.add(new StoreItem("cheese", "Cheese", new ItemStack(KerfurMod.CHEESE.get()), 5, 1));
+            allItems.add(new StoreItem("burger", "Burger", new ItemStack(KerfurMod.BURGER.get()), 5, 1));
+            allItems.add(new StoreItem("painter_black", "Painter Black", new ItemStack(KerfurMod.PAINTER_BLACK.get()), 50, 1));
+            allItems.add(new StoreItem("painter_blue", "Painter Blue", new ItemStack(KerfurMod.PAINTER_BLUE.get()), 50, 1));
+            allItems.add(new StoreItem("painter_red", "Painter Red", new ItemStack(KerfurMod.PAINTER_RED.get()), 50, 1));
+            allItems.add(new StoreItem("painter_green", "Painter Green", new ItemStack(KerfurMod.PAINTER_GREEN.get()), 50, 1));
+            allItems.add(new StoreItem("painter_pink", "Painter Pink", new ItemStack(KerfurMod.PAINTER_PINK.get()), 50, 1));
+            allItems.add(new StoreItem("painter_white", "Painter White", new ItemStack(KerfurMod.PAINTER_WHITE.get()), 50, 1));
+            allItems.add(new StoreItem("painter_yellow", "Painter Yellow", new ItemStack(KerfurMod.PAINTER_YELLOW.get()), 50, 1));
+        }
+        updateSearch();
+    }
+
+    private void updateSearch() {
+        String query = searchBox.getValue().toLowerCase();
+        filteredItems.clear();
+        for (StoreItem item : allItems) {
+            if (item.name.toLowerCase().contains(query)) {
+                filteredItems.add(item);
+            }
         }
     }
 
@@ -77,6 +144,8 @@ public class ComputerScreen extends Screen {
                     }
                 }
             }
+        } else {
+            updateSearch();
         }
     }
 
@@ -115,6 +184,8 @@ public class ComputerScreen extends Screen {
         drawTab(guiGraphics, startX + 100, startY + 10, 80, "Store", activeTab == 1);
         drawTab(guiGraphics, startX + 190, startY + 10, 80, "Email", activeTab == 2);
 
+        searchBox.setVisible(activeTab == 1);
+
         if (activeTab == 0) {
             guiGraphics.drawString(this.font, "TERMINAL_FIND", startX + 20, startY + 40, 0xFFFFFF, false);
             drawUpgradeRow(guiGraphics, startX + 20, startY + 55, "cursor_speed", UPG_CURSOR, 16, getCost("cursor_speed", UPG_CURSOR, 16), mouseX, mouseY);
@@ -123,13 +194,138 @@ public class ComputerScreen extends Screen {
             guiGraphics.drawString(this.font, "TERMINAL_PROCESSING", startX + 20, startY + 105, 0xFFFFFF, false);
             drawUpgradeRow(guiGraphics, startX + 20, startY + 120, "processing_speed", UPG_PROC_SPEED, 16, getCost("processing_speed", UPG_PROC_SPEED, 16), mouseX, mouseY);
             drawUpgradeRow(guiGraphics, startX + 20, startY + 140, "processing_level", UPG_PROC_LVL, 3, getCost("processing_level", UPG_PROC_LVL, 3), mouseX, mouseY);
-        } else if (activeTab == 1) {
-            guiGraphics.drawString(this.font, "Store is empty right now...", startX + 20, startY + 40, 0x888888, false);
+        }
+        else if (activeTab == 1) {
+            // store
+            int listX = startX + 20;
+            int listY = startY + 55;
+            int listW = 170;
+            int listH = 160;
+
+            int cartX = startX + 200;
+            int cartY = startY + 35;
+            int cartW = 180;
+            int cartH = 180;
+
+            double scale = this.minecraft.getWindow().getGuiScale();
+            RenderSystem.enableScissor((int)(listX * scale), (int)((this.height - listY - listH) * scale), (int)(listW * scale), (int)(listH * scale));
+
+            for (int i = 0; i < filteredItems.size(); i++) {
+                StoreItem item = filteredItems.get(i);
+                int itemY = listY + (i * 24) - (int)storeScroll;
+
+                if (itemY > listY + listH || itemY + 24 < listY) continue; // Не рисуем то, что за кадром
+
+                boolean isHovered = mouseX >= listX && mouseX <= listX + listW && mouseY >= itemY && mouseY <= itemY + 22;
+
+                guiGraphics.fill(listX, itemY, listX + listW, itemY + 22, isHovered ? 0xFF333333 : 0xFF111111);
+                guiGraphics.renderItem(item.icon, listX + 2, itemY + 3);
+
+                guiGraphics.drawString(this.font, item.name, listX + 22, itemY + 2, 0xFFFFFF, false);
+                guiGraphics.drawString(this.font, "Price: " + item.price, listX + 22, itemY + 12, 0x00FFFF, false);
+                guiGraphics.drawString(this.font, "Size: " + item.size, listX + 110, itemY + 12, 0x00FFFF, false);
+            }
+            RenderSystem.disableScissor();
+
+            guiGraphics.fill(cartX - 1, cartY - 1, cartX + cartW + 1, cartY + cartH + 1, 0xFFFFFFFF);
+            guiGraphics.fill(cartX, cartY, cartX + cartW, cartY + cartH, 0xFF000000);
+
+            int totalSize = shoppingCart.stream().mapToInt(i -> i.size).sum();
+            int totalPrice = shoppingCart.stream().mapToInt(i -> i.price).sum();
+
+            guiGraphics.drawString(this.font, "Shopping cart", cartX + 5, cartY + 5, 0xFFFFAA00, false);
+            guiGraphics.drawString(this.font, totalSize + "/50", cartX + cartW - 35, cartY + 5, 0xFF00FFFF, false);
+            guiGraphics.fill(cartX, cartY + 16, cartX + cartW, cartY + 17, 0xFFFFFFFF); // Линия
+
+            Map<StoreItem, Integer> cartCounts = new HashMap<>();
+            for (StoreItem item : shoppingCart) {
+                cartCounts.put(item, cartCounts.getOrDefault(item, 0) + 1);
+            }
+
+            RenderSystem.enableScissor((int)(cartX * scale), (int)((this.height - cartY - cartH + 25) * scale), (int)(cartW * scale), (int)((cartH - 45) * scale));
+            int yOff = 0;
+            for (Map.Entry<StoreItem, Integer> entry : cartCounts.entrySet()) {
+                StoreItem item = entry.getKey();
+                int count = entry.getValue();
+                int drawY = cartY + 20 + yOff - (int)cartScroll;
+
+                if (drawY > cartY + cartH - 25 || drawY + 10 < cartY + 20) {
+                    yOff += 12; continue;
+                }
+
+                boolean hoverRemove = mouseX >= cartX && mouseX <= cartX + cartW && mouseY >= drawY && mouseY < drawY + 12;
+                if (hoverRemove) guiGraphics.fill(cartX + 1, drawY, cartX + cartW - 1, drawY + 12, 0xFF550000);
+
+                guiGraphics.drawString(this.font, item.name + " x" + count, cartX + 5, drawY + 2, 0xFFFFFF, false);
+                guiGraphics.drawString(this.font, (item.price * count) + " pts", cartX + cartW - 40, drawY + 2, 0x00FFFF, false);
+                yOff += 12;
+            }
+            RenderSystem.disableScissor();
+
+            // buy
+            guiGraphics.fill(cartX, cartY + cartH - 20, cartX + cartW, cartY + cartH - 19, 0xFFFFFFFF); // Линия
+            guiGraphics.drawString(this.font, totalPrice + " pts", cartX + 5, cartY + cartH - 13, 0x00FFFF, false);
+
+            int buyBtnX = cartX + cartW - 50;
+            int buyBtnY = cartY + cartH - 16;
+            boolean canBuy = totalPrice > 0 && POINTS >= totalPrice;
+            boolean hoverBuy = mouseX >= buyBtnX && mouseX <= buyBtnX + 45 && mouseY >= buyBtnY && mouseY <= buyBtnY + 12;
+
+            int buyColor = canBuy ? (hoverBuy ? 0xFF00FF00 : 0xFFFFAA00) : 0xFF555555;
+
+            guiGraphics.fill(buyBtnX - 1, buyBtnY - 1, buyBtnX + 46, buyBtnY + 13, buyColor);
+            guiGraphics.fill(buyBtnX, buyBtnY, buyBtnX + 45, buyBtnY + 12, 0xFF000000);
+            guiGraphics.drawString(this.font, "BUY", buyBtnX + 13, buyBtnY + 2, buyColor, false);
+
         } else if (activeTab == 2) {
             guiGraphics.drawString(this.font, "No new emails.", startX + 20, startY + 40, 0x888888, false);
         }
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        if (isLoading) return false;
+
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+        int startX = centerX - 200;
+        int startY = centerY - 120;
+
+        if (activeTab == 1) {
+            int listX = startX + 20;
+            int listY = startY + 55;
+            int listW = 170;
+            int listH = 160;
+
+            int cartX = startX + 200;
+            int cartY = startY + 35;
+            int cartW = 180;
+            int cartH = 180;
+
+            // scroll
+            if (mouseX >= listX && mouseX <= listX + listW && mouseY >= listY && mouseY <= listY + listH) {
+                storeScroll -= delta * 15f;
+                float maxScroll = Math.max(0, (filteredItems.size() * 24) - listH);
+                if (storeScroll < 0) storeScroll = 0;
+                if (storeScroll > maxScroll) storeScroll = maxScroll;
+                return true;
+            }
+
+            // Скроллинг корзины
+            if (mouseX >= cartX && mouseX <= cartX + cartW && mouseY >= cartY + 20 && mouseY <= cartY + cartH - 20) {
+                cartScroll -= delta * 15f;
+                // Считаем уникальные предметы для скролла
+                long uniqueItems = shoppingCart.stream().distinct().count();
+                float maxScroll = Math.max(0, (uniqueItems * 12) - (cartH - 45));
+                if (cartScroll < 0) cartScroll = 0;
+                if (cartScroll > maxScroll) cartScroll = maxScroll;
+                return true;
+            }
+        }
+
+        return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
     private int getCost(String type, int lvl, int maxLvl) {
@@ -194,21 +390,86 @@ public class ComputerScreen extends Screen {
             checkUpgradeClick(mouseX, mouseY, startX + 20, startY + 75, "ping_cooldown", UPG_PING, 16);
             checkUpgradeClick(mouseX, mouseY, startX + 20, startY + 120, "processing_speed", UPG_PROC_SPEED, 16);
             checkUpgradeClick(mouseX, mouseY, startX + 20, startY + 140, "processing_level", UPG_PROC_LVL, 3);
+        } else if (activeTab == 1) {
+            int listX = startX + 20;
+            int listY = startY + 55;
+            int listW = 170;
+            int listH = 160;
+
+            int cartX = startX + 200;
+            int cartY = startY + 35;
+            int cartW = 180;
+            int cartH = 180;
+
+            // items in store
+            if (mouseX >= listX && mouseX <= listX + listW && mouseY >= listY && mouseY <= listY + listH) {
+                for (int i = 0; i < filteredItems.size(); i++) {
+                    int itemY = listY + (i * 24) - (int)storeScroll;
+                    if (itemY > listY + listH || itemY + 24 < listY) continue;
+
+                    if (mouseY >= itemY && mouseY <= itemY + 22) {
+                        StoreItem item = filteredItems.get(i);
+                        int totalSize = shoppingCart.stream().mapToInt(it -> it.size).sum();
+                        if (totalSize + item.size <= 50) {
+                            shoppingCart.add(item);
+                            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.5F));
+                        } else {
+                            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUG_ALERT.get(), 1.0F, 0.5F));
+                        }
+                        return true;
+                    }
+                }
+            }
+
+            // shopping cart
+            if (mouseX >= cartX && mouseX <= cartX + cartW && mouseY >= cartY + 20 && mouseY <= cartY + cartH - 20) {
+                Map<StoreItem, Integer> cartCounts = new HashMap<>();
+                List<StoreItem> uniqueItems = new ArrayList<>();
+                for (StoreItem item : shoppingCart) {
+                    if (!cartCounts.containsKey(item)) uniqueItems.add(item);
+                    cartCounts.put(item, cartCounts.getOrDefault(item, 0) + 1);
+                }
+
+                int yOff = 0;
+                for (StoreItem item : uniqueItems) {
+                    int drawY = cartY + 20 + yOff - (int)cartScroll;
+                    if (drawY > cartY + cartH - 25 || drawY + 10 < cartY + 20) { yOff += 12; continue; }
+
+                    if (mouseY >= drawY && mouseY < drawY + 12) {
+                        shoppingCart.remove(item); // Удаляем один экземпляр
+                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 0.8F));
+                        return true;
+                    }
+                    yOff += 12;
+                }
+            }
+
+ // buy button
+            int buyBtnX = cartX + cartW - 50;
+            int buyBtnY = cartY + cartH - 16;
+            if (mouseX >= buyBtnX && mouseX <= buyBtnX + 45 && mouseY >= buyBtnY && mouseY <= buyBtnY + 12) {
+                int totalPrice = shoppingCart.stream().mapToInt(i -> i.price).sum();
+                if (totalPrice > 0 && POINTS >= totalPrice) {
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+
+                    // what you buy
+                    java.util.List<String> itemIds = new java.util.ArrayList<>();
+                    for (StoreItem item : shoppingCart) {
+                        itemIds.add(item.id);
+                    }
+                    net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(
+                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.BuyStorePacket(totalPrice, itemIds)
+                    );
+
+                    shoppingCart.clear();
+                } else {
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUG_ALERT.get(), 1.0F, 0.5F));
+                }
+                return true;
+            }
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
-    }
-
-    private void checkUpgradeClick(double mX, double mY, int x, int y, String type, int curLvl, int maxLvl) {
-        if (mX >= x && mX <= x + 40 && mY >= y && mY <= y + 15) {
-            int cost = getCost(type, curLvl, maxLvl);
-            if (cost != -1 && POINTS >= cost) {
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
-                net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.BuyUpgradePacket(type));
-            } else {
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUG_ALERT.get(), 1.0F, 0.5F));
-            }
-        }
     }
 
     public static class GuiLoopSound extends net.minecraft.client.resources.sounds.AbstractTickableSoundInstance {
@@ -221,5 +482,16 @@ public class ComputerScreen extends Screen {
         }
         @Override
         public void tick() {}
+    }
+    private void checkUpgradeClick(double mX, double mY, int x, int y, String type, int curLvl, int maxLvl) {
+        if (mX >= x && mX <= x + 40 && mY >= y && mY <= y + 15) {
+            int cost = getCost(type, curLvl, maxLvl);
+            if (cost != -1 && POINTS >= cost) {
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+                net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.BuyUpgradePacket(type));
+            } else {
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUG_ALERT.get(), 1.0F, 0.5F));
+            }
+        }
     }
 }

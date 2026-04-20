@@ -1,6 +1,9 @@
 package net.votmdevs.voicesofthemines.world;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public class PlayerData implements INBTSerializable<CompoundTag> {
@@ -11,6 +14,8 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
     private int upgradePingCooldown = 0; // max 16
     private int upgradeProcessingSpeed = 0; // max 16
     private int upgradeProcessingLevel = 0; // max 3
+    // delvery
+    private final NonNullList<ItemStack> deliveryQueue = NonNullList.create();
 
     public int getPoints() { return points; }
     public void addPoints(int amount) { this.points += amount; }
@@ -27,7 +32,9 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
     public int getProcessingSpeedLvl() { return upgradeProcessingSpeed; }
     public int getProcessingLevelLvl() { return upgradeProcessingLevel; }
 
-    // bug upgrades
+    public NonNullList<ItemStack> getDeliveryQueue() { return deliveryQueue; }
+    public void addDelivery(ItemStack stack) { deliveryQueue.add(stack); }
+
     public boolean buyUpgrade(String type) {
         int cost = 0;
         if (type.equals("cursor_speed") && upgradeCursorSpeed < 16) {
@@ -49,7 +56,6 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
         return false;
     }
 
-    // price
     public int getNextCost(String type) {
         if (type.equals("cursor_speed")) return upgradeCursorSpeed >= 16 ? -1 : 5 + (upgradeCursorSpeed * 5);
         if (type.equals("ping_cooldown")) return upgradePingCooldown >= 16 ? -1 : 15 + (upgradePingCooldown * 5);
@@ -66,6 +72,12 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
         tag.putInt("upg_ping", upgradePingCooldown);
         tag.putInt("upg_procspeed", upgradeProcessingSpeed);
         tag.putInt("upg_proclvl", upgradeProcessingLevel);
+
+        ListTag queueTag = new ListTag();
+        for (ItemStack stack : deliveryQueue) {
+            queueTag.add(stack.save(new CompoundTag()));
+        }
+        tag.put("DeliveryQueue", queueTag);
         return tag;
     }
 
@@ -76,5 +88,13 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
         this.upgradePingCooldown = tag.getInt("upg_ping");
         this.upgradeProcessingSpeed = tag.getInt("upg_procspeed");
         this.upgradeProcessingLevel = tag.getInt("upg_proclvl");
+
+        if (tag.contains("DeliveryQueue")) {
+            ListTag queueTag = tag.getList("DeliveryQueue", 10);
+            deliveryQueue.clear();
+            for (int i = 0; i < queueTag.size(); i++) {
+                deliveryQueue.add(ItemStack.of(queueTag.getCompound(i)));
+            }
+        }
     }
 }

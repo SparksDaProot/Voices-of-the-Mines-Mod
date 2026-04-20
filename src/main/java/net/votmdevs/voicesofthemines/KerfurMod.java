@@ -102,6 +102,16 @@ public class KerfurMod {
                 return new KerfurMenu(windowId, inv, new net.minecraft.world.SimpleContainer(isOmega ? 54 : 27), color, isOmega);
             }));
 
+    public static final RegistryObject<MenuType<net.votmdevs.voicesofthemines.inventory.DroneMenu>> DRONE_MENU = MENUS.register("drone_menu",
+            () -> net.minecraftforge.common.extensions.IForgeMenuType.create((windowId, inv, data) -> {
+                int entityId = data.readInt();
+                net.minecraft.world.entity.Entity entity = inv.player.level().getEntity(entityId);
+                if (entity instanceof net.votmdevs.voicesofthemines.entity.DroneEntity drone) {
+                    return new net.votmdevs.voicesofthemines.inventory.DroneMenu(windowId, inv, drone.inventory);
+                }
+                return new net.votmdevs.voicesofthemines.inventory.DroneMenu(windowId, inv, new net.minecraft.world.SimpleContainer(27));
+            }));
+
     public static final RegistryObject<Block> KERFUR_WORKBENCH = BLOCKS.register("kerfur_workbench",
             () -> new KerfurWorkbenchBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().strength(5.0F, 6.0F).noOcclusion()));
 
@@ -344,6 +354,29 @@ public class KerfurMod {
     public static final RegistryObject<Item> HAZARD_BOOTS = ITEMS.register("hazard_boots", () -> new ArmorItem(HazardArmorMaterial.HAZARD, ArmorItem.Type.BOOTS, new Item.Properties()));
 
 
+    // drone
+
+
+    public static final RegistryObject<Block> DRONE_TARGET = BLOCKS.register("target_drone_block",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion().noCollission()));
+
+    public static final RegistryObject<Item> DRONE_TARGET_ITEM = ITEMS.register("target_drone_block",
+            () -> new BlockItem(DRONE_TARGET.get(), new Item.Properties()));
+
+    public static final RegistryObject<Block> DRONE_PANEL = BLOCKS.register("drone_panel",
+            () -> new net.votmdevs.voicesofthemines.block.DronePanelBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+
+    public static final RegistryObject<Item> DRONE_PANEL_ITEM = ITEMS.register("drone_panel",
+            () -> new BlockItem(DRONE_PANEL.get(), new Item.Properties()));
+
+    public static final RegistryObject<EntityType<net.votmdevs.voicesofthemines.entity.DroneEntity>> DRONE = ENTITY_TYPES.register("drone",
+            () -> EntityType.Builder.of(net.votmdevs.voicesofthemines.entity.DroneEntity::new, MobCategory.MISC)
+                    .sized(1.5f, 1.0f)
+                    .clientTrackingRange(128)
+                    .build(new ResourceLocation(MODID, "drone").toString()));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.DronePanelBlockEntity>> DRONE_PANEL_BE = BLOCK_ENTITIES.register("drone_panel_be",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.DronePanelBlockEntity::new, DRONE_PANEL.get()).build(null));
 
     public static final RegistryObject<EntityType<KerfurEntity>> KERFUR = ENTITY_TYPES.register("kerfur",
             () -> EntityType.Builder.of(KerfurEntity::new, MobCategory.CREATURE)
@@ -455,6 +488,7 @@ public class KerfurMod {
             event.put(MAXWELL.get(), MaxwellEntity.createAttributes().build());
             event.put(FUEL_CAN.get(), FuelCanEntity.createAttributes().build());
             event.put(DRIVE.get(), DriveEntity.createAttributes().build());
+            event.put(DRONE.get(), DroneEntity.createAttributes().build());
         }
 
         @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -464,6 +498,7 @@ public class KerfurMod {
                 LOGGER.info("Kerfur Client Setup Done!");
                 event.enqueueWork(() -> {
                     MenuScreens.register(KERFUR_MENU.get(), KerfurScreen::new);
+                    MenuScreens.register(DRONE_MENU.get(), net.votmdevs.voicesofthemines.client.gui.DroneScreen::new);
 
 
                     net.minecraft.client.renderer.item.ItemProperties.register(KerfurMod.HOOK_ITEM.get(), new ResourceLocation(KerfurMod.MODID, "active"),
@@ -473,6 +508,7 @@ public class KerfurMod {
                             });
                 });
             }
+
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -490,6 +526,8 @@ public class KerfurMod {
                 event.registerEntityRenderer(FUEL_CAN.get(), FuelCanRenderer::new);
                 event.registerEntityRenderer(DRIVE.get(), DriveRenderer::new);
                 event.registerBlockEntityRenderer(TERMINAL_BE.get(), VotvTerminalRenderer::new);
+                event.registerEntityRenderer(DRONE.get(), DroneRenderer::new);
+                event.registerBlockEntityRenderer(DRONE_PANEL_BE.get(), DronePanelRenderer::new);
                 event.registerBlockEntityRenderer(VOTV_DOOR_BLOCK_ENTITY.get(), net.votmdevs.voicesofthemines.client.VotvDoorRenderer::new);
             }
 
