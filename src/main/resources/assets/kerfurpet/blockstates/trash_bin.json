@@ -1,0 +1,58 @@
+{
+  "variants": {
+    "facing=north,stored=0": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=0":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=0": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=0":  { "model": "kerfurpet:block/trash_bin", "y": 270 },
+
+    "facing=north,stored=1": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=1":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=1": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=1":  { "model": "kerfurpet:block/trash_bin", "y": 270 },
+
+    "facing=north,stored=2": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=2":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=2": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=2":  { "model": "kerfurpet:block/trash_bin", "y": 270 },
+
+    "facing=north,stored=3": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=3":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=3": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=3":  { "model": "kerfurpet:block/trash_bin", "y": 270 },
+
+    "facing=north,stored=4": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=4":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=4": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=4":  { "model": "kerfurpet:block/trash_bin", "y": 270 },
+
+    "facing=north,stored=5": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=5":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=5": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=5":  { "model": "kerfurpet:block/trash_bin", "y": 270 },
+
+    "facing=north,stored=6": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=6":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=6": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=6":  { "model": "kerfurpet:block/trash_bin", "y": 270 },
+
+    "facing=north,stored=7": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=7":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=7": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=7":  { "model": "kerfurpet:block/trash_bin", "y": 270 },
+
+    "facing=north,stored=8": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=8":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=8": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=8":  { "model": "kerfurpet:block/trash_bin", "y": 270 },
+
+    "facing=north,stored=9": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=9":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=9": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=9":  { "model": "kerfurpet:block/trash_bin", "y": 270 },
+
+    "facing=north,stored=10": { "model": "kerfurpet:block/trash_bin" },
+    "facing=east,stored=10":  { "model": "kerfurpet:block/trash_bin", "y": 90 },
+    "facing=south,stored=10": { "model": "kerfurpet:block/trash_bin", "y": 180 },
+    "facing=west,stored=10":  { "model": "kerfurpet:block/trash_bin", "y": 270 }
+  }
+}

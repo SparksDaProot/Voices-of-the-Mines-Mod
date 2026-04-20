@@ -1,0 +1,54 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 256,
+				"texture_height": 256,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "terminal_check",
+					"pivot": [-0.34202, 15, 2.06031],
+					"rotation": [0, 15, 0],
+					"cubes": [
+						{"origin": [-3.84202, 14, -4.73969], "size": [3, 7, 10], "pivot": [-7.34202, 15, -28.73969], "rotation": [0, 0, 22.5], "uv": [134, 0]},
+						{"origin": [-9.78436, 13, -15.82333], "size": [8, 24, 32], "uv": [0, 45], "mirror": true},
+						{"origin": [-10.78436, 12, -14.82333], "size": [21, 4, 30], "pivot": [-0.28436, 14, 0.17667], "rotation": [0, 0, 45], "uv": [80, 45], "mirror": true},
+						{"origin": [-9.78436, 0, -15.82333], "size": [22, 13, 32], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "discard",
+					"parent": "terminal_check",
+					"pivot": [6.65798, 13.5, 0.26031],
+					"rotation": [0, 90, 0],
+					"cubes": [
+						{"origin": [5.15798, 9, -4.73969], "size": [3, 7, 10], "uv": [108, 16]},
+						{"origin": [5.65798, 16, -2.98969], "size": [2, 3, 7], "uv": [1, 11]}
+					]
+				},
+				{
+					"name": "button_check_2",
+					"parent": "terminal_check",
+					"pivot": [8.21564, 12.5, 2.17667],
+					"cubes": [
+						{"origin": [6.21564, 13, 5.17667], "size": [4, 2, 4], "uv": [64, 106]}
+					]
+				},
+				{
+					"name": "button_check_1",
+					"parent": "terminal_check",
+					"pivot": [8.21564, 12.5, -6.82333],
+					"cubes": [
+						{"origin": [6.21564, 13, -8.82333], "size": [4, 1, 4], "uv": [64, 101]}
+					]
+				}
+			]
+		}
+	]
+}

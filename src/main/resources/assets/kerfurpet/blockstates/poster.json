@@ -1,0 +1,89 @@
+{
+  "variants": {
+    "facing=north,variant=0": { "model": "kerfurpet:block/poster_blank" },
+    "facing=east,variant=0":  { "model": "kerfurpet:block/poster_blank", "y": 90 },
+    "facing=south,variant=0": { "model": "kerfurpet:block/poster_blank", "y": 180 },
+    "facing=west,variant=0":  { "model": "kerfurpet:block/poster_blank", "y": 270 },
+
+    "facing=north,variant=1": { "model": "kerfurpet:block/poster_1" },
+    "facing=east,variant=1":  { "model": "kerfurpet:block/poster_1", "y": 90 },
+    "facing=south,variant=1": { "model": "kerfurpet:block/poster_1", "y": 180 },
+    "facing=west,variant=1":  { "model": "kerfurpet:block/poster_1", "y": 270 },
+
+    "facing=north,variant=2": { "model": "kerfurpet:block/poster_2" },
+    "facing=east,variant=2":  { "model": "kerfurpet:block/poster_2", "y": 90 },
+    "facing=south,variant=2": { "model": "kerfurpet:block/poster_2", "y": 180 },
+    "facing=west,variant=2":  { "model": "kerfurpet:block/poster_2", "y": 270 },
+
+    "facing=north,variant=3": { "model": "kerfurpet:block/poster_3" },
+    "facing=east,variant=3":  { "model": "kerfurpet:block/poster_3", "y": 90 },
+    "facing=south,variant=3": { "model": "kerfurpet:block/poster_3", "y": 180 },
+    "facing=west,variant=3":  { "model": "kerfurpet:block/poster_3", "y": 270 },
+
+    "facing=north,variant=4": { "model": "kerfurpet:block/poster_4" },
+    "facing=east,variant=4":  { "model": "kerfurpet:block/poster_4", "y": 90 },
+    "facing=south,variant=4": { "model": "kerfurpet:block/poster_4", "y": 180 },
+    "facing=west,variant=4":  { "model": "kerfurpet:block/poster_4", "y": 270 },
+
+    "facing=north,variant=5": { "model": "kerfurpet:block/poster_5" },
+    "facing=east,variant=5":  { "model": "kerfurpet:block/poster_5", "y": 90 },
+    "facing=south,variant=5": { "model": "kerfurpet:block/poster_5", "y": 180 },
+    "facing=west,variant=5":  { "model": "kerfurpet:block/poster_5", "y": 270 },
+
+    "facing=north,variant=6": { "model": "kerfurpet:block/poster_6" },
+    "facing=east,variant=6":  { "model": "kerfurpet:block/poster_6", "y": 90 },
+    "facing=south,variant=6": { "model": "kerfurpet:block/poster_6", "y": 180 },
+    "facing=west,variant=6":  { "model": "kerfurpet:block/poster_6", "y": 270 },
+
+    "facing=north,variant=7": { "model": "kerfurpet:block/poster_7" },
+    "facing=east,variant=7":  { "model": "kerfurpet:block/poster_7", "y": 90 },
+    "facing=south,variant=7": { "model": "kerfurpet:block/poster_7", "y": 180 },
+    "facing=west,variant=7":  { "model": "kerfurpet:block/poster_7", "y": 270 },
+
+    "facing=north,variant=8": { "model": "kerfurpet:block/poster_8" },
+    "facing=east,variant=8":  { "model": "kerfurpet:block/poster_8", "y": 90 },
+    "facing=south,variant=8": { "model": "kerfurpet:block/poster_8", "y": 180 },
+    "facing=west,variant=8":  { "model": "kerfurpet:block/poster_8", "y": 270 },
+
+    "facing=north,variant=9": { "model": "kerfurpet:block/poster_9" },
+    "facing=east,variant=9":  { "model": "kerfurpet:block/poster_9", "y": 90 },
+    "facing=south,variant=9": { "model": "kerfurpet:block/poster_9", "y": 180 },
+    "facing=west,variant=9":  { "model": "kerfurpet:block/poster_9", "y": 270 },
+
+    "facing=north,variant=10": { "model": "kerfurpet:block/poster_10" },
+    "facing=east,variant=10":  { "model": "kerfurpet:block/poster_10", "y": 90 },
+    "facing=south,variant=10": { "model": "kerfurpet:block/poster_10", "y": 180 },
+    "facing=west,variant=10":  { "model": "kerfurpet:block/poster_10", "y": 270 },
+
+    "facing=north,variant=11": { "model": "kerfurpet:block/poster_11" },
+    "facing=east,variant=11":  { "model": "kerfurpet:block/poster_11", "y": 90 },
+    "facing=south,variant=11": { "model": "kerfurpet:block/poster_11", "y": 180 },
+    "facing=west,variant=11":  { "model": "kerfurpet:block/poster_11", "y": 270 },
+
+    "facing=north,variant=12": { "model": "kerfurpet:block/poster_12" },
+    "facing=east,variant=12":  { "model": "kerfurpet:block/poster_12", "y": 90 },
+    "facing=south,variant=12": { "model": "kerfurpet:block/poster_12", "y": 180 },
+    "facing=west,variant=12":  { "model": "kerfurpet:block/poster_12", "y": 270 },
+
+    "facing=north,variant=13": { "model": "kerfurpet:block/poster_13" },
+    "facing=east,variant=13":  { "model": "kerfurpet:block/poster_13", "y": 90 },
+    "facing=south,variant=13": { "model": "kerfurpet:block/poster_13", "y": 180 },
+    "facing=west,variant=13":  { "model": "kerfurpet:block/poster_13", "y": 270 },
+
+    "facing=north,variant=14": { "model": "kerfurpet:block/poster_14" },
+    "facing=east,variant=14":  { "model": "kerfurpet:block/poster_14", "y": 90 },
+    "facing=south,variant=14": { "model": "kerfurpet:block/poster_14", "y": 180 },
+    "facing=west,variant=14":  { "model": "kerfurpet:block/poster_14", "y": 270 },
+
+    "facing=north,variant=15": { "model": "kerfurpet:block/poster_15" },
+    "facing=east,variant=15":  { "model": "kerfurpet:block/poster_15", "y": 90 },
+    "facing=south,variant=15": { "model": "kerfurpet:block/poster_15", "y": 180 },
+    "facing=west,variant=15":  { "model": "kerfurpet:block/poster_15", "y": 270 },
+
+    "facing=north,variant=16": { "model": "kerfurpet:block/poster_16" },
+    "facing=east,variant=16":  { "model": "kerfurpet:block/poster_16", "y": 90 },
+    "facing=south,variant=16": { "model": "kerfurpet:block/poster_16", "y": 180 },
+    "facing=west,variant=16":  { "model": "kerfurpet:block/poster_16", "y": 270 }
+
+  }
+}

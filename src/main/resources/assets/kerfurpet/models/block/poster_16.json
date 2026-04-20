@@ -1,0 +1,6 @@
+{
+  "parent": "kerfurpet:block/poster",
+  "textures": {
+    "texture": "kerfurpet:block/poster_16"
+  }
+}

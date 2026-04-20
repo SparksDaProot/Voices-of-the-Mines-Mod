@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "kerfurpet:block/book_kerfur_recipe" },
+    "facing=east": { "model": "kerfurpet:block/book_kerfur_recipe", "y": 90 },
+    "facing=south": { "model": "kerfurpet:block/book_kerfur_recipe", "y": 180 },
+    "facing=west": { "model": "kerfurpet:block/book_kerfur_recipe", "y": 270 }
+  }
+}

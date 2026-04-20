@@ -1,0 +1,56 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 256,
+				"texture_height": 256,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "terminal_find",
+					"pivot": [0.34202, 15, 2.06031],
+					"rotation": [0, -15, 0],
+					"cubes": [
+						{"origin": [1.78436, 13, -15.82333], "size": [8, 24, 32], "uv": [0, 45]},
+						{"origin": [-10.21564, 12, -14.82333], "size": [21, 4, 30], "pivot": [0.28436, 14, 0.17667], "rotation": [0, 0, -45], "uv": [80, 45]},
+						{"origin": [-12.21564, 0, -15.82333], "size": [22, 13, 32], "uv": [0, 0]},
+						{"origin": [-10.21564, 13, -8.82333], "size": [4, 1, 4], "uv": [64, 106]}
+					]
+				},
+				{
+					"name": "screens",
+					"parent": "terminal_find",
+					"pivot": [-10.21564, 8, 16.67667],
+					"cubes": [
+						{"origin": [-3.71564, 13, -15.82333], "size": [0, 24, 32], "uv": [128, 135]},
+						{"origin": [-2.11564, 13, -15.82333], "size": [0, 24, 32], "uv": [64, 135]},
+						{"origin": [1.38436, 13, -15.82333], "size": [0, 24, 32], "uv": [0, 101]},
+						{"origin": [1.68436, 13, -15.82333], "size": [0, 24, 32], "uv": [80, 79]}
+					]
+				},
+				{
+					"name": "button_find",
+					"parent": "terminal_find",
+					"pivot": [-8.21564, 12.5, 2.17667],
+					"cubes": [
+						{"origin": [-10.21564, 13, 0.17667], "size": [4, 1, 4], "uv": [64, 101]}
+					]
+				},
+				{
+					"name": "lever",
+					"parent": "terminal_find",
+					"pivot": [-8.21564, 13.625, -6.82333],
+					"cubes": [
+						{"origin": [-9.46564, 16.25, -8.07333], "size": [2.5, 3, 2.5], "uv": [108, 0]},
+						{"origin": [-8.71564, 14, -7.32333], "size": [1, 3, 1], "uv": [108, 5]}
+					]
+				}
+			]
+		}
+	]
+}

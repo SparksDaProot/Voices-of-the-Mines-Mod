@@ -1,0 +1,107 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "keypad",
+					"pivot": [0.625, 8.375, 8],
+					"cubes": [
+						{"origin": [-5, 1, 6], "size": [11, 14, 2], "uv": [0, 0]},
+						{"origin": [3.1, 1, 3], "size": [0, 14, 3], "uv": [0, 16]},
+						{"origin": [6, 1, 3], "size": [0, 14, 3], "uv": [6, 16]},
+						{"origin": [-9, 6, 7], "size": [4, 7, 0], "uv": [12, 20]}
+					]
+				},
+				{
+					"name": "button_1",
+					"parent": "keypad",
+					"pivot": [-3.75, 9, 6],
+					"cubes": [
+						{"origin": [-4.75, 8, 5], "size": [2, 2, 1], "uv": [20, 20]}
+					]
+				},
+				{
+					"name": "button_2",
+					"parent": "keypad",
+					"pivot": [-1, 9, 6],
+					"cubes": [
+						{"origin": [-2, 8, 5], "size": [2, 2, 1], "uv": [20, 20]}
+					]
+				},
+				{
+					"name": "button_3",
+					"parent": "keypad",
+					"pivot": [2, 9, 6],
+					"cubes": [
+						{"origin": [1, 8, 5], "size": [2, 2, 1], "uv": [20, 20]}
+					]
+				},
+				{
+					"name": "button_4",
+					"parent": "keypad",
+					"pivot": [-3.75, 6, 6],
+					"cubes": [
+						{"origin": [-4.75, 5, 5], "size": [2, 2, 1], "uv": [20, 20]}
+					]
+				},
+				{
+					"name": "button_5",
+					"parent": "keypad",
+					"pivot": [-1, 6, 6],
+					"cubes": [
+						{"origin": [-2, 5, 5], "size": [2, 2, 1], "uv": [26, 6]}
+					]
+				},
+				{
+					"name": "button_6",
+					"parent": "keypad",
+					"pivot": [2, 6, 6],
+					"cubes": [
+						{"origin": [1, 5, 5], "size": [2, 2, 1], "uv": [20, 20]}
+					]
+				},
+				{
+					"name": "button_7",
+					"parent": "keypad",
+					"pivot": [-3.75, 3, 6],
+					"cubes": [
+						{"origin": [-4.75, 2, 5], "size": [2, 2, 1], "uv": [26, 12]}
+					]
+				},
+				{
+					"name": "button_8",
+					"parent": "keypad",
+					"pivot": [-1, 3, 6],
+					"cubes": [
+						{"origin": [-2, 2, 5], "size": [2, 2, 1], "uv": [26, 6]}
+					]
+				},
+				{
+					"name": "button_9",
+					"parent": "keypad",
+					"pivot": [2, 3, 6],
+					"cubes": [
+						{"origin": [1, 2, 5], "size": [2, 2, 1], "uv": [26, 20]}
+					]
+				},
+				{
+					"name": "screen",
+					"parent": "keypad",
+					"pivot": [-1, 12.5, 5.75],
+					"cubes": [
+						{"origin": [-5, 10.5, 5.75], "size": [8, 4, 0], "uv": [12, 16]}
+					]
+				}
+			]
+		}
+	]
+}

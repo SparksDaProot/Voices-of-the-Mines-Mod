@@ -1,0 +1,62 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "kerfurpet:block/trash_bin",
+		"particle": "kerfurpet:block/trash_bin"
+	},
+	"elements": [
+		{
+			"from": [3, 0, 3],
+			"to": [13, 17, 13],
+			"faces": {
+				"north": {"uv": [0, 0, 2.5, 4.25], "texture": "#0"},
+				"east": {"uv": [2.5, 0, 5, 4.25], "texture": "#0"},
+				"south": {"uv": [0, 4.25, 2.5, 8.5], "texture": "#0"},
+				"west": {"uv": [2.5, 4.25, 5, 8.5], "texture": "#0"},
+				"up": {"uv": [7.5, 2.5, 5, 0], "texture": "#0"},
+				"down": {"uv": [7.5, 2.5, 5, 5], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [69, 0, 0],
+			"translation": [-5.75, 1, 0],
+			"scale": [0.84, 0.84, 0.84]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [70, 0, 0],
+			"translation": [-6.5, 2, 0],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"firstperson_righthand": {
+			"rotation": [8, 0, 0],
+			"translation": [-9.5, -3.5, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [-8.25, -5, 0]
+		},
+		"ground": {
+			"translation": [0, 3.5, 0],
+			"scale": [0.47, 0.47, 0.47]
+		},
+		"gui": {
+			"rotation": [26, -28, 0],
+			"scale": [0.73, 0.73, 0.73]
+		},
+		"head": {
+			"translation": [0, 13.25, 0]
+		}
+	},
+	"groups": [
+		{
+			"name": "trash_bin",
+			"origin": [0, 0, 0],
+			"scope": 0,
+			"color": 0,
+			"children": [0]
+		}
+	]
+}
