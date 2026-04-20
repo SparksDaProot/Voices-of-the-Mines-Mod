@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.block;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -26,7 +26,7 @@ public class VotvDoorBlockEntity extends BlockEntity implements GeoBlockEntity {
     private int closeTimer = 0;
 
     public VotvDoorBlockEntity(BlockPos pos, BlockState state) {
-        super(KerfurMod.VOTV_DOOR_BLOCK_ENTITY.get(), pos, state);
+        super(VoicesOfTheMines.VOTV_DOOR_BLOCK_ENTITY.get(), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, VotvDoorBlockEntity be) {
@@ -45,7 +45,7 @@ public class VotvDoorBlockEntity extends BlockEntity implements GeoBlockEntity {
             this.isOpen = true;
             this.closeTimer = 60; // 3 секунды до закрытия
 
-            this.level.playSound(null, this.worldPosition, KerfurSounds.VOTV_DOOR_SOUND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            this.level.playSound(null, this.worldPosition, VotmSounds.VOTV_DOOR_SOUND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
             this.triggerAnim("door_controller", "open");
 
             this.level.setBlock(this.worldPosition, this.getBlockState().setValue(VotvDoorBlock.OPEN, true), 3);
@@ -59,7 +59,7 @@ public class VotvDoorBlockEntity extends BlockEntity implements GeoBlockEntity {
             this.isOpen = false;
             this.closeTimer = 0;
 
-            this.level.playSound(null, this.worldPosition, KerfurSounds.VOTV_DOOR_SOUND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            this.level.playSound(null, this.worldPosition, VotmSounds.VOTV_DOOR_SOUND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
             this.triggerAnim("door_controller", "close");
 
             this.level.setBlock(this.worldPosition, this.getBlockState().setValue(VotvDoorBlock.OPEN, false), 3);

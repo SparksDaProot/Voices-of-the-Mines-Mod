@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.client.gui;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ComputerScreen extends Screen {
-    private static final ResourceLocation LOADING_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/loading_sheet.png");
+    private static final ResourceLocation LOADING_TEX = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/loading_sheet.png");
 
-    private static final ResourceLocation DELETE_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/delete.png");
-    private static final ResourceLocation EMAIL_USER_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/email_user_generic.png");
+    private static final ResourceLocation DELETE_TEX = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/delete.png");
+    private static final ResourceLocation EMAIL_USER_TEX = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/email_user_generic.png");
 
     public static int POINTS = 0;
     public static int UPG_CURSOR = 0;
@@ -73,12 +73,12 @@ public class ComputerScreen extends Screen {
         super.init();
 
         if (startupSound == null) {
-            startupSound = SimpleSoundInstance.forUI(KerfurSounds.PC_STARTUP.get(), 1.0f, 1.0f);
+            startupSound = SimpleSoundInstance.forUI(VotmSounds.PC_STARTUP.get(), 1.0f, 1.0f);
             Minecraft.getInstance().getSoundManager().play(startupSound);
         }
 
         if (workingSound == null) {
-            workingSound = new GuiLoopSound(KerfurSounds.PC_WORKING_LOOP.get(), 0.5f);
+            workingSound = new GuiLoopSound(VotmSounds.PC_WORKING_LOOP.get(), 0.5f);
             Minecraft.getInstance().getSoundManager().play(workingSound);
         }
 
@@ -95,24 +95,24 @@ public class ComputerScreen extends Screen {
 
         // what player can buy
         if (allItems.isEmpty()) {
-            allItems.add(new StoreItem("hazard_suit", "Hazard Suit", new ItemStack(KerfurMod.HAZARD_HELMET.get()), 300, 1));
-            allItems.add(new StoreItem("hook", "Hook", new ItemStack(KerfurMod.HOOK_ITEM.get()), 50, 1));
-            allItems.add(new StoreItem("trash_roll", "Trash bag roll", new ItemStack(KerfurMod.TRASH_ROLL.get()), 16, 1));
-            allItems.add(new StoreItem("glasses", "Glasses", new ItemStack(KerfurMod.ACCESSORY_GLASSES.get()), 10, 1));
-            allItems.add(new StoreItem("jacket", "Jacket", new ItemStack(KerfurMod.ACCESSORY_JACKET.get()), 10, 1));
-            allItems.add(new StoreItem("keypad", "Keypad", new ItemStack(KerfurMod.KEYPAD_ITEM.get()), 30, 1));
-            allItems.add(new StoreItem("poster", "Poster", new ItemStack(KerfurMod.POSTER_ITEM.get()), 10, 1));
-            allItems.add(new StoreItem("taco", "Taco", new ItemStack(KerfurMod.TACO.get()), 5, 1));
-            allItems.add(new StoreItem("toblerone", "Toblerone", new ItemStack(KerfurMod.TOBLERONE.get()), 10, 1));
-            allItems.add(new StoreItem("cheese", "Cheese", new ItemStack(KerfurMod.CHEESE.get()), 5, 1));
-            allItems.add(new StoreItem("burger", "Burger", new ItemStack(KerfurMod.BURGER.get()), 5, 1));
-            allItems.add(new StoreItem("painter_black", "Painter Black", new ItemStack(KerfurMod.PAINTER_BLACK.get()), 50, 1));
-            allItems.add(new StoreItem("painter_blue", "Painter Blue", new ItemStack(KerfurMod.PAINTER_BLUE.get()), 50, 1));
-            allItems.add(new StoreItem("painter_red", "Painter Red", new ItemStack(KerfurMod.PAINTER_RED.get()), 50, 1));
-            allItems.add(new StoreItem("painter_green", "Painter Green", new ItemStack(KerfurMod.PAINTER_GREEN.get()), 50, 1));
-            allItems.add(new StoreItem("painter_pink", "Painter Pink", new ItemStack(KerfurMod.PAINTER_PINK.get()), 50, 1));
-            allItems.add(new StoreItem("painter_white", "Painter White", new ItemStack(KerfurMod.PAINTER_WHITE.get()), 50, 1));
-            allItems.add(new StoreItem("painter_yellow", "Painter Yellow", new ItemStack(KerfurMod.PAINTER_YELLOW.get()), 50, 1));
+            allItems.add(new StoreItem("hazard_suit", "Hazard Suit", new ItemStack(VoicesOfTheMines.HAZARD_HELMET.get()), 300, 1));
+            allItems.add(new StoreItem("hook", "Hook", new ItemStack(VoicesOfTheMines.HOOK_ITEM.get()), 50, 1));
+            allItems.add(new StoreItem("trash_roll", "Trash bag roll", new ItemStack(VoicesOfTheMines.TRASH_ROLL.get()), 16, 1));
+            allItems.add(new StoreItem("glasses", "Glasses", new ItemStack(VoicesOfTheMines.ACCESSORY_GLASSES.get()), 10, 1));
+            allItems.add(new StoreItem("jacket", "Jacket", new ItemStack(VoicesOfTheMines.ACCESSORY_JACKET.get()), 10, 1));
+            allItems.add(new StoreItem("keypad", "Keypad", new ItemStack(VoicesOfTheMines.KEYPAD_ITEM.get()), 30, 1));
+            allItems.add(new StoreItem("poster", "Poster", new ItemStack(VoicesOfTheMines.POSTER_ITEM.get()), 10, 1));
+            allItems.add(new StoreItem("taco", "Taco", new ItemStack(VoicesOfTheMines.TACO.get()), 5, 1));
+            allItems.add(new StoreItem("toblerone", "Toblerone", new ItemStack(VoicesOfTheMines.TOBLERONE.get()), 10, 1));
+            allItems.add(new StoreItem("cheese", "Cheese", new ItemStack(VoicesOfTheMines.CHEESE.get()), 5, 1));
+            allItems.add(new StoreItem("burger", "Burger", new ItemStack(VoicesOfTheMines.BURGER.get()), 5, 1));
+            allItems.add(new StoreItem("painter_black", "Painter Black", new ItemStack(VoicesOfTheMines.PAINTER_BLACK.get()), 50, 1));
+            allItems.add(new StoreItem("painter_blue", "Painter Blue", new ItemStack(VoicesOfTheMines.PAINTER_BLUE.get()), 50, 1));
+            allItems.add(new StoreItem("painter_red", "Painter Red", new ItemStack(VoicesOfTheMines.PAINTER_RED.get()), 50, 1));
+            allItems.add(new StoreItem("painter_green", "Painter Green", new ItemStack(VoicesOfTheMines.PAINTER_GREEN.get()), 50, 1));
+            allItems.add(new StoreItem("painter_pink", "Painter Pink", new ItemStack(VoicesOfTheMines.PAINTER_PINK.get()), 50, 1));
+            allItems.add(new StoreItem("painter_white", "Painter White", new ItemStack(VoicesOfTheMines.PAINTER_WHITE.get()), 50, 1));
+            allItems.add(new StoreItem("painter_yellow", "Painter Yellow", new ItemStack(VoicesOfTheMines.PAINTER_YELLOW.get()), 50, 1));
         }
         updateSearch();
     }
@@ -431,9 +431,9 @@ public class ComputerScreen extends Screen {
         int startY = centerY - 120;
 
         if (mouseY >= startY + 10 && mouseY <= startY + 25) {
-            if (mouseX >= startX + 10 && mouseX <= startX + 90) { activeTab = 0; Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F)); }
-            if (mouseX >= startX + 100 && mouseX <= startX + 180) { activeTab = 1; Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F)); }
-            if (mouseX >= startX + 190 && mouseX <= startX + 270) { activeTab = 2; Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F)); }
+            if (mouseX >= startX + 10 && mouseX <= startX + 90) { activeTab = 0; Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F)); }
+            if (mouseX >= startX + 100 && mouseX <= startX + 180) { activeTab = 1; Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F)); }
+            if (mouseX >= startX + 190 && mouseX <= startX + 270) { activeTab = 2; Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F)); }
         }
 
         if (activeTab == 0) {
@@ -463,9 +463,9 @@ public class ComputerScreen extends Screen {
                         int totalSize = shoppingCart.stream().mapToInt(it -> it.size).sum();
                         if (totalSize + item.size <= 50) {
                             shoppingCart.add(item);
-                            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.5F));
+                            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.5F));
                         } else {
-                            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUG_ALERT.get(), 1.0F, 0.5F));
+                            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUG_ALERT.get(), 1.0F, 0.5F));
                         }
                         return true;
                     }
@@ -488,7 +488,7 @@ public class ComputerScreen extends Screen {
 
                     if (mouseY >= drawY && mouseY < drawY + 12) {
                         shoppingCart.remove(item); // Удаляем один экземпляр
-                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 0.8F));
+                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 0.8F));
                         return true;
                     }
                     yOff += 12;
@@ -501,7 +501,7 @@ public class ComputerScreen extends Screen {
             if (mouseX >= buyBtnX && mouseX <= buyBtnX + 45 && mouseY >= buyBtnY && mouseY <= buyBtnY + 12) {
                 int totalPrice = shoppingCart.stream().mapToInt(i -> i.price).sum();
                 if (totalPrice > 0 && POINTS >= totalPrice) {
-                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
 
                     // what you buy
                     java.util.List<String> itemIds = new java.util.ArrayList<>();
@@ -514,7 +514,7 @@ public class ComputerScreen extends Screen {
 
                     shoppingCart.clear();
                 } else {
-                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUG_ALERT.get(), 1.0F, 0.5F));
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUG_ALERT.get(), 1.0F, 0.5F));
                 }
                 return true;
             }
@@ -528,7 +528,7 @@ public class ComputerScreen extends Screen {
 
                     if (mouseX >= leftX + 2 && mouseX <= leftX + 26 && mouseY >= emailY + 2 && mouseY <= emailY + 26) {
                         net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.DeleteEmailPacket(i));
-                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 0.8F));
+                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 0.8F));
                         if (selectedEmailIndex == i) selectedEmailIndex = -1;
                         else if (selectedEmailIndex > i) selectedEmailIndex--;
                         return true;
@@ -537,7 +537,7 @@ public class ComputerScreen extends Screen {
                     if (mouseY >= emailY && mouseY <= emailY + 28) {
                         selectedEmailIndex = i;
                         emailTextScroll = 0f;
-                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.2F));
+                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.2F));
 
                         if (!EMAILS.get(i).isRead) {
                             EMAILS.get(i).isRead = true;
@@ -566,10 +566,10 @@ public class ComputerScreen extends Screen {
         if (mX >= x && mX <= x + 40 && mY >= y && mY <= y + 15) {
             int cost = getCost(type, curLvl, maxLvl);
             if (cost != -1 && POINTS >= cost) {
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.BuyUpgradePacket(type));
             } else {
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUG_ALERT.get(), 1.0F, 0.5F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUG_ALERT.get(), 1.0F, 0.5F));
             }
         }
     }

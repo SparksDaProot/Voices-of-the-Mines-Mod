@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.client.gui;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.network.KerfurPacketHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,7 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class PosterScreen extends Screen {
-    private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(KerfurMod.MODID, "textures/gui/save_poster_button.png");
+    private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/save_poster_button.png");
     private final BlockPos posterPos;
     private final String initialUrl;
     private EditBox urlEditBox;
@@ -41,7 +41,7 @@ public class PosterScreen extends Screen {
         Button saveButton = new Button(Button.builder(Component.empty(), button -> saveUrlAndClose()).bounds(centerX - 16, centerY + 10, 32, 16)) {
             @Override
             public void playDownSound(net.minecraft.client.sounds.SoundManager handler) {
-                handler.play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F));
+                handler.play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F));
             }
         };
 

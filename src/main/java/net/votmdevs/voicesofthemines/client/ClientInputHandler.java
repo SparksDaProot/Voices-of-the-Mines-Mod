@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.entity.FleshEntity;
 import net.votmdevs.voicesofthemines.entity.GarbageEntity;
 import net.votmdevs.voicesofthemines.entity.MaxwellEntity;
@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Random;
 
-@Mod.EventBusSubscriber(modid = KerfurMod.MODID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = VoicesOfTheMines.MODID, value = Dist.CLIENT)
 public class ClientInputHandler {
     private static boolean wasUseKeyDown = false;
     private static Entity currentlyHeldEntity = null;
@@ -54,14 +54,14 @@ public class ClientInputHandler {
             targetRoll = (50f + rand.nextFloat() * 35f) * (rand.nextBoolean() ? 1 : -1);
             targetPitch = -40f + rand.nextFloat() * 120f;
             targetYawOffset = (rand.nextFloat() - 0.5f) * 60f;
-            mc.player.playSound(KerfurSounds.FALLDEATH.get(), 1.0F, 1.0F);
+            mc.player.playSound(VotmSounds.FALLDEATH.get(), 1.0F, 1.0F);
         }
     }
 
     @SubscribeEvent
     public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && mc.player.getMainHandItem().getItem() == KerfurMod.HOOK_ITEM.get()) {
+        if (mc.player != null && mc.player.getMainHandItem().getItem() == VoicesOfTheMines.HOOK_ITEM.get()) {
             double scroll = -event.getScrollDelta();
             if (scroll != 0) {
                 KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.HookPullPacket(scroll));
@@ -73,7 +73,7 @@ public class ClientInputHandler {
     @SubscribeEvent
     public static void onMouseClickHook(InputEvent.InteractionKeyMappingTriggered event) {
         Minecraft mc = Minecraft.getInstance();
-        if (event.isAttack() && mc.player != null && mc.player.getMainHandItem().getItem() == KerfurMod.HOOK_ITEM.get()) {
+        if (event.isAttack() && mc.player != null && mc.player.getMainHandItem().getItem() == VoicesOfTheMines.HOOK_ITEM.get()) {
             KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.HookDetachPacket());
             event.setCanceled(true);
         }
@@ -109,7 +109,7 @@ public class ClientInputHandler {
                     currentAtvSoundState = "idle";
                     if (atvSoundInstance != null) mc.getSoundManager().stop(atvSoundInstance);
 
-                    atvSoundInstance = new AtvLoopSound(activeAtv, KerfurSounds.IDLE.get());
+                    atvSoundInstance = new AtvLoopSound(activeAtv, VotmSounds.IDLE.get());
                     mc.getSoundManager().play(atvSoundInstance);
                 }
             } else {
@@ -117,7 +117,7 @@ public class ClientInputHandler {
                     currentAtvSoundState = "drive_start";
                     if (atvSoundInstance != null) mc.getSoundManager().stop(atvSoundInstance);
 
-                    atvSoundInstance = net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(KerfurSounds.ATV_DRIVE_START.get(), 1.0F, 1.0F);
+                    atvSoundInstance = net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(VotmSounds.ATV_DRIVE_START.get(), 1.0F, 1.0F);
                     mc.getSoundManager().play(atvSoundInstance);
                     atvSoundTimer = 60;
                 }
@@ -129,7 +129,7 @@ public class ClientInputHandler {
                         currentAtvSoundState = "drive_loop";
                         if (atvSoundInstance != null) mc.getSoundManager().stop(atvSoundInstance);
 
-                        atvSoundInstance = new AtvLoopSound(activeAtv, KerfurSounds.ATV_DRIVE_LOOP.get());
+                        atvSoundInstance = new AtvLoopSound(activeAtv, VotmSounds.ATV_DRIVE_LOOP.get());
                         mc.getSoundManager().play(atvSoundInstance);
                     }
                 }
@@ -154,7 +154,7 @@ public class ClientInputHandler {
 
         if (activeDrone != null) {
             if (droneSoundInstance == null || !mc.getSoundManager().isActive(droneSoundInstance)) {
-                droneSoundInstance = new DroneLoopSound(activeDrone, KerfurSounds.DRONE_AMBIENT.get());
+                droneSoundInstance = new DroneLoopSound(activeDrone, VotmSounds.DRONE_AMBIENT.get());
                 mc.getSoundManager().play(droneSoundInstance);
             }
         } else {
@@ -212,13 +212,13 @@ public class ClientInputHandler {
                         net.minecraft.world.level.block.state.BlockState state = mc.level.getBlockState(blockHit.getBlockPos());
                         net.minecraft.world.level.block.Block block = state.getBlock();
 
-                        if (block == KerfurMod.TERMINAL_CHECK.get() || block == KerfurMod.TERMINAL_PROCESSING.get()) {
+                        if (block == VoicesOfTheMines.TERMINAL_CHECK.get() || block == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
 
                             String sigId = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID);
                             boolean isEmpty = (sigId == null || sigId.isEmpty());
 
-                            if (block == KerfurMod.TERMINAL_PROCESSING.get() && isEmpty) {
-                                mc.player.playSound(KerfurSounds.BUG_ALERT.get(), 1.0F, 0.5F);
+                            if (block == VoicesOfTheMines.TERMINAL_PROCESSING.get() && isEmpty) {
+                                mc.player.playSound(VotmSounds.BUG_ALERT.get(), 1.0F, 0.5F);
                             } else {
                                 KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.InsertDrivePacket(blockHit.getBlockPos(), drive.getId()));
                             }
@@ -275,7 +275,7 @@ public class ClientInputHandler {
         }
         Minecraft mc = Minecraft.getInstance();
         if (event.isAttack() && mc.crosshairPickEntity instanceof GarbageEntity garbage) {
-            if (mc.player != null && mc.player.getMainHandItem().getItem() == KerfurMod.TRASH_ROLL.get()) {
+            if (mc.player != null && mc.player.getMainHandItem().getItem() == VoicesOfTheMines.TRASH_ROLL.get()) {
                 KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.PackGarbagePacket(garbage.getId()));
                 event.setSwingHand(true);
                 event.setCanceled(true);
@@ -350,7 +350,7 @@ public class ClientInputHandler {
         Minecraft mc = Minecraft.getInstance();
 
         if (event.getOverlay() == net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.HOTBAR.type() && vignetteAlpha > 0) {
-            ResourceLocation VIGNETTE = new ResourceLocation(KerfurMod.MODID, "textures/gui/damage_vignette.png");
+            ResourceLocation VIGNETTE = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/damage_vignette.png");
             com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
             com.mojang.blaze3d.systems.RenderSystem.depthMask(false);
             com.mojang.blaze3d.systems.RenderSystem.enableBlend();
@@ -389,7 +389,7 @@ public class ClientInputHandler {
             }
             // drone overlay
             if (mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult blockHit) {
-                if (mc.level.getBlockState(blockHit.getBlockPos()).getBlock() == KerfurMod.DRONE_PANEL.get()) {
+                if (mc.level.getBlockState(blockHit.getBlockPos()).getBlock() == VoicesOfTheMines.DRONE_PANEL.get()) {
 
                     int width = event.getWindow().getGuiScaledWidth();
                     int height = event.getWindow().getGuiScaledHeight();

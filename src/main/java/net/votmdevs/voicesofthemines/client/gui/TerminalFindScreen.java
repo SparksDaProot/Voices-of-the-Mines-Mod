@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.client.gui;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.network.KerfurPacketHandler;
 import net.votmdevs.voicesofthemines.world.SignalManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 public class TerminalFindScreen extends Screen {
-    private static final ResourceLocation SPACE_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/space.png");
-    private static final ResourceLocation CROSSHAIR_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/coordcrosshair.png");
-    private static final ResourceLocation ARROW_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/red_arrow.png");
-    private static final ResourceLocation ANIM_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/found_anim_sheet.png");
+    private static final ResourceLocation SPACE_TEX = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/space.png");
+    private static final ResourceLocation CROSSHAIR_TEX = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/coordcrosshair.png");
+    private static final ResourceLocation ARROW_TEX = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/red_arrow.png");
+    private static final ResourceLocation ANIM_TEX = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/found_anim_sheet.png");
 
     public static List<SignalManager.VotvSignal> CLIENT_SIGNALS = new ArrayList<>();
 
@@ -67,9 +67,9 @@ public class TerminalFindScreen extends Screen {
     protected void init() {
         super.init();
         if (ambientSound == null) {
-            ambientSound = new GuiLoopSound(KerfurSounds.FIND_AMBIENT.get(), 0.3f);
-            sonarSound = new GuiLoopSound(KerfurSounds.SONAR.get(), 0.15f);
-            proximitySound = new GuiLoopSound(KerfurSounds.FIND_HELP.get(), 0f); // Изначально тихий
+            ambientSound = new GuiLoopSound(VotmSounds.FIND_AMBIENT.get(), 0.3f);
+            sonarSound = new GuiLoopSound(VotmSounds.SONAR.get(), 0.15f);
+            proximitySound = new GuiLoopSound(VotmSounds.FIND_HELP.get(), 0f); // Изначально тихий
 
             Minecraft.getInstance().getSoundManager().play(ambientSound);
             Minecraft.getInstance().getSoundManager().play(sonarSound);
@@ -119,7 +119,7 @@ public class TerminalFindScreen extends Screen {
                 isScanning = false;
                 statusText = "SUCCESS: SIGNAL FOUND";
                 statusColor = 0x00FF00;
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.ACHIEVEMENT.get(), 1.0F, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.ACHIEVEMENT.get(), 1.0F, 1.0F));
                 KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.CatchSignalPacket(currentlyScanningSignal.id));
                 CLIENT_SIGNALS.remove(currentlyScanningSignal);
                 currentlyScanningSignal = null;
@@ -259,7 +259,7 @@ public class TerminalFindScreen extends Screen {
                     arrowTimer = 60;
                     addLog("PING: " + CLIENT_SIGNALS.size() + " signals detected.");
 
-                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.DETECT_BEEP.get(), 1.0F, 0.8F));
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.DETECT_BEEP.get(), 1.0F, 0.8F));
                 }
             } else {
                 addLog("ERR: Radar charging.");
@@ -312,7 +312,7 @@ public class TerminalFindScreen extends Screen {
     }
 
     private void playErrorSound() {
-        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUG_ALERT.get(), 1.0F, 0.4F));
+        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUG_ALERT.get(), 1.0F, 0.4F));
     }
 
     public static class GuiLoopSound extends net.minecraft.client.resources.sounds.AbstractTickableSoundInstance {

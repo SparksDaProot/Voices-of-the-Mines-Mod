@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.item;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
@@ -10,7 +10,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import java.util.function.Supplier;
 
 public enum HazardArmorMaterial implements ArmorMaterial {
-    HAZARD("hazard", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(KerfurMod.RECYCLED_RUBBER.get()));
+    HAZARD("hazard", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> Ingredient.of(VoicesOfTheMines.RECYCLED_RUBBER.get()));
 
     private final String name;
     private final int durabilityMultiplier;
@@ -49,7 +49,7 @@ public enum HazardArmorMaterial implements ArmorMaterial {
     @Override public int getEnchantmentValue() { return this.enchantmentValue; }
     @Override public SoundEvent getEquipSound() { return this.equipSound; }
     @Override public Ingredient getRepairIngredient() { return this.repairIngredient.get(); }
-    @Override public String getName() { return KerfurMod.MODID + ":" + this.name; }
+    @Override public String getName() { return VoicesOfTheMines.MODID + ":" + this.name; }
     @Override public float getToughness() { return this.toughness; }
     @Override public float getKnockbackResistance() { return this.knockbackResistance; }
 }

@@ -17,6 +17,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -68,7 +70,7 @@ public class FleshEntity extends PathfinderMob implements GeoEntity {
             if (isColliding && !this.wasCollidingLastTick) {
                 // blood
                 createOrUpgradeSplash();
-                this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.FLESH_DROP.get(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                this.playSound(VotmSounds.FLESH_DROP.get(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
             this.wasCollidingLastTick = isColliding;
 
@@ -132,7 +134,7 @@ public class FleshEntity extends PathfinderMob implements GeoEntity {
             }
             splash.resetTimer();
         } else {
-            BloodSplashEntity newSplash = net.votmdevs.voicesofthemines.KerfurMod.BLOOD_SPLASH.get().create(this.level());
+            BloodSplashEntity newSplash = VoicesOfTheMines.BLOOD_SPLASH.get().create(this.level());
             if (newSplash != null) {
                 double offX = spawnPos.x + face.getStepX() * 0.05D;
                 double offY = spawnPos.y + face.getStepY() * 0.05D;

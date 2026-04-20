@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.entity.HookEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -35,7 +35,7 @@ public class HookRenderer extends EntityRenderer<HookEntity> {
         poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
         poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
 
-        ItemStack stack = new ItemStack(KerfurMod.HOOK_PART.get());
+        ItemStack stack = new ItemStack(VoicesOfTheMines.HOOK_PART.get());
         this.itemRenderer.renderStatic(stack, ItemDisplayContext.GROUND, packedLight, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), entity.getId());
 
         poseStack.popPose();
@@ -46,7 +46,7 @@ public class HookRenderer extends EntityRenderer<HookEntity> {
 
             int handOffset = player.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
             ItemStack itemInHand = player.getMainHandItem();
-            if (itemInHand.getItem() != KerfurMod.HOOK_ITEM.get()) {
+            if (itemInHand.getItem() != VoicesOfTheMines.HOOK_ITEM.get()) {
                 handOffset = -handOffset;
             }
 

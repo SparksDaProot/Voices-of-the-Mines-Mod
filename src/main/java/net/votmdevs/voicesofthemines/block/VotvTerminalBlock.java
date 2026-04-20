@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.block;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -40,7 +40,7 @@ public class VotvTerminalBlock extends BaseEntityBlock {
         if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
             net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(serverPlayer.serverLevel());
 
-            if (this == KerfurMod.TERMINAL_FIND.get()) {
+            if (this == VoicesOfTheMines.TERMINAL_FIND.get()) {
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
                         new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncSignalsPacket(manager.getUncaughtSignals()),
                         serverPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
@@ -50,7 +50,7 @@ public class VotvTerminalBlock extends BaseEntityBlock {
                         serverPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
                 );
             }
-            else if (this == KerfurMod.TERMINAL_CALIBRATE.get()) {
+            else if (this == VoicesOfTheMines.TERMINAL_CALIBRATE.get()) {
                 net.votmdevs.voicesofthemines.world.SignalManager.VotvSignal sig = manager.getProcessingSignal();
                 boolean hasSig = (sig != null);
                 float tLine = hasSig ? sig.targetLine : 0f;
@@ -63,7 +63,7 @@ public class VotvTerminalBlock extends BaseEntityBlock {
                 );
             }
 
-            else if (this == KerfurMod.TABLE.get()) {
+            else if (this == VoicesOfTheMines.TABLE.get()) {
                 net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
 
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
@@ -72,7 +72,7 @@ public class VotvTerminalBlock extends BaseEntityBlock {
                 );
             }
 
-            else if (this == KerfurMod.TERMINAL_PROCESSING.get()) {
+            else if (this == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
                 net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal = (net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity) level.getBlockEntity(pos);
                 if (terminal != null && terminal.hasDrive()) {
                     String sigType = terminal.getDriveSignalType();
@@ -84,7 +84,7 @@ public class VotvTerminalBlock extends BaseEntityBlock {
                 }
             }
 
-            else if (this == KerfurMod.TERMINAL_CHECK.get()) {
+            else if (this == VoicesOfTheMines.TERMINAL_CHECK.get()) {
                 net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal = (net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity) level.getBlockEntity(pos);
 
                 String sType = "";
@@ -114,21 +114,21 @@ public class VotvTerminalBlock extends BaseEntityBlock {
             }
         } else {
             // client
-            if (this == KerfurMod.TERMINAL_FIND.get()) {
+            if (this == VoicesOfTheMines.TERMINAL_FIND.get()) {
                 net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalFindScreen(pos));
-            } else if (this == KerfurMod.TERMINAL_CALIBRATE.get()) {
+            } else if (this == VoicesOfTheMines.TERMINAL_CALIBRATE.get()) {
                 net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalCalibrateScreen(pos));
             }
-            else if (this == KerfurMod.TABLE.get()) {
+            else if (this == VoicesOfTheMines.TABLE.get()) {
                 net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.ComputerScreen(pos));
             }
-            else if (this == KerfurMod.TERMINAL_PROCESSING.get()) {
+            else if (this == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
                 net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal = (net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity) level.getBlockEntity(pos);
                 if (terminal != null && terminal.hasDrive()) {
                     net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalProcessingScreen(pos));
                 }
             }
-            else if (this == KerfurMod.TERMINAL_CHECK.get()) {
+            else if (this == VoicesOfTheMines.TERMINAL_CHECK.get()) {
                 net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal = (net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity) level.getBlockEntity(pos);
                 if (terminal != null && terminal.hasDrive()) {
                     net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalCheckScreen(pos));
@@ -136,7 +136,7 @@ public class VotvTerminalBlock extends BaseEntityBlock {
             }
         }
 
-        if (this == KerfurMod.TERMINAL_FIND.get() || this == KerfurMod.TERMINAL_CALIBRATE.get()) {
+        if (this == VoicesOfTheMines.TERMINAL_FIND.get() || this == VoicesOfTheMines.TERMINAL_CALIBRATE.get()) {
             return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
         }
         return net.minecraft.world.InteractionResult.PASS;
@@ -158,13 +158,13 @@ public class VotvTerminalBlock extends BaseEntityBlock {
             BlockPos pos2 = pos.relative(side2);
 
             if (level.getBlockState(pos1).canBeReplaced()) {
-                level.setBlock(pos1, KerfurMod.PHANTOM_BLOCK.get().defaultBlockState(), 3);
+                level.setBlock(pos1, VoicesOfTheMines.PHANTOM_BLOCK.get().defaultBlockState(), 3);
             }
             if (level.getBlockState(pos1_1).canBeReplaced()) {
-                level.setBlock(pos1_1, KerfurMod.PHANTOM_BLOCK.get().defaultBlockState(), 3);
+                level.setBlock(pos1_1, VoicesOfTheMines.PHANTOM_BLOCK.get().defaultBlockState(), 3);
             }
             if (level.getBlockState(pos2).canBeReplaced()) {
-                level.setBlock(pos2, KerfurMod.PHANTOM_BLOCK.get().defaultBlockState(), 3);
+                level.setBlock(pos2, VoicesOfTheMines.PHANTOM_BLOCK.get().defaultBlockState(), 3);
             }
         }
     }
@@ -181,13 +181,13 @@ public class VotvTerminalBlock extends BaseEntityBlock {
             BlockPos pos1_1 = pos.relative(side1,2);
             BlockPos pos2 = pos.relative(side2);
 
-            if (level.getBlockState(pos1).is(KerfurMod.PHANTOM_BLOCK.get())) {
+            if (level.getBlockState(pos1).is(VoicesOfTheMines.PHANTOM_BLOCK.get())) {
                 level.removeBlock(pos1, false);
             }
-            if (level.getBlockState(pos1_1).is(KerfurMod.PHANTOM_BLOCK.get())) {
+            if (level.getBlockState(pos1_1).is(VoicesOfTheMines.PHANTOM_BLOCK.get())) {
                 level.removeBlock(pos1_1, false);
             }
-            if (level.getBlockState(pos2).is(KerfurMod.PHANTOM_BLOCK.get())) {
+            if (level.getBlockState(pos2).is(VoicesOfTheMines.PHANTOM_BLOCK.get())) {
                 level.removeBlock(pos2, false);
             }
         }
@@ -195,8 +195,8 @@ public class VotvTerminalBlock extends BaseEntityBlock {
     }
 
     private boolean isWideTerminal(Block block) {
-        return block == KerfurMod.TERMINAL_CALIBRATE.get() ||
-                block == KerfurMod.TERMINAL_PROCESSING.get();
+        return block == VoicesOfTheMines.TERMINAL_CALIBRATE.get() ||
+                block == VoicesOfTheMines.TERMINAL_PROCESSING.get();
     }
 
 

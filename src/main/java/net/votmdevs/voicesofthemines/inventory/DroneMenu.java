@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.inventory;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,7 +12,7 @@ public class DroneMenu extends AbstractContainerMenu {
     private final Container container;
 
     public DroneMenu(int windowId, Inventory playerInventory, Container container) {
-        super(KerfurMod.DRONE_MENU.get(), windowId);
+        super(VoicesOfTheMines.DRONE_MENU.get(), windowId);
         this.container = container;
         checkContainerSize(container, 27);
         container.startOpen(playerInventory.player);

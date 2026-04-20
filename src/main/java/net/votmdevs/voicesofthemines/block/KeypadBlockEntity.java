@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.block;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -30,7 +30,7 @@ public class KeypadBlockEntity extends BlockEntity implements GeoBlockEntity {
     private int timer = 0;
 
     public KeypadBlockEntity(BlockPos pos, BlockState state) {
-        super(KerfurMod.KEYPAD_BLOCK_ENTITY.get(), pos, state);
+        super(VoicesOfTheMines.KEYPAD_BLOCK_ENTITY.get(), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, KeypadBlockEntity be) {
@@ -41,9 +41,9 @@ public class KeypadBlockEntity extends BlockEntity implements GeoBlockEntity {
 
             if (be.status == 3) {
                 if (be.timer == 54) { // Через 0.3 сек (60 - 6 тиков)
-                    level.playSound(null, pos, KerfurSounds.KEYPAD_ACCESS.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                    level.playSound(null, pos, VotmSounds.KEYPAD_ACCESS.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
                 } else if (be.timer == 38) { // Через 0.8 сек после access (54 - 16 тиков)
-                    level.playSound(null, pos, KerfurSounds.KEYPAD_DENIED.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                    level.playSound(null, pos, VotmSounds.KEYPAD_DENIED.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
             }
 
@@ -61,7 +61,7 @@ public class KeypadBlockEntity extends BlockEntity implements GeoBlockEntity {
 
         if (this.level.isClientSide()) {
             this.triggerAnim("buttons", "button_" + number);
-            this.level.playLocalSound(this.worldPosition, KerfurSounds.KEYPAD_PRESS.get(), SoundSource.BLOCKS, 1.0F, 1.0F, false);
+            this.level.playLocalSound(this.worldPosition, VotmSounds.KEYPAD_PRESS.get(), SoundSource.BLOCKS, 1.0F, 1.0F, false);
         } else {
             if (currentCode.length() >= 4) currentCode = "";
             currentCode += number;
@@ -86,7 +86,7 @@ public class KeypadBlockEntity extends BlockEntity implements GeoBlockEntity {
                     } else {
                         status = 3;
                         timer = 60;
-                        this.level.playSound(null, this.worldPosition, KerfurSounds.KEYPAD_CANCELED.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                        this.level.playSound(null, this.worldPosition, VotmSounds.KEYPAD_CANCELED.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
                     }
                 }
             }

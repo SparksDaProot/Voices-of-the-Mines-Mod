@@ -1,0 +1,246 @@
+{
+  "idle": { "sounds": [ "kerfurpet:idle" ] },
+  "jump": { "sounds": [ "kerfurpet:jump" ] },
+  "meow": { "sounds": [ "kerfurpet:meow" ] },
+  "shutdown": { "sounds": [ "kerfurpet:shutdown" ] },
+  "craft": { "sounds": [ "kerfurpet:craft" ] },
+  "open_storage": { "sounds": [ "kerfurpet:open_storage" ] },
+  "flashlight": { "sounds": [ "kerfurpet:flashlight" ] },
+  "bubble": { "sounds": [ "kerfurpet:bubble" ] },
+  "walk": { "sounds": [ "kerfurpet:walk" ] },
+  "warning": { "sounds": [ "kerfurpet:warning" ] },
+
+  "flesh_grab": {
+    "sounds": [
+      "kerfurpet:flesh_1",
+      "kerfurpet:flesh_2",
+      "kerfurpet:flesh_3"
+    ]
+  },
+  "flesh_drop": {
+    "sounds": [
+      "kerfurpet:flesh_impact_2",
+      "kerfurpet:flesh_impact_3",
+      "kerfurpet:flesh_impact_4"
+    ]
+  },
+  "garbage_grab": {
+    "sounds": [
+      "kerfurpet:garbage_grab1",
+      "kerfurpet:garbage_grab2",
+      "kerfurpet:garbage_grab3"
+    ]
+  },
+  "garbage_drop": {
+    "sounds": [
+      "kerfurpet:pl_dirt1",
+      "kerfurpet:pl_dirt2",
+      "kerfurpet:pl_dirt3"
+    ]
+  },
+
+  "murder_meow": {
+    "sounds": [ "kerfurpet:murder_kerfur_meow" ]
+  },
+  "murder_random": {
+    "sounds": [
+      "kerfurpet:murderfur_1",
+      "kerfurpet:murderfur_2",
+      "kerfurpet:murderfur_3",
+      "kerfurpet:murderfur_4",
+      "kerfurpet:murderfur_5",
+      "kerfurpet:murderfur_6"
+    ]
+  },
+
+  "maxwell_theme": { "sounds": [ "kerfurpet:maxwell_theme" ] },
+  "meow1": { "sounds": [ "kerfurpet:meow1" ] },
+  "meow2": { "sounds": [ "kerfurpet:meow2" ] },
+  "dududu": { "sounds": [ "kerfurpet:dududu" ] },
+
+  "player_cough": {
+    "sounds": [
+      "kerfurpet:cough-01",
+      "kerfurpet:cough-02",
+      "kerfurpet:cough-03"
+    ]
+  },
+
+  "buttonclick": { "sounds": [ "voicesofthemines:buttonclick" ] },
+  "concrete_scrape": { "sounds": [ "voicesofthemines:concrete_scrape" ] },
+
+  "cockroach_eat": {
+    "sounds": [
+      "voicesofthemines:eat",
+      "voicesofthemines:eat_2",
+      "voicesofthemines:eat_3",
+      "voicesofthemines:eat_4"
+    ]
+  },
+
+  "pack_garbage": {
+    "sounds": [
+      "voicesofthemines:impact_bag_1",
+      "voicesofthemines:impact_bag_2",
+      "voicesofthemines:impact_bag_3"
+    ]
+  },
+
+  "omega_sprint": { "sounds": [ "voicesofthemines:start_sprint" ] },
+  "omega_bonk": { "sounds": [ "voicesofthemines:bonk" ] },
+  "breath": { "sounds": [ "voicesofthemines:breath" ] },
+  "breakingbad": { "sounds": [ "voicesofthemines:breakingbad" ] },
+  "falldeath": { "sounds": [ "voicesofthemines:falldeath" ] },
+  "dooropen1": { "sounds": [ "voicesofthemines:dooropen1" ] },
+
+  "omega_step_dirt": {
+    "sounds": [
+      "voicesofthemines:foot_dirt_1",
+      "voicesofthemines:foot_dirt_2",
+      "voicesofthemines:foot_dirt_3"
+    ]
+  },
+  "omega_step_wood": {
+    "sounds": [
+      "voicesofthemines:foot_wood_0001",
+      "voicesofthemines:foot_wood_0002",
+      "voicesofthemines:foot_wood_0003"
+    ]
+  },
+  "omega_step_default": {
+    "sounds": [
+      "voicesofthemines:foot_def_0001",
+      "voicesofthemines:foot_def_0002",
+      "voicesofthemines:foot_def_0003"
+    ]
+  },
+
+  "keypad_press": {
+    "sounds": [
+      "voicesofthemines:keypress1",
+      "voicesofthemines:keypress2",
+      "voicesofthemines:keypress3",
+      "voicesofthemines:keypress4",
+      "voicesofthemines:keypress5",
+      "voicesofthemines:keypress6",
+      "voicesofthemines:keypress7",
+      "voicesofthemines:keypress8",
+      "voicesofthemines:keypress9",
+      "voicesofthemines:keypress10"
+    ]
+  },
+  "keypad_canceled": { "sounds": [ "voicesofthemines:keypad_canceled" ] },
+  "keypad_access": { "sounds": [ "voicesofthemines:access" ] },
+  "keypad_denied": { "sounds": [ "voicesofthemines:denied" ] },
+
+  "fuel_can_drop": {
+    "sounds": [
+      "voicesofthemines:impact_metall01",
+      "voicesofthemines:impact_metall02"
+    ]
+  },
+
+  "fuel1": { "sounds": [ "voicesofthemines:fuel1" ] },
+  "car_on": { "sounds": [ "voicesofthemines:car_on" ] },
+  "car_off": { "sounds": [ "voicesofthemines:car_off" ] },
+  "car_drive_brake": { "sounds": [ "voicesofthemines:car_drive_brake" ] },
+  "car_drive_start": { "sounds": [ "voicesofthemines:car_drive_start" ] },
+  "car_drive_loop": { "sounds": [ "voicesofthemines:car_drive_loop" ] },
+  "car_damage": { "sounds": [ "voicesofthemines:car_damage" ] },
+
+  "bug_alert": { "sounds": [ "voicesofthemines:bug_alert" ] },
+  "find_ambient": { "sounds": [ "voicesofthemines:find_ambient" ] },
+  "sonar": { "sounds": [ "voicesofthemines:sonar" ] },
+  "detect_beep": { "sounds": [ "voicesofthemines:detect_beep" ] },
+  "find_help": { "sounds": [ "voicesofthemines:find_help" ] },
+  "calibrate_loop": { "sounds": [ "voicesofthemines:calibrate_loop" ] },
+  "achievement": { "sounds": [ "voicesofthemines:achievement" ] },
+  "tumbler": { "sounds": [ "voicesofthemines:tumbler" ] },
+
+  "pcstartup": { "sounds": [ "voicesofthemines:pcstartup" ] },
+  "computerworking_loop": { "sounds": [ "voicesofthemines:computerworking_loop" ] },
+
+  "raw1": { "sounds": [ "voicesofthemines:raw1" ] },
+  "raw2": { "sounds": [ "voicesofthemines:raw2" ] },
+  "raw3": { "sounds": [ "voicesofthemines:raw3" ] },
+  "raw4": { "sounds": [ "voicesofthemines:raw4" ] },
+  "raw5": { "sounds": [ "voicesofthemines:raw5" ] },
+  "raw6": { "sounds": [ "voicesofthemines:raw6" ] },
+  "raw7": { "sounds": [ "voicesofthemines:raw7" ] },
+  "raw8": { "sounds": [ "voicesofthemines:raw8" ] },
+
+  "noisy1": { "sounds": [ "voicesofthemines:noisy1" ] },
+  "noisy2": { "sounds": [ "voicesofthemines:noisy2" ] },
+  "noisy3": { "sounds": [ "voicesofthemines:noisy3" ] },
+  "noisy4": { "sounds": [ "voicesofthemines:noisy4" ] },
+  "noisy5": { "sounds": [ "voicesofthemines:noisy5" ] },
+  "noisy6": { "sounds": [ "voicesofthemines:noisy6" ] },
+  "noisy7": { "sounds": [ "voicesofthemines:noisy7" ] },
+  "noisy8": { "sounds": [ "voicesofthemines:noisy8" ] },
+
+  "low1": { "sounds": [ "voicesofthemines:low1" ] },
+  "low2": { "sounds": [ "voicesofthemines:low2" ] },
+  "low3": { "sounds": [ "voicesofthemines:low3" ] },
+  "low4": { "sounds": [ "voicesofthemines:low4" ] },
+  "low5": { "sounds": [ "voicesofthemines:low5" ] },
+  "low6": { "sounds": [ "voicesofthemines:low6" ] },
+  "low7": { "sounds": [ "voicesofthemines:low7" ] },
+  "low8": { "sounds": [ "voicesofthemines:low8" ] },
+
+  "signal_planet_mars": { "sounds": [ "voicesofthemines:signal_planet_mars" ] },
+  "signal_bday": { "sounds": [ "voicesofthemines:signal_bday" ] },
+  "signal_planet_venus": { "sounds": [ "voicesofthemines:signal_planet_venus" ] },
+  "signal_planet_enceladus": { "sounds": [ "voicesofthemines:signal_planet_enceladus" ] },
+  "signal_planet_ceres": { "sounds": [ "voicesofthemines:signal_planet_ceres" ] },
+  "signal_planet_dione": { "sounds": [ "voicesofthemines:signal_planet_dione" ] },
+  "signal_planet_bennu": { "sounds": [ "voicesofthemines:signal_planet_bennu" ] },
+  "signal_planet_mercury": { "sounds": [ "voicesofthemines:signal_planet_mercury" ] },
+  "signal_planet_earth": { "sounds": [ "voicesofthemines:signal_planet_earth" ] },
+  "signal_faces": { "sounds": [ "voicesofthemines:signal_faces" ] },
+  "signal_planet_retro": { "sounds": [ "voicesofthemines:signal_planet_retro" ] },
+
+  "siggen1": { "sounds": [ "voicesofthemines:siggen1" ] },
+  "siggen2": { "sounds": [ "voicesofthemines:siggen2" ] },
+  "siggen3": { "sounds": [ "voicesofthemines:siggen3" ] },
+  "siggen4": { "sounds": [ "voicesofthemines:siggen4" ] },
+  "siggen5": { "sounds": [ "voicesofthemines:siggen5" ] },
+  "siggen6": { "sounds": [ "voicesofthemines:siggen6" ] },
+
+  "signal_siggenus1": { "sounds": [ "voicesofthemines:signal_siggenus1" ] },
+  "signal_siggenus2": { "sounds": [ "voicesofthemines:signal_siggenus2" ] },
+  "signal_siggenus3": { "sounds": [ "voicesofthemines:signal_siggenus3" ] },
+  "signal_siggenus4": { "sounds": [ "voicesofthemines:signal_siggenus4" ] },
+  "signal_siggenus5": { "sounds": [ "voicesofthemines:signal_siggenus5" ] },
+  "signal_siggenus6": { "sounds": [ "voicesofthemines:signal_siggenus6" ] },
+  "signal_siggenus7": { "sounds": [ "voicesofthemines:signal_siggenus7" ] },
+  "signal_siggenus8": { "sounds": [ "voicesofthemines:signal_siggenus8" ] },
+
+  "signal_planet_makemake": { "sounds": [ "voicesofthemines:signal_planet_makemake" ] },
+  "signal_planet_rhea": { "sounds": [ "voicesofthemines:signal_planet_rhea" ] },
+  "signal_iris": { "sounds": [ "voicesofthemines:signal_iris" ] },
+  "signal_amazur": { "sounds": [ "voicesofthemines:signal_amazur" ] },
+  "signal_vion": { "sounds": [ "voicesofthemines:signal_vion" ] },
+  "signal_subplanet": { "sounds": [ "voicesofthemines:signal_subplanet" ] },
+  "signal_planet_europa": { "sounds": [ "voicesofthemines:signal_planet_europa" ] },
+  "signal_planet_moon": { "sounds": [ "voicesofthemines:signal_planet_moon" ] },
+  "signal_planet_jupiter": { "sounds": [ "voicesofthemines:signal_planet_jupiter" ] },
+  "signal_planet_uranus": { "sounds": [ "voicesofthemines:signal_planet_uranus" ] },
+  "signal_planet_neptune": { "sounds": [ "voicesofthemines:signal_planet_neptune" ] },
+  "signal_planet_saturn": { "sounds": [ "voicesofthemines:signal_planet_saturn" ] },
+  "signal_hilero": { "sounds": [ "voicesofthemines:signal_hilero" ] },
+
+  "exogen1": { "sounds": [ "voicesofthemines:exogen1" ] },
+  "exogen2": { "sounds": [ "voicesofthemines:exogen2" ] },
+
+  "votv_earth": { "sounds": [ "voicesofthemines:votv_earth" ] },
+  "signal_hairy": { "sounds": [ "voicesofthemines:signal_hairy" ] },
+  "signal_fard": { "sounds": [ "voicesofthemines:signal_fard" ] },
+  "ironlungsignal": { "sounds": [ "voicesofthemines:ironlungsignal" ] },
+
+  "drive_in": { "sounds": [ "voicesofthemines:drive_in" ] },
+  "impact_drive_0001": { "sounds": [ "voicesofthemines:impact_drive_0001" ] },
+  "impact_drive_0002": { "sounds": [ "voicesofthemines:impact_drive_0002" ] },
+  "impact_drive_0003": { "sounds": [ "voicesofthemines:impact_drive_0003" ] },
+  "drone": { "sounds": [ "voicesofthemines:drone" ] },
+  "email": { "sounds": [ "voicesofthemines:email" ] }
+}

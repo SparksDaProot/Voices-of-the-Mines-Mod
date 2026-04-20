@@ -12,6 +12,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -56,7 +57,7 @@ public class FuelCanEntity extends PathfinderMob implements GeoEntity {
         if (!this.level().isClientSide()) {
             boolean isColliding = this.horizontalCollision || this.verticalCollision;
             if (isColliding && !this.wasCollidingLastTick) {
-                this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.FUEL_CAN_DROP.get(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                this.playSound(VotmSounds.FUEL_CAN_DROP.get(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
             this.wasCollidingLastTick = isColliding;
         }
@@ -84,7 +85,7 @@ public class FuelCanEntity extends PathfinderMob implements GeoEntity {
                             this.entityData.set(CAN_FUEL, Math.max(0.0f, canFuel - 0.1f));
 
                             if (this.tickCount % 6 == 0) {
-                                this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.FUEL_POUR.get(), 0.5f, 1.0f);
+                                this.playSound(VotmSounds.FUEL_POUR.get(), 0.5f, 1.0f);
                             }
                             break;
                         }

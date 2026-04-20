@@ -1,6 +1,0 @@
-{
-  "parent": "kerfurpet:block/taped_poster",
-  "textures": {
-    "texture": "kerfurpet:block/poster_blank_taped"
-  }
-}

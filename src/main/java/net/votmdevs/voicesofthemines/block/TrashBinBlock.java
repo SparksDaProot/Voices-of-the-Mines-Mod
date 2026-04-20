@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.block;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.entity.GarbageEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -66,7 +66,7 @@ public class TrashBinBlock extends Block {
                         if (stored + levelToAbsorb <= 10) {
                             level.setBlock(pos, state.setValue(STORED, stored + levelToAbsorb).setValue(FACING, state.getValue(FACING)), 3);
                             garbage.discard();
-                            level.playSound(null, pos, KerfurSounds.GARBAGE_DROP.get(), SoundSource.BLOCKS, 1.0F, 0.8F);
+                            level.playSound(null, pos, VotmSounds.GARBAGE_DROP.get(), SoundSource.BLOCKS, 1.0F, 0.8F);
                             absorbed = true;
                             break;
                         }
@@ -86,7 +86,7 @@ public class TrashBinBlock extends Block {
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         int stored = state.getValue(STORED);
         if (stored > 0) {
-            GarbageEntity garbage = KerfurMod.GARBAGE.get().create(level);
+            GarbageEntity garbage = VoicesOfTheMines.GARBAGE.get().create(level);
             if (garbage != null) {
                 garbage.setGarbageLevel(1);
                 garbage.moveTo(pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, random.nextFloat() * 360F, 0.0F);
@@ -110,7 +110,7 @@ public class TrashBinBlock extends Block {
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && !player.isCreative()) {
-            ItemStack stack = new ItemStack(KerfurMod.TRASH_BIN_ITEM.get());
+            ItemStack stack = new ItemStack(VoicesOfTheMines.TRASH_BIN_ITEM.get());
             int stored = state.getValue(STORED);
 
             if (stored > 0) {

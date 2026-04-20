@@ -12,6 +12,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -189,29 +190,29 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
 
     // sell prices
     private int getSellPrice(net.minecraft.world.item.Item item) {
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.HAZARD_HELMET.get() ||
-                item == net.votmdevs.voicesofthemines.KerfurMod.HAZARD_CHESTPLATE.get() ||
-                item == net.votmdevs.voicesofthemines.KerfurMod.HAZARD_LEGGINGS.get() ||
-                item == net.votmdevs.voicesofthemines.KerfurMod.HAZARD_BOOTS.get()) return 150;
+        if (item == VoicesOfTheMines.HAZARD_HELMET.get() ||
+                item == VoicesOfTheMines.HAZARD_CHESTPLATE.get() ||
+                item == VoicesOfTheMines.HAZARD_LEGGINGS.get() ||
+                item == VoicesOfTheMines.HAZARD_BOOTS.get()) return 150;
 
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.HOOK_ITEM.get()) return 25;
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.TRASH_ROLL.get()) return 5;
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.ACCESSORY_GLASSES.get()) return 1;
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.ACCESSORY_JACKET.get()) return 1;
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.KEYPAD_ITEM.get()) return 10;
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.POSTER_ITEM.get()) return 5;
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.TACO.get()) return 1;
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.TOBLERONE.get()) return 1;
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.CHEESE.get()) return 1;
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.BURGER.get()) return 1;
+        if (item == VoicesOfTheMines.HOOK_ITEM.get()) return 25;
+        if (item == VoicesOfTheMines.TRASH_ROLL.get()) return 5;
+        if (item == VoicesOfTheMines.ACCESSORY_GLASSES.get()) return 1;
+        if (item == VoicesOfTheMines.ACCESSORY_JACKET.get()) return 1;
+        if (item == VoicesOfTheMines.KEYPAD_ITEM.get()) return 10;
+        if (item == VoicesOfTheMines.POSTER_ITEM.get()) return 5;
+        if (item == VoicesOfTheMines.TACO.get()) return 1;
+        if (item == VoicesOfTheMines.TOBLERONE.get()) return 1;
+        if (item == VoicesOfTheMines.CHEESE.get()) return 1;
+        if (item == VoicesOfTheMines.BURGER.get()) return 1;
 
-        if (item == net.votmdevs.voicesofthemines.KerfurMod.PAINTER_BLACK.get() ||
-                item == net.votmdevs.voicesofthemines.KerfurMod.PAINTER_BLUE.get() ||
-                item == net.votmdevs.voicesofthemines.KerfurMod.PAINTER_GREEN.get() ||
-                item == net.votmdevs.voicesofthemines.KerfurMod.PAINTER_PINK.get() ||
-                item == net.votmdevs.voicesofthemines.KerfurMod.PAINTER_RED.get() ||
-                item == net.votmdevs.voicesofthemines.KerfurMod.PAINTER_WHITE.get() ||
-                item == net.votmdevs.voicesofthemines.KerfurMod.PAINTER_YELLOW.get()) return 20;
+        if (item == VoicesOfTheMines.PAINTER_BLACK.get() ||
+                item == VoicesOfTheMines.PAINTER_BLUE.get() ||
+                item == VoicesOfTheMines.PAINTER_GREEN.get() ||
+                item == VoicesOfTheMines.PAINTER_PINK.get() ||
+                item == VoicesOfTheMines.PAINTER_RED.get() ||
+                item == VoicesOfTheMines.PAINTER_WHITE.get() ||
+                item == VoicesOfTheMines.PAINTER_YELLOW.get()) return 20;
 
         return 0; // garbage 0 points :C
     }

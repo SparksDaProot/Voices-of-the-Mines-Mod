@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.entity.CockroachEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,7 +15,7 @@ import org.joml.Matrix4f;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CockroachRenderer extends GeoEntityRenderer<CockroachEntity> {
-    private static final ResourceLocation SELECT_ICON = new ResourceLocation(KerfurMod.MODID, "textures/gui/select.png");
+    private static final ResourceLocation SELECT_ICON = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/select.png");
 
     public CockroachRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new CockroachModel());

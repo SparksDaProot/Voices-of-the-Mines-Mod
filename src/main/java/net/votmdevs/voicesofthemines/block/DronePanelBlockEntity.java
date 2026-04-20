@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.block;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -20,7 +20,7 @@ public class DronePanelBlockEntity extends BlockEntity implements GeoBlockEntity
     public boolean isOpen = false;
 
     public DronePanelBlockEntity(BlockPos pos, BlockState state) {
-        super(KerfurMod.DRONE_PANEL_BE.get(), pos, state);
+        super(VoicesOfTheMines.DRONE_PANEL_BE.get(), pos, state);
     }
 
     public void toggleOpen() {

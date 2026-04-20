@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -65,7 +66,7 @@ public class AtvEntity extends PathfinderMob implements GeoEntity {
 
         if (braking && !wasBraking) {
             this.triggerAnim("actions", "brakes_start");
-            this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.ATV_BRAKE.get(), 1.0f, 1.0f);
+            this.playSound(VotmSounds.ATV_BRAKE.get(), 1.0f, 1.0f);
         } else if (!braking && wasBraking) {
             this.triggerAnim("actions", "brakes_end");
         }
@@ -163,7 +164,7 @@ public class AtvEntity extends PathfinderMob implements GeoEntity {
             boolean isColliding = this.horizontalCollision || this.verticalCollision || this.onGround();
             if (isColliding && !this.wasCollidingLastTick) {
                 this.triggerAnim("actions", "car_onground");
-                this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.GARBAGE_DROP.get(), 1.0F, 1.0F);
+                this.playSound(VotmSounds.GARBAGE_DROP.get(), 1.0F, 1.0F);
             }
             this.wasCollidingLastTick = isColliding;
         }
@@ -174,7 +175,7 @@ public class AtvEntity extends PathfinderMob implements GeoEntity {
                 this.entityData.set(FUEL, Math.max(0f, currentFuel - 0.0025f));
             } else {
                 this.setEngineOn(false);
-                this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.ATV_OFF.get(), 1.0F, 1.0F); // Звук глохнущего мотора
+                this.playSound(VotmSounds.ATV_OFF.get(), 1.0F, 1.0F); // Звук глохнущего мотора
             }
         }
 
@@ -212,8 +213,8 @@ public class AtvEntity extends PathfinderMob implements GeoEntity {
                 }
                 this.setEngineOn(newState);
 
-                if (newState) this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.ATV_ON.get(), 1.0F, 1.0F);
-                else this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.ATV_OFF.get(), 1.0F, 1.0F);
+                if (newState) this.playSound(VotmSounds.ATV_ON.get(), 1.0F, 1.0F);
+                else this.playSound(VotmSounds.ATV_OFF.get(), 1.0F, 1.0F);
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {

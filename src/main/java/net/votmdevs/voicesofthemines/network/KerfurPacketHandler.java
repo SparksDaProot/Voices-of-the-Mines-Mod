@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.network;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.client.gui.GmodNotificationManager;
 import net.votmdevs.voicesofthemines.entity.FleshEntity;
 import net.votmdevs.voicesofthemines.entity.FuelCanEntity;
@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 public class KerfurPacketHandler {
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(KerfurMod.MODID, "main"),
+            new ResourceLocation(VoicesOfTheMines.MODID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals
@@ -126,12 +126,12 @@ public class KerfurPacketHandler {
                         if (e instanceof FleshEntity flesh && flesh.getFleshLevel() < 5) {
                             if (!flesh.isHeld()) {
                                 flesh.setHeldBy(player.getUUID());
-                                flesh.playSound(net.votmdevs.voicesofthemines.KerfurSounds.FLESH_GRAB.get(), 1.0F, 1.0F);
+                                flesh.playSound(VotmSounds.FLESH_GRAB.get(), 1.0F, 1.0F);
                             }
                         } else if (e instanceof GarbageEntity garbage && garbage.getGarbageLevel() < 5) {
                             if (!garbage.isHeld()) {
                                 garbage.setHeldBy(player.getUUID());
-                                garbage.playSound(net.votmdevs.voicesofthemines.KerfurSounds.GARBAGE_GRAB.get(), 1.0F, 1.0F);
+                                garbage.playSound(VotmSounds.GARBAGE_GRAB.get(), 1.0F, 1.0F);
                             }
                         } else if (e instanceof net.votmdevs.voicesofthemines.entity.MaxwellEntity maxwell) {
                             if (!maxwell.isHeld()) {
@@ -203,11 +203,11 @@ public class KerfurPacketHandler {
                     if (e instanceof GarbageEntity garbage && garbage.getGarbageLevel() > 1 && !garbage.isHeld()) {
                         garbage.setGarbageLevel(garbage.getGarbageLevel() - 1);
 
-                        GarbageEntity singlePiece = KerfurMod.GARBAGE.get().create(player.level());
+                        GarbageEntity singlePiece = VoicesOfTheMines.GARBAGE.get().create(player.level());
                         if (singlePiece != null) {
                             singlePiece.moveTo(player.getX(), player.getY() + 1.5D, player.getZ(), 0, 0);
                             player.level().addFreshEntity(singlePiece);
-                            singlePiece.playSound(KerfurSounds.GARBAGE_GRAB.get(), 1.0F, 1.2F);
+                            singlePiece.playSound(VotmSounds.GARBAGE_GRAB.get(), 1.0F, 1.2F);
                         }
                     }
                 }
@@ -357,7 +357,7 @@ public class KerfurPacketHandler {
                     if (e instanceof GarbageEntity garbage) {
                         net.minecraft.world.item.ItemStack handItem = player.getMainHandItem();
 
-                        if (handItem.getItem() == KerfurMod.TRASH_ROLL.get()) {
+                        if (handItem.getItem() == VoicesOfTheMines.TRASH_ROLL.get()) {
 
                             if (garbage.getGarbageLevel() > 1) {
                                 garbage.setGarbageLevel(garbage.getGarbageLevel() - 1);
@@ -369,10 +369,10 @@ public class KerfurPacketHandler {
 
                             net.minecraft.world.entity.item.ItemEntity bagEntity = new net.minecraft.world.entity.item.ItemEntity(
                                     player.level(), garbage.getX(), garbage.getY() + 0.5, garbage.getZ(),
-                                    new net.minecraft.world.item.ItemStack(KerfurMod.TRASH_BAG.get())
+                                    new net.minecraft.world.item.ItemStack(VoicesOfTheMines.TRASH_BAG.get())
                             );
                             player.level().addFreshEntity(bagEntity);
-                            player.level().playSound(null, garbage.blockPosition(), net.votmdevs.voicesofthemines.KerfurSounds.PACK_GARBAGE.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
+                            player.level().playSound(null, garbage.blockPosition(), VotmSounds.PACK_GARBAGE.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
                         }
                     }
                 }
@@ -424,7 +424,7 @@ public class KerfurPacketHandler {
             ctx.get().enqueueWork(() -> {
                 ServerPlayer player = ctx.get().getSender();
                 if (player != null && player.getVehicle() instanceof net.votmdevs.voicesofthemines.entity.AtvEntity atv) {
-                    atv.level().playSound(null, atv.blockPosition(), net.votmdevs.voicesofthemines.KerfurSounds.ATV_CRASH.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
+                    atv.level().playSound(null, atv.blockPosition(), VotmSounds.ATV_CRASH.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
                     player.stopRiding();
                     net.minecraft.world.phys.Vec3 look = atv.getLookAngle();
                     player.setDeltaMovement(-look.x * 0.8, 0.5, -look.z * 0.8);
@@ -655,7 +655,7 @@ public class KerfurPacketHandler {
                             String sigType = terminal.getDriveSignalType();
                             int sigLevel = terminal.getDriveSignalLevel();
 
-                            net.votmdevs.voicesofthemines.entity.DriveEntity drive = KerfurMod.DRIVE.get().create(player.serverLevel());
+                            net.votmdevs.voicesofthemines.entity.DriveEntity drive = VoicesOfTheMines.DRIVE.get().create(player.serverLevel());
                             if (drive != null) {
                                 drive.moveTo(msg.pos.getX() + 0.5, msg.pos.getY() + 1.2, msg.pos.getZ() + 0.5, 0, 0);
                                 drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID, sigId != null ? sigId : "");
@@ -668,7 +668,7 @@ public class KerfurPacketHandler {
                                 drive.setDeltaMovement(throwVec.x, 0.3D, throwVec.z);
 
                                 player.level().addFreshEntity(drive);
-                                player.level().playSound(null, msg.pos, net.votmdevs.voicesofthemines.KerfurSounds.BUTTON_CLICK.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+                                player.level().playSound(null, msg.pos, VotmSounds.BUTTON_CLICK.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
                             }
 
                             terminal.setDrive(false, "", "", 0);
@@ -714,8 +714,8 @@ public class KerfurPacketHandler {
                             String sigId = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID);
                             boolean isEmpty = (sigId == null || sigId.isEmpty());
                             net.minecraft.world.level.block.Block block = player.serverLevel().getBlockState(msg.pos).getBlock();
-                            if (block == KerfurMod.TERMINAL_PROCESSING.get() && isEmpty) {
-                                player.level().playSound(null, msg.pos, KerfurSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 0.5F);
+                            if (block == VoicesOfTheMines.TERMINAL_PROCESSING.get() && isEmpty) {
+                                player.level().playSound(null, msg.pos, VotmSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 0.5F);
                                 return; // Прерываем выполнение! Диск не вставится.
                             }
                             String sigType = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_TYPE);
@@ -723,7 +723,7 @@ public class KerfurPacketHandler {
 
                             terminal.setDrive(true, sigId != null ? sigId : "", sigType != null ? sigType : "", sigLevel);
 
-                            player.level().playSound(null, msg.pos, KerfurSounds.DRIVE_IN.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+                            player.level().playSound(null, msg.pos, VotmSounds.DRIVE_IN.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
                             drive.discard();
                         }
                     }
@@ -780,7 +780,7 @@ public class KerfurPacketHandler {
                             String sigType = terminal.getDriveSignalType();
                             int sigLevel = terminal.getDriveSignalLevel();
 
-                            net.votmdevs.voicesofthemines.entity.DriveEntity drive = KerfurMod.DRIVE.get().create(player.serverLevel());
+                            net.votmdevs.voicesofthemines.entity.DriveEntity drive = VoicesOfTheMines.DRIVE.get().create(player.serverLevel());
                             if (drive != null) {
                                 drive.moveTo(msg.pos.getX() + 0.5, msg.pos.getY() + 1.2, msg.pos.getZ() + 0.5, 0, 0);
                                 drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID, sigId != null ? sigId : "");
@@ -790,7 +790,7 @@ public class KerfurPacketHandler {
                                 net.minecraft.world.phys.Vec3 throwVec = player.getEyePosition().subtract(new net.minecraft.world.phys.Vec3(msg.pos.getX() + 0.5, msg.pos.getY() + 1.2, msg.pos.getZ() + 0.5)).normalize().scale(0.4D);
                                 drive.setDeltaMovement(throwVec.x, 0.3D, throwVec.z);
                                 player.level().addFreshEntity(drive);
-                                player.level().playSound(null, msg.pos, net.votmdevs.voicesofthemines.KerfurSounds.BUTTON_CLICK.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+                                player.level().playSound(null, msg.pos, VotmSounds.BUTTON_CLICK.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
                             }
                             terminal.setDrive(false, "", "", 0);
                         }
@@ -860,7 +860,7 @@ public class KerfurPacketHandler {
                         net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
                         KerfurPacketHandler.INSTANCE.sendTo(new SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl(),pd.getEmails()), player.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
                     } else {
-                        player.level().playSound(null, player.blockPosition(), KerfurSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 1.0F);
+                        player.level().playSound(null, player.blockPosition(), VotmSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 1.0F);
                     }
                 }
             });
@@ -913,7 +913,7 @@ public class KerfurPacketHandler {
                         net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
                         KerfurPacketHandler.INSTANCE.sendTo(new SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl(),pd.getEmails()), player.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
                     } else {
-                        player.level().playSound(null, player.blockPosition(), KerfurSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 1.0F);
+                        player.level().playSound(null, player.blockPosition(), VotmSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 1.0F);
                     }
                 }
             });
@@ -922,24 +922,24 @@ public class KerfurPacketHandler {
 
         private static net.minecraft.world.item.Item getItemById(String id) {
             switch(id) {
-                case "hazard_suit": return net.votmdevs.voicesofthemines.KerfurMod.HAZARD_HELMET.get();
-                case "hook": return net.votmdevs.voicesofthemines.KerfurMod.HOOK_ITEM.get();
-                case "trash_roll": return net.votmdevs.voicesofthemines.KerfurMod.TRASH_ROLL.get();
-                case "glasses": return net.votmdevs.voicesofthemines.KerfurMod.ACCESSORY_GLASSES.get();
-                case "jacket": return net.votmdevs.voicesofthemines.KerfurMod.ACCESSORY_JACKET.get();
-                case "keypad": return net.votmdevs.voicesofthemines.KerfurMod.KEYPAD_ITEM.get();
-                case "poster": return net.votmdevs.voicesofthemines.KerfurMod.POSTER_ITEM.get();
-                case "taco": return net.votmdevs.voicesofthemines.KerfurMod.TACO.get();
-                case "toblerone": return net.votmdevs.voicesofthemines.KerfurMod.TOBLERONE.get();
-                case "cheese": return net.votmdevs.voicesofthemines.KerfurMod.CHEESE.get();
-                case "burger": return net.votmdevs.voicesofthemines.KerfurMod.BURGER.get();
-                case "painter_black": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_BLACK.get();
-                case "painter_blue": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_BLUE.get();
-                case "painter_red": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_RED.get();
-                case "painter_green": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_GREEN.get();
-                case "painter_pink": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_PINK.get();
-                case "painter_white": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_WHITE.get();
-                case "painter_yellow": return net.votmdevs.voicesofthemines.KerfurMod.PAINTER_YELLOW.get();
+                case "hazard_suit": return VoicesOfTheMines.HAZARD_HELMET.get();
+                case "hook": return VoicesOfTheMines.HOOK_ITEM.get();
+                case "trash_roll": return VoicesOfTheMines.TRASH_ROLL.get();
+                case "glasses": return VoicesOfTheMines.ACCESSORY_GLASSES.get();
+                case "jacket": return VoicesOfTheMines.ACCESSORY_JACKET.get();
+                case "keypad": return VoicesOfTheMines.KEYPAD_ITEM.get();
+                case "poster": return VoicesOfTheMines.POSTER_ITEM.get();
+                case "taco": return VoicesOfTheMines.TACO.get();
+                case "toblerone": return VoicesOfTheMines.TOBLERONE.get();
+                case "cheese": return VoicesOfTheMines.CHEESE.get();
+                case "burger": return VoicesOfTheMines.BURGER.get();
+                case "painter_black": return VoicesOfTheMines.PAINTER_BLACK.get();
+                case "painter_blue": return VoicesOfTheMines.PAINTER_BLUE.get();
+                case "painter_red": return VoicesOfTheMines.PAINTER_RED.get();
+                case "painter_green": return VoicesOfTheMines.PAINTER_GREEN.get();
+                case "painter_pink": return VoicesOfTheMines.PAINTER_PINK.get();
+                case "painter_white": return VoicesOfTheMines.PAINTER_WHITE.get();
+                case "painter_yellow": return VoicesOfTheMines.PAINTER_YELLOW.get();
                 default: return null;
             }
         }
@@ -1004,7 +1004,7 @@ public class KerfurPacketHandler {
                     BlockPos tablePos = null;
 
                     for (BlockPos pos : BlockPos.betweenClosed(playerPos.offset(-32, -16, -32), playerPos.offset(32, 16, 32))) {
-                        if (mc.level.getBlockState(pos).getBlock() == net.votmdevs.voicesofthemines.KerfurMod.TABLE.get()) {
+                        if (mc.level.getBlockState(pos).getBlock() == VoicesOfTheMines.TABLE.get()) {
                             tablePos = pos;
                             break;
                         }
@@ -1012,9 +1012,9 @@ public class KerfurPacketHandler {
 
                     if (tablePos != null) {
                         mc.level.playLocalSound(tablePos.getX() + 0.5, tablePos.getY() + 0.5, tablePos.getZ() + 0.5,
-                                net.votmdevs.voicesofthemines.KerfurSounds.EMAIL_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F, false);
+                                VotmSounds.EMAIL_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F, false);
                     } else {
-                        mc.player.playSound(net.votmdevs.voicesofthemines.KerfurSounds.EMAIL_ALERT.get(), 1.0F, 1.0F);
+                        mc.player.playSound(VotmSounds.EMAIL_ALERT.get(), 1.0F, 1.0F);
                     }
                 }
             });

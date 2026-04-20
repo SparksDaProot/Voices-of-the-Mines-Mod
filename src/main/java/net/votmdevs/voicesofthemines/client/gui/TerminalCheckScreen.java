@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.client.gui;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -37,7 +37,7 @@ public class TerminalCheckScreen extends Screen {
 
         String[] images = {"np1", "np2", "np3", "np4", "np5", "np6", "np7", "np8", "np10", "np19"};
         String chosenImg = images[new Random().nextInt(images.length)];
-        this.selectedImage = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/" + chosenImg + ".png");
+        this.selectedImage = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + chosenImg + ".png");
     }
 
     @Override
@@ -164,9 +164,9 @@ public class TerminalCheckScreen extends Screen {
 
                 ResourceLocation imageToDraw = selectedImage;
                 if (CURRENT_SIGNAL_TYPE.startsWith("siggenus")) {
-                    imageToDraw = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/" + CURRENT_SIGNAL_TYPE + ".png");
+                    imageToDraw = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + CURRENT_SIGNAL_TYPE + ".png");
                 } else if (CURRENT_SIGNAL_TYPE.equals("hairy")) {
-                    imageToDraw = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/hairy.png");
+                    imageToDraw = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/hairy.png");
                 }
 
                 guiGraphics.blit(imageToDraw, rightX, topLeftY, 0, 0, 128, 128, 128, 128);
@@ -199,54 +199,54 @@ public class TerminalCheckScreen extends Screen {
 
     private net.minecraft.sounds.SoundEvent getStage3Sound(String type) {
         if (type.equals("mars")) {
-            return new Random().nextInt(100) < 5 ? KerfurSounds.SIGNAL_BDAY.get() : KerfurSounds.SIGNAL_PLANET_MARS.get();
+            return new Random().nextInt(100) < 5 ? VotmSounds.SIGNAL_BDAY.get() : VotmSounds.SIGNAL_PLANET_MARS.get();
         }
         switch (type) {
             // Старые
-            case "venus": return KerfurSounds.SIGNAL_PLANET_VENUS.get();
-            case "enceladus": return KerfurSounds.SIGNAL_PLANET_ENCELADUS.get();
-            case "ceres": return KerfurSounds.SIGNAL_PLANET_CERES.get();
-            case "dione": return KerfurSounds.SIGNAL_PLANET_DIONE.get();
-            case "bennu": return KerfurSounds.SIGNAL_PLANET_BENNU.get();
-            case "mercury": return KerfurSounds.SIGNAL_PLANET_MERCURY.get();
-            case "siggen1": return KerfurSounds.SIGGEN1.get();
-            case "siggen2": return KerfurSounds.SIGGEN2.get();
-            case "siggen3": return KerfurSounds.SIGGEN3.get();
-            case "siggen4": return KerfurSounds.SIGGEN4.get();
-            case "siggen5": return KerfurSounds.SIGGEN5.get();
-            case "siggen6": return KerfurSounds.SIGGEN6.get();
-            case "earth": return KerfurSounds.SIGNAL_PLANET_EARTH.get();
-            case "faces": return KerfurSounds.SIGNAL_FACES.get();
-            case "retroplanet": return KerfurSounds.SIGNAL_PLANET_RETRO.get();
-            case "siggenus1": return KerfurSounds.SIGNAL_SIGGENUS1.get();
-            case "siggenus2": return KerfurSounds.SIGNAL_SIGGENUS2.get();
-            case "siggenus3": return KerfurSounds.SIGNAL_SIGGENUS3.get();
-            case "siggenus4": return KerfurSounds.SIGNAL_SIGGENUS4.get();
-            case "siggenus5": return KerfurSounds.SIGNAL_SIGGENUS5.get();
-            case "siggenus6": return KerfurSounds.SIGNAL_SIGGENUS6.get();
-            case "siggenus7": return KerfurSounds.SIGNAL_SIGGENUS7.get();
-            case "siggenus8": return KerfurSounds.SIGNAL_SIGGENUS8.get();
+            case "venus": return VotmSounds.SIGNAL_PLANET_VENUS.get();
+            case "enceladus": return VotmSounds.SIGNAL_PLANET_ENCELADUS.get();
+            case "ceres": return VotmSounds.SIGNAL_PLANET_CERES.get();
+            case "dione": return VotmSounds.SIGNAL_PLANET_DIONE.get();
+            case "bennu": return VotmSounds.SIGNAL_PLANET_BENNU.get();
+            case "mercury": return VotmSounds.SIGNAL_PLANET_MERCURY.get();
+            case "siggen1": return VotmSounds.SIGGEN1.get();
+            case "siggen2": return VotmSounds.SIGGEN2.get();
+            case "siggen3": return VotmSounds.SIGGEN3.get();
+            case "siggen4": return VotmSounds.SIGGEN4.get();
+            case "siggen5": return VotmSounds.SIGGEN5.get();
+            case "siggen6": return VotmSounds.SIGGEN6.get();
+            case "earth": return VotmSounds.SIGNAL_PLANET_EARTH.get();
+            case "faces": return VotmSounds.SIGNAL_FACES.get();
+            case "retroplanet": return VotmSounds.SIGNAL_PLANET_RETRO.get();
+            case "siggenus1": return VotmSounds.SIGNAL_SIGGENUS1.get();
+            case "siggenus2": return VotmSounds.SIGNAL_SIGGENUS2.get();
+            case "siggenus3": return VotmSounds.SIGNAL_SIGGENUS3.get();
+            case "siggenus4": return VotmSounds.SIGNAL_SIGGENUS4.get();
+            case "siggenus5": return VotmSounds.SIGNAL_SIGGENUS5.get();
+            case "siggenus6": return VotmSounds.SIGNAL_SIGGENUS6.get();
+            case "siggenus7": return VotmSounds.SIGNAL_SIGGENUS7.get();
+            case "siggenus8": return VotmSounds.SIGNAL_SIGGENUS8.get();
             // Новые
-            case "makemake": return KerfurSounds.SIGNAL_PLANET_MAKEMAKE.get();
-            case "rhea": return KerfurSounds.SIGNAL_PLANET_RHEA.get();
-            case "iris": return KerfurSounds.SIGNAL_IRIS.get();
-            case "amazur": return KerfurSounds.SIGNAL_AMAZUR.get();
-            case "vion": return KerfurSounds.SIGNAL_VION.get();
-            case "subplanet": return KerfurSounds.SIGNAL_SUBPLANET.get();
-            case "europa": return KerfurSounds.SIGNAL_PLANET_EUROPA.get();
-            case "moon": return KerfurSounds.SIGNAL_PLANET_MOON.get();
-            case "jupiter": return KerfurSounds.SIGNAL_PLANET_JUPITER.get();
-            case "uranus": return KerfurSounds.SIGNAL_PLANET_URANUS.get();
-            case "neptune": return KerfurSounds.SIGNAL_PLANET_NEPTUNE.get();
-            case "saturn": return KerfurSounds.SIGNAL_PLANET_SATURN.get();
-            case "hilero": return KerfurSounds.SIGNAL_HILERO.get();
-            case "exogen1": return KerfurSounds.EXOGEN1.get();
-            case "exogen2": return KerfurSounds.EXOGEN2.get();
-            case "votv_earth": return KerfurSounds.VOTV_EARTH.get();
-            case "hairy": return KerfurSounds.SIGNAL_HAIRY.get();
-            case "fard": return KerfurSounds.SIGNAL_FARD.get();
-            case "ironlung": return KerfurSounds.IRONLUNGSIGNAL.get();
-            default: return KerfurSounds.RAW1.get();
+            case "makemake": return VotmSounds.SIGNAL_PLANET_MAKEMAKE.get();
+            case "rhea": return VotmSounds.SIGNAL_PLANET_RHEA.get();
+            case "iris": return VotmSounds.SIGNAL_IRIS.get();
+            case "amazur": return VotmSounds.SIGNAL_AMAZUR.get();
+            case "vion": return VotmSounds.SIGNAL_VION.get();
+            case "subplanet": return VotmSounds.SIGNAL_SUBPLANET.get();
+            case "europa": return VotmSounds.SIGNAL_PLANET_EUROPA.get();
+            case "moon": return VotmSounds.SIGNAL_PLANET_MOON.get();
+            case "jupiter": return VotmSounds.SIGNAL_PLANET_JUPITER.get();
+            case "uranus": return VotmSounds.SIGNAL_PLANET_URANUS.get();
+            case "neptune": return VotmSounds.SIGNAL_PLANET_NEPTUNE.get();
+            case "saturn": return VotmSounds.SIGNAL_PLANET_SATURN.get();
+            case "hilero": return VotmSounds.SIGNAL_HILERO.get();
+            case "exogen1": return VotmSounds.EXOGEN1.get();
+            case "exogen2": return VotmSounds.EXOGEN2.get();
+            case "votv_earth": return VotmSounds.VOTV_EARTH.get();
+            case "hairy": return VotmSounds.SIGNAL_HAIRY.get();
+            case "fard": return VotmSounds.SIGNAL_FARD.get();
+            case "ironlung": return VotmSounds.IRONLUNGSIGNAL.get();
+            default: return VotmSounds.RAW1.get();
         }
     }
 
@@ -274,13 +274,13 @@ public class TerminalCheckScreen extends Screen {
                     sounds = new net.minecraft.sounds.SoundEvent[]{ getStage3Sound(CURRENT_SIGNAL_TYPE) };
                 } else if (CURRENT_SIGNAL_LEVEL == 2) {
                     // === СТАДИЯ 2 ===
-                    sounds = new net.minecraft.sounds.SoundEvent[]{KerfurSounds.LOW1.get(), KerfurSounds.LOW2.get(), KerfurSounds.LOW3.get(), KerfurSounds.LOW4.get(), KerfurSounds.LOW5.get(), KerfurSounds.LOW6.get(), KerfurSounds.LOW7.get(), KerfurSounds.LOW8.get()};
+                    sounds = new net.minecraft.sounds.SoundEvent[]{VotmSounds.LOW1.get(), VotmSounds.LOW2.get(), VotmSounds.LOW3.get(), VotmSounds.LOW4.get(), VotmSounds.LOW5.get(), VotmSounds.LOW6.get(), VotmSounds.LOW7.get(), VotmSounds.LOW8.get()};
                 } else if (CURRENT_SIGNAL_LEVEL == 1) {
                     // === СТАДИЯ 1 ===
-                    sounds = new net.minecraft.sounds.SoundEvent[]{KerfurSounds.NOISY1.get(), KerfurSounds.NOISY2.get(), KerfurSounds.NOISY3.get(), KerfurSounds.NOISY4.get(), KerfurSounds.NOISY5.get(), KerfurSounds.NOISY6.get(), KerfurSounds.NOISY7.get(), KerfurSounds.NOISY8.get()};
+                    sounds = new net.minecraft.sounds.SoundEvent[]{VotmSounds.NOISY1.get(), VotmSounds.NOISY2.get(), VotmSounds.NOISY3.get(), VotmSounds.NOISY4.get(), VotmSounds.NOISY5.get(), VotmSounds.NOISY6.get(), VotmSounds.NOISY7.get(), VotmSounds.NOISY8.get()};
                 } else {
                     // === СТАДИЯ 0 (RAW) ===
-                    sounds = new net.minecraft.sounds.SoundEvent[]{KerfurSounds.RAW1.get(), KerfurSounds.RAW2.get(), KerfurSounds.RAW3.get(), KerfurSounds.RAW4.get(), KerfurSounds.RAW5.get(), KerfurSounds.RAW6.get(), KerfurSounds.RAW7.get(), KerfurSounds.RAW8.get()};
+                    sounds = new net.minecraft.sounds.SoundEvent[]{VotmSounds.RAW1.get(), VotmSounds.RAW2.get(), VotmSounds.RAW3.get(), VotmSounds.RAW4.get(), VotmSounds.RAW5.get(), VotmSounds.RAW6.get(), VotmSounds.RAW7.get(), VotmSounds.RAW8.get()};
                 }
 
                 net.minecraft.sounds.SoundEvent selectedSnd = sounds[new Random().nextInt(sounds.length)];
@@ -288,12 +288,12 @@ public class TerminalCheckScreen extends Screen {
                 Minecraft.getInstance().getSoundManager().play(currentSound);
                 isPlaying = true;
             }
-            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
             return true;
         }
 
         if (mouseX >= finishBtnX && mouseX <= finishBtnX + 60 && mouseY >= btnY && mouseY <= btnY + 20) {
-            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
             if (currentSound != null) Minecraft.getInstance().getSoundManager().stop(currentSound);
             net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.FinishCheckPacket(terminalPos));
             HAS_ACTIVE_SIGNAL = false;

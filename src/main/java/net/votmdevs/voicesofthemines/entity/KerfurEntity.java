@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.entity;
 
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.inventory.KerfurMenu;
 import net.votmdevs.voicesofthemines.network.KerfurPacketHandler;
 import net.minecraft.core.BlockPos;
@@ -121,19 +121,19 @@ public class KerfurEntity extends TamableAnimal implements GeoEntity, MenuProvid
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(KerfurSounds.WALK.get(), 0.15F, 1.0F);
+        this.playSound(VotmSounds.WALK.get(), 0.15F, 1.0F);
     }
 
     @Override
     protected void jumpFromGround() {
         super.jumpFromGround();
-        this.playSound(KerfurSounds.JUMP.get(), 1.0F, 1.0F);
+        this.playSound(VotmSounds.JUMP.get(), 1.0F, 1.0F);
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return (!isDeactivated() && !isWakingUp()) ? KerfurSounds.IDLE.get() : null;
+        return (!isDeactivated() && !isWakingUp()) ? VotmSounds.IDLE.get() : null;
     }
 
     private boolean hasEmptySlot() {
@@ -161,7 +161,7 @@ public class KerfurEntity extends TamableAnimal implements GeoEntity, MenuProvid
                 this.setDeactivated(true);
                 this.navigation.stop();
                 this.goalSelector.removeAllGoals(goal -> true);
-                this.playSound(KerfurSounds.SHUTDOWN.get(), 1.0F, 1.0F);
+                this.playSound(VotmSounds.SHUTDOWN.get(), 1.0F, 1.0F);
 
                 if (!notifiedRecharge && this.getOwner() instanceof ServerPlayer sp) {
                     sendNotification(sp, "Kerfur is recharging");
@@ -217,7 +217,7 @@ public class KerfurEntity extends TamableAnimal implements GeoEntity, MenuProvid
 
                 if (shouldBeOn != isFlashlightOn()) {
                     setFlashlightOn(shouldBeOn);
-                    this.playSound(KerfurSounds.FLASHLIGHT.get(), 1.0F, 1.0F);
+                    this.playSound(VotmSounds.FLASHLIGHT.get(), 1.0F, 1.0F);
                 }
 
                 if (torchCooldown > 0) torchCooldown--;
@@ -301,7 +301,7 @@ public class KerfurEntity extends TamableAnimal implements GeoEntity, MenuProvid
             }
 
             if (meowTicks > 0) {
-                if (meowTicks % 15 == 0) this.playSound(KerfurSounds.MEOW.get(), 1.0F, 1.0F);
+                if (meowTicks % 15 == 0) this.playSound(VotmSounds.MEOW.get(), 1.0F, 1.0F);
                 meowTicks--;
             }
 
@@ -309,7 +309,7 @@ public class KerfurEntity extends TamableAnimal implements GeoEntity, MenuProvid
             if (this.getKerfurColor().equals("abandoned")) {
                 // 1. Случайные криповые звуки
                 if (this.random.nextInt(400) == 0) {
-                    this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.MURDER_RANDOM.get(), 1.0F, 1.0F);
+                    this.playSound(VotmSounds.MURDER_RANDOM.get(), 1.0F, 1.0F);
                 }
 
                 boolean isPlayerNear = false;
@@ -326,7 +326,7 @@ public class KerfurEntity extends TamableAnimal implements GeoEntity, MenuProvid
                     if (this.tickCount % 20 == 0) {
                         for (Player target : nearbyPlayers) {
                             if (this.random.nextFloat() < 0.60F) {
-                                this.level().playSound(null, target.blockPosition(), net.votmdevs.voicesofthemines.KerfurSounds.PLAYER_COUGH.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F + (this.random.nextFloat() - 0.5F) * 0.2F);
+                                this.level().playSound(null, target.blockPosition(), VotmSounds.PLAYER_COUGH.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F + (this.random.nextFloat() - 0.5F) * 0.2F);
                             }
                         }
                     }
@@ -341,7 +341,7 @@ public class KerfurEntity extends TamableAnimal implements GeoEntity, MenuProvid
 
             if (isDeactivated()) {
                 if (!this.level().isClientSide()) {
-                    this.playSound(KerfurSounds.WARNING.get(), 1.0F, 1.0F);
+                    this.playSound(VotmSounds.WARNING.get(), 1.0F, 1.0F);
 
                     if (player instanceof ServerPlayer sp) {
                         sendNotification(sp, "Wait! Kerfur is recharging!");
@@ -356,7 +356,7 @@ public class KerfurEntity extends TamableAnimal implements GeoEntity, MenuProvid
                         buffer.writeUtf(this.getKerfurColor());
                         buffer.writeBoolean(false);
                     });
-                    this.playSound(KerfurSounds.OPEN_STORAGE.get(), 1.0F, 1.0F);
+                    this.playSound(VotmSounds.OPEN_STORAGE.get(), 1.0F, 1.0F);
                 }
                 return InteractionResult.sidedSuccess(this.level().isClientSide());
             }
@@ -393,9 +393,9 @@ public class KerfurEntity extends TamableAnimal implements GeoEntity, MenuProvid
                     } else {
                         float pitch = 1.0F + (petCombo * 0.1F);
                         if (this.getKerfurColor().equals("abandoned")) {
-                            this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.MURDER_MEOW.get(), 1.0F, pitch);
+                            this.playSound(VotmSounds.MURDER_MEOW.get(), 1.0F, pitch);
                         } else {
-                            this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.MEOW.get(), 1.0F, pitch);
+                            this.playSound(VotmSounds.MEOW.get(), 1.0F, pitch);
                         }
                     }
                 }

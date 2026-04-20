@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client.gui;
 
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -39,7 +39,7 @@ public class TerminalProcessingScreen extends Screen {
                 progress = 100f;
                 isProcessing = false;
 
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.ACHIEVEMENT.get(), 1.0F, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.ACHIEVEMENT.get(), 1.0F, 1.0F));
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.FinishProcessingPacket(terminalPos));
                 this.minecraft.setScreen(null);
             }
@@ -168,12 +168,12 @@ public class TerminalProcessingScreen extends Screen {
 
         if (mouseX >= btnX && mouseX <= btnX + 100 && mouseY >= btnY && mouseY <= btnY + 20) {
             if (CURRENT_SIGNAL_LEVEL >= ComputerScreen.UPG_PROC_LVL) {
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUG_ALERT.get(), 1.0F, 0.5F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUG_ALERT.get(), 1.0F, 0.5F));
                 return true; // Блокируем, если уровень сигнала уже равен или выше купленного
             }
 
             isProcessing = true;
-            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
             return true;
         }
 

@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.client.gui.GmodNotificationManager;
 import net.votmdevs.voicesofthemines.network.KerfurPacketHandler;
 import com.mojang.blaze3d.platform.NativeImage;
@@ -65,7 +65,7 @@ public class PosterTextureManager {
 
                     Minecraft.getInstance().execute(() -> {
                         DynamicTexture texture = new DynamicTexture(image);
-                        ResourceLocation rl = new ResourceLocation(KerfurMod.MODID, "custom_poster_" + Math.abs(urlString.hashCode()));
+                        ResourceLocation rl = new ResourceLocation(VoicesOfTheMines.MODID, "custom_poster_" + Math.abs(urlString.hashCode()));
                         Minecraft.getInstance().getTextureManager().register(rl, texture);
 
                         CACHE.put(urlString, rl);

@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.block;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -24,7 +24,7 @@ public class VotvTerminalBlockEntity extends BlockEntity implements GeoBlockEnti
     private int driveSignalLevel = 0;
 
     public VotvTerminalBlockEntity(BlockPos pos, BlockState state) {
-        super(KerfurMod.TERMINAL_BE.get(), pos, state);
+        super(VoicesOfTheMines.TERMINAL_BE.get(), pos, state);
     }
 
     public boolean hasDrive() { return hasDrive; }

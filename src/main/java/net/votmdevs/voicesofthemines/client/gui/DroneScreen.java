@@ -6,11 +6,11 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.inventory.DroneMenu;
 
 public class DroneScreen extends AbstractContainerScreen<DroneMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(KerfurMod.MODID, "textures/gui/drone_storage.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/drone_storage.png");
 
     public DroneScreen(DroneMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);

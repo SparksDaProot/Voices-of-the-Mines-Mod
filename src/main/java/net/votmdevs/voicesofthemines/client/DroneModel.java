@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.entity.DroneEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class DroneModel extends GeoModel<DroneEntity> {
     @Override
     public ResourceLocation getModelResource(DroneEntity object) {
-        return new ResourceLocation(KerfurMod.MODID, "geo/drone.geo.json");
+        return new ResourceLocation(VoicesOfTheMines.MODID, "geo/drone.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(DroneEntity object) {
-        return new ResourceLocation(KerfurMod.MODID, "textures/entity/drone.png");
+        return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/drone.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(DroneEntity animatable) {
-        return new ResourceLocation(KerfurMod.MODID, "animations/drone_animation.json");
+        return new ResourceLocation(VoicesOfTheMines.MODID, "animations/drone_animation.json");
     }
 }

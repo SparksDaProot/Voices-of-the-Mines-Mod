@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.inventory;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +15,7 @@ public class KerfurMenu extends AbstractContainerMenu {
     private final int containerRows;
 
     public KerfurMenu(int containerId, Inventory playerInventory, Container container, String color, boolean isOmega) {
-        super(KerfurMod.KERFUR_MENU.get(), containerId);
+        super(VoicesOfTheMines.KERFUR_MENU.get(), containerId);
         this.container = container;
         this.kerfurColor = color;
         this.isOmega = isOmega;

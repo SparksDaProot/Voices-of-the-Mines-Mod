@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.entity;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -97,7 +97,7 @@ public class MaxwellEntity extends PathfinderMob implements GeoEntity {
             if (isSkeleton()) {
                 skeletonTicks++;
                 if (skeletonTicks == 1) {
-                    this.playSound(KerfurSounds.DUDUDU.get(), 1.0F, 1.0F);
+                    this.playSound(VotmSounds.DUDUDU.get(), 1.0F, 1.0F);
                 }
                 if (skeletonTicks >= 30) {
                     this.level().explode(this, this.getX(), this.getY(), this.getZ(), 3.0F, Level.ExplosionInteraction.MOB);
@@ -111,16 +111,16 @@ public class MaxwellEntity extends PathfinderMob implements GeoEntity {
             boolean currentlyHeld = isHeld();
 
             if ((currentlyDancing && !wasDancing) || (currentlyHeld && !wasHeld)) {
-                stopCustomSound(KerfurSounds.MAXWELL_THEME.get());
-                stopCustomSound(KerfurSounds.CONCRETE_SCRAPE.get());
+                stopCustomSound(VotmSounds.MAXWELL_THEME.get());
+                stopCustomSound(VotmSounds.CONCRETE_SCRAPE.get());
                 wasScraping = false; // Сбрасываем скрежет при поднятии
             }
 
             if (!currentlyDancing && !musicStopped && !currentlyHeld) {
                 themeTimer--;
                 if (themeTimer <= 0) {
-                    stopCustomSound(KerfurSounds.MAXWELL_THEME.get());
-                    this.playSound(KerfurSounds.MAXWELL_THEME.get(), 0.3F, 1.0F);
+                    stopCustomSound(VotmSounds.MAXWELL_THEME.get());
+                    this.playSound(VotmSounds.MAXWELL_THEME.get(), 0.3F, 1.0F);
                     themeTimer = 1380;
                 }
             } else if (currentlyDancing || currentlyHeld) {
@@ -140,7 +140,7 @@ public class MaxwellEntity extends PathfinderMob implements GeoEntity {
                     if (diff.lengthSqr() > 64.0D) {
                         setHeldBy(null);
                         if (wasScraping) {
-                            stopCustomSound(KerfurSounds.CONCRETE_SCRAPE.get());
+                            stopCustomSound(VotmSounds.CONCRETE_SCRAPE.get());
                             wasScraping = false;
                         }
                     } else {
@@ -154,19 +154,19 @@ public class MaxwellEntity extends PathfinderMob implements GeoEntity {
 
                         if (currentlyScraping) {
                             if (!wasScraping) {
-                                this.playSound(KerfurSounds.CONCRETE_SCRAPE.get(), 0.3F, 1.0F + (this.random.nextFloat() - 0.5F) * 0.1F);
+                                this.playSound(VotmSounds.CONCRETE_SCRAPE.get(), 0.3F, 1.0F + (this.random.nextFloat() - 0.5F) * 0.1F);
                                 scrapeTimer = 80;
                             } else {
                                 scrapeTimer--;
                                 if (scrapeTimer <= 0) {
-                                    stopCustomSound(KerfurSounds.CONCRETE_SCRAPE.get());
-                                    this.playSound(KerfurSounds.CONCRETE_SCRAPE.get(), 0.3F, 1.0F + (this.random.nextFloat() - 0.5F) * 0.1F);
+                                    stopCustomSound(VotmSounds.CONCRETE_SCRAPE.get());
+                                    this.playSound(VotmSounds.CONCRETE_SCRAPE.get(), 0.3F, 1.0F + (this.random.nextFloat() - 0.5F) * 0.1F);
                                     scrapeTimer = 80;
                                 }
                             }
                         } else {
                             if (wasScraping) {
-                                stopCustomSound(KerfurSounds.CONCRETE_SCRAPE.get());
+                                stopCustomSound(VotmSounds.CONCRETE_SCRAPE.get());
                             }
                             scrapeTimer = 0;
                         }
@@ -176,13 +176,13 @@ public class MaxwellEntity extends PathfinderMob implements GeoEntity {
                 } else {
                     setHeldBy(null);
                     if (wasScraping) {
-                        stopCustomSound(KerfurSounds.CONCRETE_SCRAPE.get());
+                        stopCustomSound(VotmSounds.CONCRETE_SCRAPE.get());
                         wasScraping = false;
                     }
                 }
             } else {
                 if (wasScraping) {
-                    stopCustomSound(KerfurSounds.CONCRETE_SCRAPE.get());
+                    stopCustomSound(VotmSounds.CONCRETE_SCRAPE.get());
                     wasScraping = false;
                 }
             }
@@ -210,7 +210,7 @@ public class MaxwellEntity extends PathfinderMob implements GeoEntity {
             if (!this.level().isClientSide()) {
                 if (!musicStopped) {
                     musicStopped = true;
-                    stopCustomSound(KerfurSounds.MAXWELL_THEME.get());
+                    stopCustomSound(VotmSounds.MAXWELL_THEME.get());
                 }
 
                 long time = this.level().getGameTime();
@@ -222,7 +222,7 @@ public class MaxwellEntity extends PathfinderMob implements GeoEntity {
                     this.setSkeleton(true);
                 } else {
                     float pitch = 1.0F + (petCombo * 0.1F);
-                    this.playSound(KerfurSounds.MEOW_1.get(), 1.0F, pitch);
+                    this.playSound(VotmSounds.MEOW_1.get(), 1.0F, pitch);
                 }
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide());
@@ -236,11 +236,11 @@ public class MaxwellEntity extends PathfinderMob implements GeoEntity {
         if (isSkeleton()) return false;
 
         if (source.getEntity() instanceof Player && !this.level().isClientSide()) {
-            stopCustomSound(KerfurSounds.MAXWELL_THEME.get());
-            stopCustomSound(KerfurSounds.CONCRETE_SCRAPE.get());
+            stopCustomSound(VotmSounds.MAXWELL_THEME.get());
+            stopCustomSound(VotmSounds.CONCRETE_SCRAPE.get());
 
-            this.playSound(this.random.nextBoolean() ? KerfurSounds.MEOW_1.get() : KerfurSounds.MEOW_2.get(), 1.0f, 1.0f);
-            this.spawnAtLocation(KerfurMod.MAXWELL_ITEM.get());
+            this.playSound(this.random.nextBoolean() ? VotmSounds.MEOW_1.get() : VotmSounds.MEOW_2.get(), 1.0f, 1.0f);
+            this.spawnAtLocation(VoicesOfTheMines.MAXWELL_ITEM.get());
             this.discard();
             return false;
         }

@@ -1,0 +1,6 @@
+{
+	"parent": "voicesofthemines:block/poster",
+	"textures": {
+		"texture": "voicesofthemines:block/poster_10"
+	}
+}

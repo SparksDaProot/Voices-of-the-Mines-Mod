@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.entity.OmegaKerfurEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
@@ -12,22 +12,22 @@ public class OmegaKerfurModel extends GeoModel<OmegaKerfurEntity> {
         String color = object.getKerfurColor();
 
         if (!accessory.equals("none")) {
-            return new ResourceLocation(KerfurMod.MODID, "geo/omega_kerfur_" + accessory + ".geo.json");
+            return new ResourceLocation(VoicesOfTheMines.MODID, "geo/omega_kerfur_" + accessory + ".geo.json");
         }
 
         if (color.equals("blue") || color.equals("none")) {
-            return new ResourceLocation(KerfurMod.MODID, "geo/omega_kerfur.geo.json");
+            return new ResourceLocation(VoicesOfTheMines.MODID, "geo/omega_kerfur.geo.json");
         }
-        return new ResourceLocation(KerfurMod.MODID, "geo/omega_kerfur_other.geo.json");
+        return new ResourceLocation(VoicesOfTheMines.MODID, "geo/omega_kerfur_other.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(OmegaKerfurEntity object) {
         String color = object.getKerfurColor();
         if (color.equals("blue") || color.equals("none")) {
-            return new ResourceLocation(KerfurMod.MODID, "textures/entity/omega_kerfur.png");
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/omega_kerfur.png");
         }
-        return new ResourceLocation(KerfurMod.MODID, "textures/entity/omega_kerfur_" + color + ".png");
+        return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/omega_kerfur_" + color + ".png");
     }
 
     @Override
@@ -35,9 +35,9 @@ public class OmegaKerfurModel extends GeoModel<OmegaKerfurEntity> {
         String accessory = object.getKerfurAccessory();
 
         if (!accessory.equals("none")) {
-            return new ResourceLocation(KerfurMod.MODID, "animations/omega_kerfur_animations_" + accessory + ".json");
+            return new ResourceLocation(VoicesOfTheMines.MODID, "animations/omega_kerfur_animations_" + accessory + ".json");
         }
 
-        return new ResourceLocation(KerfurMod.MODID, "animations/omega_kerfur_animations.json");
+        return new ResourceLocation(VoicesOfTheMines.MODID, "animations/omega_kerfur_animations.json");
     }
 }

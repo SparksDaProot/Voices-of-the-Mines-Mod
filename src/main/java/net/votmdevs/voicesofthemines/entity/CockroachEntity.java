@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.entity;
 
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -72,7 +72,7 @@ public class CockroachEntity extends PathfinderMob implements GeoEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && !this.level().isClientSide()) {
-            this.playSound(KerfurSounds.COCKROACH_EAT.get(), 1.0F, 1.0F + (this.random.nextFloat() - 0.5F) * 0.2F);
+            this.playSound(VotmSounds.COCKROACH_EAT.get(), 1.0F, 1.0F + (this.random.nextFloat() - 0.5F) * 0.2F);
             player.getFoodData().eat(1, 0.1F);
             this.discard();
             return InteractionResult.SUCCESS;
@@ -126,7 +126,7 @@ public class CockroachEntity extends PathfinderMob implements GeoEntity {
                 this.roach.getNavigation().moveTo(this.targetFood, 1.2D);
 
                 if (this.roach.distanceToSqr(this.targetFood) < 2.0D) {
-                    this.roach.playSound(KerfurSounds.COCKROACH_EAT.get(), 0.5F, 1.5F);
+                    this.roach.playSound(VotmSounds.COCKROACH_EAT.get(), 0.5F, 1.5F);
 
                     this.targetFood.getItem().shrink(1);
                     if (this.targetFood.getItem().isEmpty()) {

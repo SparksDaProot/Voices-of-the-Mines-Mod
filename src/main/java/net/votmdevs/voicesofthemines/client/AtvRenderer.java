@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.entity.AtvEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,7 +15,7 @@ import org.joml.Matrix4f;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class AtvRenderer extends GeoEntityRenderer<AtvEntity> {
-    private static final ResourceLocation SELECT_ICON = new ResourceLocation(KerfurMod.MODID, "textures/gui/select.png");
+    private static final ResourceLocation SELECT_ICON = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/select.png");
 
     public AtvRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new AtvModel());

@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -13,27 +13,27 @@ public class VotvTerminalModel extends GeoModel<VotvTerminalBlockEntity> {
         Block block = object.getBlockState().getBlock();
         String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
 
-        if (block == KerfurMod.TERMINAL_CHECK.get() && object.hasDrive()) {
-            return new ResourceLocation(KerfurMod.MODID, "geo/terminal_check_drive.geo.json");
+        if (block == VoicesOfTheMines.TERMINAL_CHECK.get() && object.hasDrive()) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "geo/terminal_check_drive.geo.json");
         }
-        if (block == KerfurMod.TERMINAL_PROCESSING.get() && object.hasDrive()) {
-            return new ResourceLocation(KerfurMod.MODID, "geo/terminal_processing_drive.geo.json");
+        if (block == VoicesOfTheMines.TERMINAL_PROCESSING.get() && object.hasDrive()) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "geo/terminal_processing_drive.geo.json");
         }
-        return new ResourceLocation(KerfurMod.MODID, "geo/" + name + ".geo.json");
+        return new ResourceLocation(VoicesOfTheMines.MODID, "geo/" + name + ".geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(VotvTerminalBlockEntity object) {
         String name = ForgeRegistries.BLOCKS.getKey(object.getBlockState().getBlock()).getPath();
 
-        if (object.getBlockState().getBlock() == KerfurMod.TERMINAL_CHECK.get() && object.hasDrive()) {
-            return new ResourceLocation(KerfurMod.MODID, "textures/block/terminal_check_drive.png");
+        if (object.getBlockState().getBlock() == VoicesOfTheMines.TERMINAL_CHECK.get() && object.hasDrive()) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/block/terminal_check_drive.png");
         }
-        if (object.getBlockState().getBlock() == KerfurMod.TERMINAL_PROCESSING.get() && object.hasDrive()) {
-            return new ResourceLocation(KerfurMod.MODID, "textures/block/terminal_processing_drive.png");
+        if (object.getBlockState().getBlock() == VoicesOfTheMines.TERMINAL_PROCESSING.get() && object.hasDrive()) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/block/terminal_processing_drive.png");
         }
 
-        return new ResourceLocation(KerfurMod.MODID, "textures/block/" + name + ".png");
+        return new ResourceLocation(VoicesOfTheMines.MODID, "textures/block/" + name + ".png");
     }
 
     @Override

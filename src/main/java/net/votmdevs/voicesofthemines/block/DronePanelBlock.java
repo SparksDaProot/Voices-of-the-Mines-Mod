@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.block;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.entity.DroneEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -35,7 +35,7 @@ public class DronePanelBlock extends BaseEntityBlock {
 
                         BlockPos target = findTarget(level, pos);
                         if (target != null) {
-                            DroneEntity drone = KerfurMod.DRONE.get().create(level);
+                            DroneEntity drone = VoicesOfTheMines.DRONE.get().create(level);
                             if (drone != null) {
                                 drone.setPos(target.getX() - 100, target.getY() + 30, target.getZ());
                                 drone.setTargetPosition(target);
@@ -71,7 +71,7 @@ public class DronePanelBlock extends BaseEntityBlock {
             for (int y = -5; y <= 5; y++) {
                 for (int z = -10; z <= 10; z++) {
                     BlockPos p = startPos.offset(x, y, z);
-                    if (level.getBlockState(p).getBlock() == KerfurMod.DRONE_TARGET.get()) {
+                    if (level.getBlockState(p).getBlock() == VoicesOfTheMines.DRONE_TARGET.get()) {
                         return p;
                     }
                 }

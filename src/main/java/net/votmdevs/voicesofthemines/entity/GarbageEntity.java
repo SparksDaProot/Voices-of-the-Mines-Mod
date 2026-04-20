@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -60,7 +61,7 @@ public class GarbageEntity extends PathfinderMob implements GeoEntity {
             boolean isColliding = this.horizontalCollision || this.verticalCollision;
 
             if (isColliding && !this.wasCollidingLastTick) {
-                this.playSound(net.votmdevs.voicesofthemines.KerfurSounds.GARBAGE_DROP.get(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                this.playSound(VotmSounds.GARBAGE_DROP.get(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
             this.wasCollidingLastTick = isColliding;
 

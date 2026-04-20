@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.entity;
 
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,6 +15,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -62,7 +63,7 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
         if (!this.level().isClientSide()) {
             boolean isColliding = this.horizontalCollision || this.verticalCollision;
             if (isColliding && !this.wasCollidingLastTick) {
-                SoundEvent[] impactSounds = {KerfurSounds.IMPACT_DRIVE_1.get(), KerfurSounds.IMPACT_DRIVE_2.get(), KerfurSounds.IMPACT_DRIVE_3.get()};
+                SoundEvent[] impactSounds = {VotmSounds.IMPACT_DRIVE_1.get(), VotmSounds.IMPACT_DRIVE_2.get(), VotmSounds.IMPACT_DRIVE_3.get()};
                 SoundEvent selectedSound = impactSounds[this.random.nextInt(impactSounds.length)];
                 this.playSound(selectedSound, 0.6F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
@@ -92,15 +93,15 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
                         if (inserted) break;
                         net.minecraft.world.level.block.state.BlockState state = this.level().getBlockState(bp);
 
-                        if (state.getBlock() == net.votmdevs.voicesofthemines.KerfurMod.TERMINAL_CHECK.get() ||
-                                state.getBlock() == net.votmdevs.voicesofthemines.KerfurMod.TERMINAL_PROCESSING.get() ||
-                                state.getBlock() == net.votmdevs.voicesofthemines.KerfurMod.PHANTOM_BLOCK.get()) {
+                        if (state.getBlock() == VoicesOfTheMines.TERMINAL_CHECK.get() ||
+                                state.getBlock() == VoicesOfTheMines.TERMINAL_PROCESSING.get() ||
+                                state.getBlock() == VoicesOfTheMines.PHANTOM_BLOCK.get()) {
 
                             for (net.minecraft.core.BlockPos searchPos : net.minecraft.core.BlockPos.betweenClosed(bp.offset(-2, -1, -2), bp.offset(2, 1, 2))) {
                                 net.minecraft.world.level.block.Block searchBlock = this.level().getBlockState(searchPos).getBlock();
 
-                                if (searchBlock == net.votmdevs.voicesofthemines.KerfurMod.TERMINAL_CHECK.get() ||
-                                        searchBlock == net.votmdevs.voicesofthemines.KerfurMod.TERMINAL_PROCESSING.get()) {
+                                if (searchBlock == VoicesOfTheMines.TERMINAL_CHECK.get() ||
+                                        searchBlock == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
 
                                     net.minecraft.world.level.block.entity.BlockEntity be = this.level().getBlockEntity(searchPos);
 
@@ -108,7 +109,7 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
                                         if (!terminal.hasDrive()) {
                                             String sigId = this.entityData.get(SIGNAL_ID);
                                             boolean isEmpty = (sigId == null || sigId.isEmpty());
-                                            if (searchBlock == net.votmdevs.voicesofthemines.KerfurMod.TERMINAL_PROCESSING.get() && isEmpty) {
+                                            if (searchBlock == VoicesOfTheMines.TERMINAL_PROCESSING.get() && isEmpty) {
                                                 continue;
                                             }
                                             String sigType = this.entityData.get(SIGNAL_TYPE);
@@ -116,7 +117,7 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
 
                                             terminal.setDrive(true, sigId != null ? sigId : "", sigType != null ? sigType : "", sigLevel);
 
-                                            this.level().playSound(null, searchPos, KerfurSounds.DRIVE_IN.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+                                            this.level().playSound(null, searchPos, VotmSounds.DRIVE_IN.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
 
                                             this.discard();
                                             inserted = true;

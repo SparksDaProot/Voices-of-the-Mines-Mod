@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.client.gui;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TerminalCalibrateScreen extends Screen {
-    private static final ResourceLocation NOISE_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/noise_sheet.png");
-    private static final ResourceLocation NOISE_RED_TEX = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/noise_sheet_not_found.png");
+    private static final ResourceLocation NOISE_TEX = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/noise_sheet.png");
+    private static final ResourceLocation NOISE_RED_TEX = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/noise_sheet_not_found.png");
 
     public static boolean HAS_ACTIVE_SIGNAL = false;
     public static float CURRENT_TARGET_LINE = 0f;
@@ -65,7 +65,7 @@ public class TerminalCalibrateScreen extends Screen {
     protected void init() {
         super.init();
         if (ambientSound == null) {
-            ambientSound = new TerminalFindScreen.GuiLoopSound(KerfurSounds.CALIBRATE_LOOP.get(), 0.3f);
+            ambientSound = new TerminalFindScreen.GuiLoopSound(VotmSounds.CALIBRATE_LOOP.get(), 0.3f);
             Minecraft.getInstance().getSoundManager().play(ambientSound);
         }
     }
@@ -112,7 +112,7 @@ public class TerminalCalibrateScreen extends Screen {
             if (data.loadingProgress >= 100f) {
                 data.loadingProgress = 100f;
                 efficiency = 0f;
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.ACHIEVEMENT.get(), 1.0F, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.ACHIEVEMENT.get(), 1.0F, 1.0F));
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.FinishCalibrationPacket());
             }
         } else {
@@ -212,33 +212,33 @@ public class TerminalCalibrateScreen extends Screen {
                     t.equals("jupiter") || t.equals("uranus") || t.equals("neptune") || t.equals("saturn") ||
                     t.equals("hilero") || t.equals("votv_earth") || t.equals("fard") || t.equals("ironlung")) {
 
-                targetTex = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/" + t + "_sheet.png");
+                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + t + "_sheet.png");
                 isAnimatedSheet = true;
                 if (data.loadingProgress >= 100f) objectNameText = "planet_" + t;
             }
             else if (t.equals("retroplanet")) {
-                targetTex = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/retro_planet_sheet.png");
+                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/retro_planet_sheet.png");
                 isAnimatedSheet = true;
                 if (data.loadingProgress >= 100f) objectNameText = "planet_retro_planet";
             }
             else if (t.equals("enceladus") || t.equals("ceres") || t.equals("dione") || t.equals("bennu")) {
-                targetTex = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/grey_sheet.png");
+                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/grey_sheet.png");
                 isAnimatedSheet = true;
                 if (data.loadingProgress >= 100f) objectNameText = "planet_" + t;
             }
             else if (t.startsWith("siggen") || t.startsWith("exogen") || t.startsWith("siggenus") || t.equals("hairy")) {
-                targetTex = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/genstars" + randomStarType + ".png");
+                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/genstars" + randomStarType + ".png");
                 if (data.loadingProgress >= 100f) {
                     if (t.startsWith("exogen")) objectNameText = "unind_object";
                     else objectNameText = "unidentified_planet";
                 }
             }
             else if (t.equals("faces")) {
-                targetTex = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/faces_im.png");
+                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/faces_im.png");
                 if (data.loadingProgress >= 100f) objectNameText = "unidentified_planet";
             }
             else {
-                targetTex = new ResourceLocation(KerfurMod.MODID, "textures/gui/terminal/generic_signal_image.png");
+                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/generic_signal_image.png");
                 if (data.loadingProgress >= 100f) objectNameText = "generic planet";
             }
 
@@ -287,13 +287,13 @@ public class TerminalCalibrateScreen extends Screen {
             if (mouseY >= btnsY && mouseY <= btnsY + 15) {
                 data.isLineRowActive = !data.isLineRowActive;
                 if (data.isLineRowActive) data.isWaveRowActive = false;
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
                 return true;
             }
             if (mouseY >= btnsY + 20 && mouseY <= btnsY + 35) {
                 data.isWaveRowActive = !data.isWaveRowActive;
                 if (data.isWaveRowActive) data.isLineRowActive = false;
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
                 return true;
             }
         }
@@ -331,7 +331,7 @@ public class TerminalCalibrateScreen extends Screen {
         }
 
         if (scrolled) {
-            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.TUMBLER.get(), 1.0F, 0.8F));
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.TUMBLER.get(), 1.0F, 0.8F));
             return true;
         }
 

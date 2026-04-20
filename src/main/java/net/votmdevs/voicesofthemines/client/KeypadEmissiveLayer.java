@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.block.KeypadBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -30,11 +30,11 @@ public class KeypadEmissiveLayer extends GeoRenderLayer<KeypadBlockEntity> {
 
     private ResourceLocation getEmissiveTexture(int status) {
         if (status == 0 || status == 2) {
-            return new ResourceLocation(KerfurMod.MODID, "textures/block/keypad_write_code_emissive.png");
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/block/keypad_write_code_emissive.png");
         }
         else if (status == 3) {
-            return new ResourceLocation(KerfurMod.MODID, "textures/block/keypad_error_emissive.png");
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/block/keypad_error_emissive.png");
         }
-        return new ResourceLocation(KerfurMod.MODID, "textures/block/keypad_emissive.png");
+        return new ResourceLocation(VoicesOfTheMines.MODID, "textures/block/keypad_emissive.png");
     }
 }

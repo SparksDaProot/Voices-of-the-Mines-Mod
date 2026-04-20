@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.client.gui;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = KerfurMod.MODID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = VoicesOfTheMines.MODID, value = Dist.CLIENT)
 public class GmodNotificationManager {
-    private static final ResourceLocation ICON = new ResourceLocation(KerfurMod.MODID, "textures/gui/icons/notification_icon.png");
+    private static final ResourceLocation ICON = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/icons/notification_icon.png");
     private static final List<Notification> notifications = new ArrayList<>();
 
     public static void addNotification(String message) {
         notifications.add(new Notification(message));
-        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(KerfurSounds.BUBBLE.get(), 1.0F));
+        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUBBLE.get(), 1.0F));
     }
 
     @SubscribeEvent

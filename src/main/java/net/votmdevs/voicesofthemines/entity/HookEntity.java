@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.entity;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -33,7 +33,7 @@ public class HookEntity extends Projectile {
     }
 
     public HookEntity(Level level, Player owner) {
-        super(KerfurMod.HOOK_ENTITY.get(), level);
+        super(VoicesOfTheMines.HOOK_ENTITY.get(), level);
         this.setOwnerUUID(owner.getUUID());
         this.setPos(owner.getX(), owner.getEyeY() - 0.1D, owner.getZ());
         this.startPos = this.position();
@@ -62,7 +62,7 @@ public class HookEntity extends Projectile {
         if (ownerId == null) return;
 
         Player owner = this.level().getPlayerByUUID(ownerId);
-        if (owner == null || owner.getMainHandItem().getItem() != KerfurMod.HOOK_ITEM.get()) {
+        if (owner == null || owner.getMainHandItem().getItem() != VoicesOfTheMines.HOOK_ITEM.get()) {
             if (!this.level().isClientSide) this.discard();
             return;
         }

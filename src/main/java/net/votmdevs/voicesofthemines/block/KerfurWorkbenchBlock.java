@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.block;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.entity.FleshEntity;
 import net.votmdevs.voicesofthemines.entity.GarbageEntity;
 import net.votmdevs.voicesofthemines.entity.KerfurEntity;
@@ -78,28 +78,28 @@ public class KerfurWorkbenchBlock extends Block {
         Item item = stack.getItem();
 
 // KERFUR-O
-        if (parts == 3 && item == KerfurMod.KERFUR_PART.get() && color == KerfurColor.NONE) {
+        if (parts == 3 && item == VoicesOfTheMines.KERFUR_PART.get() && color == KerfurColor.NONE) {
             advanceCraft(level, pos, state, 7, stack, player, SoundEvents.WOOD_PLACE);
             return InteractionResult.sidedSuccess(level.isClientSide);
-        } else if (parts == 7 && item == KerfurMod.RECYCLED_PLASTIC.get()) {
+        } else if (parts == 7 && item == VoicesOfTheMines.RECYCLED_PLASTIC.get()) {
             advanceCraft(level, pos, state, 8, stack, player, SoundEvents.WOOD_PLACE);
             return InteractionResult.sidedSuccess(level.isClientSide);
-        } else if (parts == 8 && item == KerfurMod.RECYCLED_PLASTIC.get()) {
+        } else if (parts == 8 && item == VoicesOfTheMines.RECYCLED_PLASTIC.get()) {
             advanceCraft(level, pos, state, 9, stack, player, SoundEvents.WOOD_PLACE);
             return InteractionResult.sidedSuccess(level.isClientSide);
-        } else if (parts == 9 && item == KerfurMod.RECYCLED_RUBBER.get()) {
+        } else if (parts == 9 && item == VoicesOfTheMines.RECYCLED_RUBBER.get()) {
             advanceCraft(level, pos, state, 10, stack, player, SoundEvents.SLIME_BLOCK_PLACE);
             return InteractionResult.sidedSuccess(level.isClientSide);
-        } else if (parts == 10 && item == KerfurMod.METAL_SCRAP.get()) {
+        } else if (parts == 10 && item == VoicesOfTheMines.METAL_SCRAP.get()) {
             advanceCraft(level, pos, state, 11, stack, player, SoundEvents.ANVIL_PLACE);
             return InteractionResult.sidedSuccess(level.isClientSide);
-        } else if (parts == 11 && item == KerfurMod.ELECTRONIC_WASTE.get()) {
+        } else if (parts == 11 && item == VoicesOfTheMines.ELECTRONIC_WASTE.get()) {
             advanceCraft(level, pos, state, 12, stack, player, SoundEvents.COPPER_PLACE);
             return InteractionResult.sidedSuccess(level.isClientSide);
-        } else if (parts == 12 && item == KerfurMod.ELECTRONIC_WASTE.get()) {
+        } else if (parts == 12 && item == VoicesOfTheMines.ELECTRONIC_WASTE.get()) {
             advanceCraft(level, pos, state, 13, stack, player, SoundEvents.COPPER_PLACE);
             return InteractionResult.sidedSuccess(level.isClientSide);
-        } else if (parts == 13 && item == KerfurMod.RADIOACTIVE_CAPSULE.get()) {
+        } else if (parts == 13 && item == VoicesOfTheMines.RADIOACTIVE_CAPSULE.get()) {
             advanceCraft(level, pos, state, 14, stack, player, SoundEvents.BEACON_ACTIVATE);
             return InteractionResult.sidedSuccess(level.isClientSide);
         } else if (parts == 14 && color == KerfurColor.NONE) {
@@ -116,7 +116,7 @@ public class KerfurWorkbenchBlock extends Block {
 
         if (parts == 15 && stack.isEmpty()) {
             if (!level.isClientSide) {
-                OmegaKerfurEntity omega = KerfurMod.OMEGA_KERFUR.get().create(level);
+                OmegaKerfurEntity omega = VoicesOfTheMines.OMEGA_KERFUR.get().create(level);
                 if (omega != null) {
                     omega.setKerfurColor(color.getSerializedName());
                     omega.moveTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, player.getYRot(), 0.0F);
@@ -125,13 +125,13 @@ public class KerfurWorkbenchBlock extends Block {
                     level.addFreshEntity(omega);
                 }
                 level.setBlock(pos, state.setValue(PARTS, 0).setValue(COLOR, KerfurColor.NONE), 3);
-                level.playSound(null, pos, KerfurSounds.CRAFT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.playSound(null, pos, VotmSounds.CRAFT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
 // common kerfur
-        if (item == KerfurMod.KERFUR_PART.get() && parts >= 0 && parts < 3) {
+        if (item == VoicesOfTheMines.KERFUR_PART.get() && parts >= 0 && parts < 3) {
             advanceCraft(level, pos, state, parts + 1, stack, player, SoundEvents.WOOD_PLACE);
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
@@ -148,14 +148,14 @@ public class KerfurWorkbenchBlock extends Block {
                 }
 
                 if (color != KerfurColor.NONE || isAbandoned) {
-                    KerfurEntity kerfur = KerfurMod.KERFUR.get().create(level);
+                    KerfurEntity kerfur = VoicesOfTheMines.KERFUR.get().create(level);
                     if (kerfur != null) {
                         kerfur.moveTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, player.getYRot(), 0.0F);
                         kerfur.setKerfurColor(isAbandoned ? "abandoned" : color.getSerializedName());
                         level.addFreshEntity(kerfur);
                     }
                     level.setBlock(pos, state.setValue(PARTS, 0).setValue(COLOR, KerfurColor.NONE), 3);
-                    level.playSound(null, pos, KerfurSounds.CRAFT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                    level.playSound(null, pos, VotmSounds.CRAFT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -179,8 +179,8 @@ public class KerfurWorkbenchBlock extends Block {
                 if (parts == 4) { advanceCraft(level, pos, state, 5, stack, player, SoundEvents.ITEM_FRAME_ADD_ITEM); return InteractionResult.sidedSuccess(level.isClientSide); }
                 if (parts == 5) { advanceCraft(level, pos, state, 6, stack, player, SoundEvents.ITEM_FRAME_ADD_ITEM); return InteractionResult.sidedSuccess(level.isClientSide); }
                 if (parts == 6) {
-                    advanceCraft(level, pos, state, 0, stack, player, KerfurSounds.CRAFT.get());
-                    dropItemOnTable(level, pos, KerfurMod.RECYCLED_PLASTIC.get());
+                    advanceCraft(level, pos, state, 0, stack, player, VotmSounds.CRAFT.get());
+                    dropItemOnTable(level, pos, VoicesOfTheMines.RECYCLED_PLASTIC.get());
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
             }
@@ -191,8 +191,8 @@ public class KerfurWorkbenchBlock extends Block {
                 if (parts == 4) { advanceCraft(level, pos, state, 5, stack, player, SoundEvents.LEASH_KNOT_PLACE); return InteractionResult.sidedSuccess(level.isClientSide); }
                 if (parts == 5) { advanceCraft(level, pos, state, 6, stack, player, SoundEvents.LEASH_KNOT_PLACE); return InteractionResult.sidedSuccess(level.isClientSide); }
                 if (parts == 6) {
-                    advanceCraft(level, pos, state, 0, stack, player, KerfurSounds.CRAFT.get());
-                    dropItemOnTable(level, pos, KerfurMod.RECYCLED_RUBBER.get());
+                    advanceCraft(level, pos, state, 0, stack, player, VotmSounds.CRAFT.get());
+                    dropItemOnTable(level, pos, VoicesOfTheMines.RECYCLED_RUBBER.get());
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
             }
@@ -203,8 +203,8 @@ public class KerfurWorkbenchBlock extends Block {
                 if (parts == 4) { advanceCraft(level, pos, state, 5, stack, player, SoundEvents.METAL_PLACE); return InteractionResult.sidedSuccess(level.isClientSide); }
                 if (parts == 5) { advanceCraft(level, pos, state, 6, stack, player, SoundEvents.METAL_PLACE); return InteractionResult.sidedSuccess(level.isClientSide); }
                 if (parts == 6) {
-                    advanceCraft(level, pos, state, 0, stack, player, KerfurSounds.CRAFT.get());
-                    dropItemOnTable(level, pos, KerfurMod.METAL_SCRAP.get());
+                    advanceCraft(level, pos, state, 0, stack, player, VotmSounds.CRAFT.get());
+                    dropItemOnTable(level, pos, VoicesOfTheMines.METAL_SCRAP.get());
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
             }
@@ -215,27 +215,27 @@ public class KerfurWorkbenchBlock extends Block {
                 if (parts == 4) { advanceCraft(level, pos, state, 5, stack, player, SoundEvents.STONE_PLACE); return InteractionResult.sidedSuccess(level.isClientSide); }
                 if (parts == 5) { advanceCraft(level, pos, state, 6, stack, player, SoundEvents.STONE_PLACE); return InteractionResult.sidedSuccess(level.isClientSide); }
                 if (parts == 6) {
-                    advanceCraft(level, pos, state, 0, stack, player, KerfurSounds.CRAFT.get());
-                    dropItemOnTable(level, pos, KerfurMod.ELECTRONIC_WASTE.get());
+                    advanceCraft(level, pos, state, 0, stack, player, VotmSounds.CRAFT.get());
+                    dropItemOnTable(level, pos, VoicesOfTheMines.ELECTRONIC_WASTE.get());
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
             }
 
             // garbage
-            if (getColorFromPainter(item) == KerfurColor.NONE && item != KerfurMod.KERFUR_PART.get()) {
-                if (parts == 0) { advanceCraft(level, pos, state, 4, stack, player, KerfurSounds.GARBAGE_DROP.get()); return InteractionResult.sidedSuccess(level.isClientSide); }
-                if (parts == 4) { advanceCraft(level, pos, state, 5, stack, player, KerfurSounds.GARBAGE_DROP.get()); return InteractionResult.sidedSuccess(level.isClientSide); }
-                if (parts == 5) { advanceCraft(level, pos, state, 6, stack, player, KerfurSounds.GARBAGE_DROP.get()); return InteractionResult.sidedSuccess(level.isClientSide); }
+            if (getColorFromPainter(item) == KerfurColor.NONE && item != VoicesOfTheMines.KERFUR_PART.get()) {
+                if (parts == 0) { advanceCraft(level, pos, state, 4, stack, player, VotmSounds.GARBAGE_DROP.get()); return InteractionResult.sidedSuccess(level.isClientSide); }
+                if (parts == 4) { advanceCraft(level, pos, state, 5, stack, player, VotmSounds.GARBAGE_DROP.get()); return InteractionResult.sidedSuccess(level.isClientSide); }
+                if (parts == 5) { advanceCraft(level, pos, state, 6, stack, player, VotmSounds.GARBAGE_DROP.get()); return InteractionResult.sidedSuccess(level.isClientSide); }
                 if (parts == 6) {
                     if (!level.isClientSide) {
                         if (!player.isCreative()) stack.shrink(1);
-                        GarbageEntity garbage = KerfurMod.GARBAGE.get().create(level);
+                        GarbageEntity garbage = VoicesOfTheMines.GARBAGE.get().create(level);
                         if (garbage != null) {
                             garbage.moveTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, player.getYRot(), 0.0F);
                             level.addFreshEntity(garbage);
                         }
                         level.setBlock(pos, state.setValue(PARTS, 0), 3);
-                        level.playSound(null, pos, KerfurSounds.CRAFT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                        level.playSound(null, pos, VotmSounds.CRAFT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
                     }
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
@@ -246,13 +246,13 @@ public class KerfurWorkbenchBlock extends Block {
     }
 
     private KerfurColor getColorFromPainter(Item item) {
-        if (item == KerfurMod.PAINTER_BLACK.get()) return KerfurColor.BLACK;
-        if (item == KerfurMod.PAINTER_BLUE.get()) return KerfurColor.BLUE;
-        if (item == KerfurMod.PAINTER_GREEN.get()) return KerfurColor.GREEN;
-        if (item == KerfurMod.PAINTER_PINK.get()) return KerfurColor.PINK;
-        if (item == KerfurMod.PAINTER_RED.get()) return KerfurColor.RED;
-        if (item == KerfurMod.PAINTER_WHITE.get()) return KerfurColor.WHITE;
-        if (item == KerfurMod.PAINTER_YELLOW.get()) return KerfurColor.YELLOW;
+        if (item == VoicesOfTheMines.PAINTER_BLACK.get()) return KerfurColor.BLACK;
+        if (item == VoicesOfTheMines.PAINTER_BLUE.get()) return KerfurColor.BLUE;
+        if (item == VoicesOfTheMines.PAINTER_GREEN.get()) return KerfurColor.GREEN;
+        if (item == VoicesOfTheMines.PAINTER_PINK.get()) return KerfurColor.PINK;
+        if (item == VoicesOfTheMines.PAINTER_RED.get()) return KerfurColor.RED;
+        if (item == VoicesOfTheMines.PAINTER_WHITE.get()) return KerfurColor.WHITE;
+        if (item == VoicesOfTheMines.PAINTER_YELLOW.get()) return KerfurColor.YELLOW;
         return KerfurColor.NONE;
     }
 }

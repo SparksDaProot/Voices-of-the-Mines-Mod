@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.block;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -13,7 +13,7 @@ public class PosterBlockEntity extends BlockEntity {
     private String customImageUrl = "";
 
     public PosterBlockEntity(BlockPos pos, BlockState state) {
-        super(KerfurMod.POSTER_BLOCK_ENTITY.get(), pos, state);
+        super(VoicesOfTheMines.POSTER_BLOCK_ENTITY.get(), pos, state);
     }
 
     public String getCustomImageUrl() {

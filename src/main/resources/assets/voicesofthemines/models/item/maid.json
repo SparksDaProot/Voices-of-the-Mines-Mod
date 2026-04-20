@@ -1,0 +1,6 @@
+{
+  "parent": "voicesofthemines/generated",
+  "textures": {
+    "layer0": "voicesofthemines:item/maid"
+  }
+}

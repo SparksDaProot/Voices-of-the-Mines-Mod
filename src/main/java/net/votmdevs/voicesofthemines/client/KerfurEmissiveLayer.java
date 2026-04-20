@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.entity.KerfurEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -30,8 +30,8 @@ public class KerfurEmissiveLayer extends GeoRenderLayer<KerfurEntity> {
 
     private ResourceLocation getGlowTextureForColor(String color) {
         if (color.equals("blue") || color.equals("none")) {
-            return new ResourceLocation(KerfurMod.MODID, "textures/entity/kerfur_emmisive.png");
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/kerfur_emmisive.png");
         }
-        return new ResourceLocation(KerfurMod.MODID, "textures/entity/kerfur_" + color + "_emmisive.png");
+        return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/kerfur_" + color + "_emmisive.png");
     }
 }

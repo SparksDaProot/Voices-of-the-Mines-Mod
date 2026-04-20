@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.inventory.KerfurMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,12 +23,12 @@ public class KerfurScreen extends AbstractContainerScreen<KerfurMenu> {
 
     private ResourceLocation getTextureForColor(String color, boolean isOmega) {
         if (isOmega) {
-            if (color.equals("blue") || color.equals("none")) return new ResourceLocation(KerfurMod.MODID, "textures/gui/omega_kerfur_storage.png");
-            return new ResourceLocation(KerfurMod.MODID, "textures/gui/omega_kerfur_storage_" + color + ".png");
+            if (color.equals("blue") || color.equals("none")) return new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/omega_kerfur_storage.png");
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/omega_kerfur_storage_" + color + ".png");
         } else {
-            if (color.equals("blue") || color.equals("none")) return new ResourceLocation(KerfurMod.MODID, "textures/gui/kerfur_storage.png");
-            if (color.equals("abandoned")) return new ResourceLocation(KerfurMod.MODID, "textures/gui/kerfur_storage_abandoned.png");
-            return new ResourceLocation(KerfurMod.MODID, "textures/gui/kerfur_storage_" + color + ".png");
+            if (color.equals("blue") || color.equals("none")) return new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/kerfur_storage.png");
+            if (color.equals("abandoned")) return new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/kerfur_storage_abandoned.png");
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/kerfur_storage_" + color + ".png");
         }
     }
 

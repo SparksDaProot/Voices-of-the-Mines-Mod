@@ -1,7 +1,7 @@
 package net.votmdevs.voicesofthemines.entity;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
-import net.votmdevs.voicesofthemines.KerfurSounds;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.inventory.KerfurMenu;
 import net.votmdevs.voicesofthemines.network.KerfurPacketHandler;
 import net.minecraft.core.BlockPos;
@@ -111,11 +111,11 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
         if (blockIn.is(BlockTags.LOGS) || blockIn.is(BlockTags.PLANKS) || blockIn.is(BlockTags.WOODEN_DOORS) || blockIn.is(BlockTags.WOODEN_STAIRS) || blockIn.is(BlockTags.WOODEN_SLABS)) {
-            this.playSound(KerfurSounds.OMEGA_STEP_WOOD.get(), 0.3F, 1.0F);
+            this.playSound(VotmSounds.OMEGA_STEP_WOOD.get(), 0.3F, 1.0F);
         } else if (blockIn.is(BlockTags.DIRT) || blockIn.is(BlockTags.SAND) || blockIn.is(Blocks.GRAVEL) || blockIn.is(Blocks.CLAY) || blockIn.is(Blocks.GRASS_BLOCK)) {
-            this.playSound(KerfurSounds.OMEGA_STEP_DIRT.get(), 0.3F, 1.0F);
+            this.playSound(VotmSounds.OMEGA_STEP_DIRT.get(), 0.3F, 1.0F);
         } else {
-            this.playSound(KerfurSounds.OMEGA_STEP_DEFAULT.get(), 0.3F, 1.0F);
+            this.playSound(VotmSounds.OMEGA_STEP_DEFAULT.get(), 0.3F, 1.0F);
         }
     }
 
@@ -166,7 +166,7 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
                 double currentSpeed = this.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue();
 
                 if (dist > 7.0D && currentSpeed <= 0.35D) {
-                    this.playSound(KerfurSounds.OMEGA_SPRINT.get(), 1.0F, 1.0F);
+                    this.playSound(VotmSounds.OMEGA_SPRINT.get(), 1.0F, 1.0F);
                     this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.45D);
                 } else if (dist < 4.0D && currentSpeed > 0.35D) {
                     this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.35D);
@@ -179,7 +179,7 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
             if (healthPercentage < 0.70F && !isDeactivated() && !isWakingUp()) {
                 this.setDeactivated(true);
                 this.getNavigation().stop();
-                this.playSound(KerfurSounds.SHUTDOWN.get(), 1.0F, 1.0F);
+                this.playSound(VotmSounds.SHUTDOWN.get(), 1.0F, 1.0F);
 
                 if (!notifiedRecharge && this.getOwner() instanceof ServerPlayer sp) {
                     sendNotification(sp, "Wait! Kerfur-O is recharging!");
@@ -254,15 +254,15 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
 
         ItemStack itemInHand = player.getItemInHand(hand);
 
-        if (itemInHand.getItem() == KerfurMod.ACCESSORY_MAID.get() ||
-                itemInHand.getItem() == KerfurMod.ACCESSORY_RIBBON.get() ||
-                itemInHand.getItem() == KerfurMod.ACCESSORY_GLASSES.get() ||
-                itemInHand.getItem() == KerfurMod.ACCESSORY_JACKET.get()) {
+        if (itemInHand.getItem() == VoicesOfTheMines.ACCESSORY_MAID.get() ||
+                itemInHand.getItem() == VoicesOfTheMines.ACCESSORY_RIBBON.get() ||
+                itemInHand.getItem() == VoicesOfTheMines.ACCESSORY_GLASSES.get() ||
+                itemInHand.getItem() == VoicesOfTheMines.ACCESSORY_JACKET.get()) {
 
             if (!this.level().isClientSide()) {
                 String currentAcc = this.getKerfurAccessory();
                 if (!currentAcc.equals("none")) {
-                    Item dropItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(KerfurMod.MODID, currentAcc));
+                    Item dropItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(VoicesOfTheMines.MODID, currentAcc));
                     if (dropItem != null) {
                         this.spawnAtLocation(dropItem);
                     }
@@ -285,7 +285,7 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
 
         if (isDeactivated() || isWakingUp()) {
             if (!this.level().isClientSide()) {
-                this.playSound(KerfurSounds.WARNING.get(), 1.0F, 1.0F);
+                this.playSound(VotmSounds.WARNING.get(), 1.0F, 1.0F);
                 if (player instanceof ServerPlayer sp) {
                     sendNotification(sp, "Wait! Kerfur-O is recharging!");
                 }
@@ -299,7 +299,7 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
                     buf.writeUtf(this.getKerfurColor());
                     buf.writeBoolean(true);
                 });
-                this.playSound(KerfurSounds.OPEN_STORAGE.get(), 1.0F, 1.0F);
+                this.playSound(VotmSounds.OPEN_STORAGE.get(), 1.0F, 1.0F);
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide());
         }
@@ -321,7 +321,7 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
 
             if (petCombo >= 15) {
                 this.triggerAnim("action", "attack");
-                this.playSound(KerfurSounds.OMEGA_BONK.get(), 1.0F, 1.0F);
+                this.playSound(VotmSounds.OMEGA_BONK.get(), 1.0F, 1.0F);
 
                 boolean hurt = player.hurt(this.damageSources().mobAttack(this), 6.0F);
                 if (!hurt) {
@@ -335,7 +335,7 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
                 this.setPetting(false);
             } else {
                 this.triggerAnim("action", "petmeow");
-                this.playSound(KerfurSounds.MEOW.get(), 1.0F, 1.0F + (petCombo * 0.1F));
+                this.playSound(VotmSounds.MEOW.get(), 1.0F, 1.0F + (petCombo * 0.1F));
             }
         }
 

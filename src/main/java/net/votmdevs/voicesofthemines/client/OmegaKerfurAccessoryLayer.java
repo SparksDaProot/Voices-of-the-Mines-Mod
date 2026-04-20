@@ -1,6 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
-import net.votmdevs.voicesofthemines.KerfurMod;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.entity.OmegaKerfurEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OmegaKerfurAccessoryLayer extends GeoRenderLayer<OmegaKerfurEntity> {
 
-    private static final ResourceLocation ACCESSORY_TEXTURE = new ResourceLocation(KerfurMod.MODID, "textures/entity/omega_kerfur_accesories.png");
+    private static final ResourceLocation ACCESSORY_TEXTURE = new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/omega_kerfur_accesories.png");
 
     public OmegaKerfurAccessoryLayer(GeoRenderer<OmegaKerfurEntity> entityRendererIn) {
         super(entityRendererIn);
