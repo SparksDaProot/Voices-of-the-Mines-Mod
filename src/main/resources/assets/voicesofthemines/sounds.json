@@ -253,5 +253,14 @@
   "click2": { "sounds": [ "voicesofthemines:click2" ] },
   "click3": { "sounds": [ "voicesofthemines:click3" ] },
   "click4": { "sounds": [ "voicesofthemines:click4" ] },
-  "click5": { "sounds": [ "voicesofthemines:click5" ] }
+  "click5": { "sounds": [ "voicesofthemines:click5" ] },
+
+  "server1": { "sounds": [ "voicesofthemines:server1" ] },
+  "server2": { "sounds": [ "voicesofthemines:server2" ] },
+  "server3": { "sounds": [ "voicesofthemines:server3" ] },
+  "server4": { "sounds": [ "voicesofthemines:server4" ] },
+  "server5": { "sounds": [ "voicesofthemines:server5" ] },
+  "server6": { "sounds": [ "voicesofthemines:server6" ] },
+  "server7": { "sounds": [ "voicesofthemines:server7" ] },
+  "server8": { "sounds": [ "voicesofthemines:server8" ] }
 }

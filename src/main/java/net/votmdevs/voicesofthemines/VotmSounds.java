@@ -31,6 +31,15 @@ public class VotmSounds {
     public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLICK4 = registerSoundEvent("click4");
     public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLICK5 = registerSoundEvent("click5");
 
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVER1 = registerSoundEvent("server1");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVER2 = registerSoundEvent("server2");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVER3 = registerSoundEvent("server3");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVER4 = registerSoundEvent("server4");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVER5 = registerSoundEvent("server5");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVER6 = registerSoundEvent("server6");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVER7 = registerSoundEvent("server7");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVER8 = registerSoundEvent("server8");
+
     public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVOMOTOR_LOOP = registerSoundEvent("servomotor_loop");
     public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVERDOWN = registerSoundEvent("serverdown");
 

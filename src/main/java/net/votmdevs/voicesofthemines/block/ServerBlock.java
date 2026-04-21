@@ -91,9 +91,26 @@ public class ServerBlock extends BaseEntityBlock {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (!state.getValue(BROKEN)) {
-            if (random.nextInt(20) == 0) {
+            if (random.nextInt(160) == 0) {
                 level.playLocalSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
                         VotmSounds.SERVOMOTOR_LOOP.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.3F, 1.0F, false);
+            }
+
+            if (random.nextInt(400) == 0) {
+                int soundChoice = random.nextInt(8) + 1; // от 1 до 8
+                net.minecraft.sounds.SoundEvent randomServerSound = switch (soundChoice) {
+                    case 1 -> VotmSounds.SERVER1.get();
+                    case 2 -> VotmSounds.SERVER2.get();
+                    case 3 -> VotmSounds.SERVER3.get();
+                    case 4 -> VotmSounds.SERVER4.get();
+                    case 5 -> VotmSounds.SERVER5.get();
+                    case 6 -> VotmSounds.SERVER6.get();
+                    case 7 -> VotmSounds.SERVER7.get();
+                    default -> VotmSounds.SERVER8.get();
+                };
+
+                level.playLocalSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
+                        randomServerSound, net.minecraft.sounds.SoundSource.BLOCKS, 0.4F, 1.0F, false);
             }
         }
     }
