@@ -29,6 +29,9 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, ConsoleCommandPacket.class, ConsoleCommandPacket::encode, ConsoleCommandPacket::decode, ConsoleCommandPacket::handle);
+        INSTANCE.registerMessage(id++, ConsoleOutputPacket.class, ConsoleOutputPacket::encode, ConsoleOutputPacket::decode, ConsoleOutputPacket::handle);
+        INSTANCE.registerMessage(id++, SetCalibrationPacket.class, SetCalibrationPacket::encode, SetCalibrationPacket::decode, SetCalibrationPacket::handle);
         INSTANCE.registerMessage(id++, FixServerPacket.class, FixServerPacket::encode, FixServerPacket::decode, FixServerPacket::handle);
         INSTANCE.registerMessage(id++, ListCustomItemPacket.class, ListCustomItemPacket::encode, ListCustomItemPacket::decode, ListCustomItemPacket::handle);
         INSTANCE.registerMessage(id++, SendEmailPacket.class, SendEmailPacket::encode, SendEmailPacket::decode, SendEmailPacket::handle);
@@ -861,6 +864,147 @@ public class KerfurPacketHandler {
                         player.level().setBlock(msg.pos, state.setValue(net.votmdevs.voicesofthemines.block.ServerBlock.BROKEN, false), 3);
                         player.level().playSound(null, msg.pos, net.minecraft.sounds.SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f);
                     }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public static class ConsoleCommandPacket {
+        private final String command;
+        private final BlockPos consolePos;
+        public ConsoleCommandPacket(String command, BlockPos consolePos) { this.command = command; this.consolePos = consolePos; }
+        public static void encode(ConsoleCommandPacket msg, FriendlyByteBuf buffer) { buffer.writeUtf(msg.command); buffer.writeBlockPos(msg.consolePos); }
+        public static ConsoleCommandPacket decode(FriendlyByteBuf buffer) { return new ConsoleCommandPacket(buffer.readUtf(), buffer.readBlockPos()); }
+
+        public static void handle(ConsoleCommandPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel());
+                    String cmd = msg.command.trim().toLowerCase();
+                    String[] args = cmd.split(" ");
+
+                    if (cmd.equals("cake")) {
+                        sendOutput(player, "\u00A7cis a lie");
+                    } else if (cmd.equals("sv.cheats")) {
+                        sendOutput(player, "\u00A7dnope");
+                    } else if (cmd.equals("impulse")) {
+                        sendOutput(player, "\u00A7fobjection: shoot them");
+                    } else if (cmd.equals("noclip")) {
+                        sendOutput(player, "\u00A7enobitches");
+                    } else if (cmd.equals("maxwell")) {
+                        sendOutput(player, "\u00A7aMaxwell activated. Find Maxwell");
+                        net.votmdevs.voicesofthemines.entity.MaxwellEntity maxwell = net.votmdevs.voicesofthemines.VoicesOfTheMines.MAXWELL.get().create(player.serverLevel());
+                        if (maxwell != null) {
+                            double randX = player.getX() + (player.getRandom().nextDouble() - 0.5) * 60;
+                            double randZ = player.getZ() + (player.getRandom().nextDouble() - 0.5) * 60;
+
+                            int safeY = player.level().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, (int)randX, (int)randZ);
+
+                            maxwell.moveTo(randX, safeY + 1, randZ, 0, 0);
+                            maxwell.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 1200, 0));
+
+                            player.level().addFreshEntity(maxwell);
+                        }
+                    } else if (cmd.equals("amogus")) {
+                        sendOutput(player, "\u00A7cIt's not popular anymore, but whatever...");
+                        player.level().playSound(null, player.blockPosition(), net.votmdevs.voicesofthemines.VotmSounds.AMOGUS.get(), net.minecraft.sounds.SoundSource.MASTER, 1.0F, 1.0F);
+                    } else if (cmd.equals("clarke")) {
+                        sendOutput(player, "\u00A7fnot now");
+                        player.level().playSound(null, player.blockPosition(), net.votmdevs.voicesofthemines.VotmSounds.CLARKE.get(), net.minecraft.sounds.SoundSource.MASTER, 1.0F, 1.0F);
+                    } else if (cmd.equals("delete")) {
+                        String[] colors = {"\u00A7c", "\u00A7e", "\u00A7a", "\u00A7b", "\u00A7d"};
+                        String aue = "";
+                        for (char c : "AUEAUUUAEUEAUE".toCharArray()) aue += colors[player.getRandom().nextInt(colors.length)] + c;
+                        sendOutput(player, aue);
+                        player.level().playSound(null, player.blockPosition(), net.votmdevs.voicesofthemines.VotmSounds.DELETEMEME.get(), net.minecraft.sounds.SoundSource.MASTER, 1.0F, 1.0F);
+                    }
+
+
+                    else if (cmd.equals("alien")) {
+                        sendOutput(player, "[IMG]alien"); // Отправляем команду на клиент
+                        player.level().playSound(null, player.blockPosition(), net.votmdevs.voicesofthemines.VotmSounds.ALIENMEME.get(), net.minecraft.sounds.SoundSource.MASTER, 1.0F, 1.0F);
+                    } else if (cmd.equals("floppa")) {
+                        sendOutput(player, "[IMG]floppa");
+                    } else if (cmd.equals("argemia")) {
+                        sendOutput(player, "[IMG]argemia");
+                    } else if (cmd.equals("bingus")) {
+                        sendOutput(player, "[IMG]bingus");
+                    }
+
+
+                    else if (cmd.equals("day")) {
+                        sendOutput(player, "\u00A7a> " + manager.currentDay + " day");
+                    }
+                    else if (cmd.equals("sv.hash")) {
+                        boolean found = false;
+                        for (BlockPos p : BlockPos.betweenClosed(msg.consolePos.offset(-2, -2, -2), msg.consolePos.offset(2, 2, 2))) {
+                            net.minecraft.world.level.block.state.BlockState st = player.level().getBlockState(p);
+                            if (st.getBlock() == net.votmdevs.voicesofthemines.VoicesOfTheMines.SERVER_BLOCK.get()) {
+                                String typeName = st.getValue(net.votmdevs.voicesofthemines.block.ServerBlock.TYPE).getSerializedName();
+                                typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1); // Первая заглавная
+                                if (manager.dailyHashes.containsKey(typeName)) {
+                                    sendOutput(player, "\u00A7a> Hash for " + typeName + ": \u00A7f" + manager.dailyHashes.get(typeName));
+                                    found = true; break;
+                                }
+                            }
+                        }
+                        if (!found) sendOutput(player, "\u00A7c> ERR: No target server nearby.");
+                    }
+                    else if (args[0].equals("sv.ping")) {
+                        String[] targets = args.length > 1 ? new String[]{args[1]} : net.votmdevs.voicesofthemines.world.SignalManager.SATELLITES;
+                        for (String target : targets) {
+                            String formattedTarget = target.substring(0, 1).toUpperCase() + target.substring(1).toLowerCase();
+                            BlockPos srvPos = manager.placedServers.get(formattedTarget);
+                            boolean isWorking = false;
+
+                            if (srvPos != null) {
+                                net.minecraft.world.level.block.state.BlockState st = player.level().getBlockState(srvPos);
+                                if (st.getBlock() == net.votmdevs.voicesofthemines.VoicesOfTheMines.SERVER_BLOCK.get()) {
+                                    isWorking = !st.getValue(net.votmdevs.voicesofthemines.block.ServerBlock.BROKEN);
+                                }
+                            }
+
+                            if (isWorking) sendOutput(player, "> Server \"" + formattedTarget.toUpperCase() + "\" recieved \u00A7a4/4\u00A7f Packages");
+                            else sendOutput(player, "> Server \"" + formattedTarget.toUpperCase() + "\" recieved \u00A7c0/4\u00A7f Packages");
+                        }
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+
+        private static void sendOutput(ServerPlayer p, String line) {
+            INSTANCE.sendTo(new ConsoleOutputPacket(line), p.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
+        }
+    }
+
+    public static class ConsoleOutputPacket {
+        private final String line;
+        public ConsoleOutputPacket(String line) { this.line = line; }
+        public static void encode(ConsoleOutputPacket msg, FriendlyByteBuf buffer) { buffer.writeUtf(msg.line); }
+        public static ConsoleOutputPacket decode(FriendlyByteBuf buffer) { return new ConsoleOutputPacket(buffer.readUtf()); }
+        public static void handle(ConsoleOutputPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                if (net.minecraft.client.Minecraft.getInstance().screen instanceof net.votmdevs.voicesofthemines.client.gui.ConsoleScreen screen) {
+                    screen.addOutput(msg.line);
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public static class SetCalibrationPacket {
+        private final String satellite;
+        public SetCalibrationPacket(String satellite) { this.satellite = satellite; }
+        public static void encode(SetCalibrationPacket msg, FriendlyByteBuf buffer) { buffer.writeUtf(msg.satellite); }
+        public static SetCalibrationPacket decode(FriendlyByteBuf buffer) { return new SetCalibrationPacket(buffer.readUtf()); }
+        public static void handle(SetCalibrationPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel()).calibrations.put(msg.satellite, 100.0f);
                 }
             });
             ctx.get().setPacketHandled(true);

@@ -362,6 +362,15 @@ public class VoicesOfTheMines {
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ServerBlockEntity>> SERVER_BE = BLOCK_ENTITIES.register("server_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ServerBlockEntity::new, SERVER_BLOCK.get()).build(null));
 
+    public static final RegistryObject<Block> CONSOLE_BLOCK = BLOCKS.register("console_block",
+            () -> new net.votmdevs.voicesofthemines.block.ConsoleBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+
+    public static final RegistryObject<Item> CONSOLE_BLOCK_ITEM = ITEMS.register("console_block",
+            () -> new BlockItem(CONSOLE_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ConsoleBlockEntity>> CONSOLE_BE = BLOCK_ENTITIES.register("console_be",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ConsoleBlockEntity::new, CONSOLE_BLOCK.get()).build(null));
+
     // drone
 
 
@@ -523,6 +532,7 @@ public class VoicesOfTheMines {
                 event.registerBlockEntityRenderer(SERVER_BE.get(), ServerRenderer::new);
                 event.registerEntityRenderer(KERFUR.get(), KerfurRenderer::new);
                 event.registerEntityRenderer(FLESH.get(), FleshRenderer::new);
+                event.registerBlockEntityRenderer(CONSOLE_BE.get(), ConsoleRenderer::new);
                 event.registerEntityRenderer(COCKROACH.get(), CockroachRenderer::new);
                 event.registerEntityRenderer(OMEGA_KERFUR.get(), OmegaKerfurRenderer::new);
                 event.registerBlockEntityRenderer(POSTER_BLOCK_ENTITY.get(), PosterRenderer::new);

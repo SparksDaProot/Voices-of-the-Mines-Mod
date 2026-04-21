@@ -25,9 +25,19 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> PC_STARTUP = registerSoundEvent("pcstartup");
     public static final RegistryObject<SoundEvent> PC_WORKING_LOOP = registerSoundEvent("computerworking_loop");
 
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLICK1 = registerSoundEvent("click1");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLICK2 = registerSoundEvent("click2");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLICK3 = registerSoundEvent("click3");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLICK4 = registerSoundEvent("click4");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLICK5 = registerSoundEvent("click5");
 
     public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVOMOTOR_LOOP = registerSoundEvent("servomotor_loop");
     public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVERDOWN = registerSoundEvent("serverdown");
+
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> ALIENMEME = registerSoundEvent("alienmeme");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> DELETEMEME = registerSoundEvent("delete");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLARKE = registerSoundEvent("clarke");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> AMOGUS = registerSoundEvent("amogus");
 
     public static final RegistryObject<SoundEvent> SIGNAL_PLANET_MARS = registerSoundEvent("signal_planet_mars");
     public static final RegistryObject<SoundEvent> SIGNAL_BDAY = registerSoundEvent("signal_bday");

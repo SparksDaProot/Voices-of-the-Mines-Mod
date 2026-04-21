@@ -244,5 +244,14 @@
   "drone": { "sounds": [ "voicesofthemines:drone" ] },
   "email": { "sounds": [ "voicesofthemines:email" ] },
   "servomotor_loop": { "sounds": [ "voicesofthemines:servomotor_loop" ] },
-  "serverdown": { "sounds": [ "voicesofthemines:serverdown" ] }
+  "serverdown": { "sounds": [ "voicesofthemines:serverdown" ] },
+  "alienmeme": { "sounds": [ "voicesofthemines:alienmeme" ] },
+  "delete": { "sounds": [ "voicesofthemines:delete" ] },
+  "clarke": { "sounds": [ "voicesofthemines:clarke" ] },
+  "amogus": { "sounds": [ "voicesofthemines:amogus" ] },
+  "click1": { "sounds": [ "voicesofthemines:click1" ] },
+  "click2": { "sounds": [ "voicesofthemines:click2" ] },
+  "click3": { "sounds": [ "voicesofthemines:click3" ] },
+  "click4": { "sounds": [ "voicesofthemines:click4" ] },
+  "click5": { "sounds": [ "voicesofthemines:click5" ] }
 }

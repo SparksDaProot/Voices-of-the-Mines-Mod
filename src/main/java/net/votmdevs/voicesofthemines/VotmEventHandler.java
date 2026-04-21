@@ -41,7 +41,16 @@ public class VotmEventHandler {
         if (event.phase == TickEvent.Phase.END && !event.level.isClientSide()) {
             ServerLevel level = (ServerLevel) event.level;
             if (level.dimension() == Level.OVERWORLD) {
-                net.votmdevs.voicesofthemines.world.SignalManager.get(level).tick();
+                net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(level);
+                manager.tick();
+
+                if (level.getDayTime() > 0 && level.getDayTime() % 24000 == 0) {
+                    manager.advanceDay();
+                }
+
+                if (level.getGameTime() % 6000 == 0) {
+                    manager.degradeRandomCalibration();
+                }
             }
             if (level.getGameTime() % 20 == 0) {
                 for (Player player : level.players()) {

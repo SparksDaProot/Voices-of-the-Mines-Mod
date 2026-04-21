@@ -99,6 +99,55 @@ public class ServerBlock extends BaseEntityBlock {
     }
 
     @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable net.minecraft.world.entity.LivingEntity placer, ItemStack stack) {
+        if (!level.isClientSide()) {
+            String typeName = state.getValue(TYPE).getSerializedName();
+            typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1);
+            net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get((ServerLevel) level);
+            manager.placedServers.put(typeName, pos);
+            manager.setDirty(); // ВАЖНО: сохраняем базу!
+        }
+        super.setPlacedBy(level, pos, state, placer, stack);
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock()) && !level.isClientSide()) {
+            String typeName = state.getValue(TYPE).getSerializedName();
+            typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1);
+            net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get((ServerLevel) level);
+
+            if (pos.equals(manager.placedServers.get(typeName))) {
+                manager.placedServers.remove(typeName);
+                manager.setDirty();
+            }
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (!level.isClientSide() && state.getBlock() == oldState.getBlock() && state.getValue(TYPE) != oldState.getValue(TYPE)) {
+            net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get((ServerLevel) level);
+
+            String oldName = oldState.getValue(TYPE).getSerializedName();
+            oldName = oldName.substring(0, 1).toUpperCase() + oldName.substring(1);
+
+            if (pos.equals(manager.placedServers.get(oldName))) {
+                manager.placedServers.remove(oldName);
+            }
+
+            String newName = state.getValue(TYPE).getSerializedName();
+            newName = newName.substring(0, 1).toUpperCase() + newName.substring(1);
+            manager.placedServers.put(newName, pos);
+
+            manager.setDirty();
+        }
+        super.onPlace(state, level, pos, oldState, isMoving);
+    }
+
+
+    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         boolean isBroken = state.getValue(BROKEN);
         ItemStack itemInHand = player.getItemInHand(hand);
