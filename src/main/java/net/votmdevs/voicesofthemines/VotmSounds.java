@@ -25,6 +25,10 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> PC_STARTUP = registerSoundEvent("pcstartup");
     public static final RegistryObject<SoundEvent> PC_WORKING_LOOP = registerSoundEvent("computerworking_loop");
 
+
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVOMOTOR_LOOP = registerSoundEvent("servomotor_loop");
+    public static final RegistryObject<net.minecraft.sounds.SoundEvent> SERVERDOWN = registerSoundEvent("serverdown");
+
     public static final RegistryObject<SoundEvent> SIGNAL_PLANET_MARS = registerSoundEvent("signal_planet_mars");
     public static final RegistryObject<SoundEvent> SIGNAL_BDAY = registerSoundEvent("signal_bday");
     public static final RegistryObject<SoundEvent> SIGNAL_PLANET_VENUS = registerSoundEvent("signal_planet_venus");

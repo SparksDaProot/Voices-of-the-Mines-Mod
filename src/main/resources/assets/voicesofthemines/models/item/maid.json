@@ -1,5 +1,5 @@
 {
-  "parent": "voicesofthemines/generated",
+  "parent": "item/generated",
   "textures": {
     "layer0": "voicesofthemines:item/maid"
   }

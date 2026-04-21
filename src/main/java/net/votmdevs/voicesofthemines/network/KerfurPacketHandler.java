@@ -29,6 +29,7 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, FixServerPacket.class, FixServerPacket::encode, FixServerPacket::decode, FixServerPacket::handle);
         INSTANCE.registerMessage(id++, ListCustomItemPacket.class, ListCustomItemPacket::encode, ListCustomItemPacket::decode, ListCustomItemPacket::handle);
         INSTANCE.registerMessage(id++, SendEmailPacket.class, SendEmailPacket::encode, SendEmailPacket::decode, SendEmailPacket::handle);
         INSTANCE.registerMessage(id++, EmailNotificationPacket.class, EmailNotificationPacket::encode, EmailNotificationPacket::decode, EmailNotificationPacket::handle);
@@ -826,11 +827,39 @@ public class KerfurPacketHandler {
 
                         ServerPlayer targetPlayer = player.server.getPlayerList().getPlayer(targetUUID);
                         if (targetPlayer != null) KerfurPacketHandler.INSTANCE.sendTo(new EmailNotificationPacket(), targetPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
-
-                        player.sendSystemMessage(net.minecraft.network.chat.Component.literal("Email sent successfully!"));
+                        KerfurPacketHandler.INSTANCE.sendTo(
+                                new NotificationPacket("Email sent successfully!"),
+                                player.connection.connection,
+                                net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
+                        );
                     } else {
                         manager.getGlobalPlayerData().addEmail(player.getUUID(), "System", "Error", "User '" + msg.to + "' not found.");
                         manager.setDirty();
+                        KerfurPacketHandler.INSTANCE.sendTo(
+                                new NotificationPacket("ERR: User not found!"),
+                                player.connection.connection,
+                                net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
+                        );
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    public static class FixServerPacket {
+        private final BlockPos pos;
+        public FixServerPacket(BlockPos pos) { this.pos = pos; }
+        public static void encode(FixServerPacket msg, FriendlyByteBuf buffer) { buffer.writeBlockPos(msg.pos); }
+        public static FixServerPacket decode(FriendlyByteBuf buffer) { return new FixServerPacket(buffer.readBlockPos()); }
+
+        public static void handle(FixServerPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.minecraft.world.level.block.state.BlockState state = player.level().getBlockState(msg.pos);
+                    if (state.getBlock() == net.votmdevs.voicesofthemines.VoicesOfTheMines.SERVER_BLOCK.get()) {
+                        player.level().setBlock(msg.pos, state.setValue(net.votmdevs.voicesofthemines.block.ServerBlock.BROKEN, false), 3);
+                        player.level().playSound(null, msg.pos, net.minecraft.sounds.SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f);
                     }
                 }
             });

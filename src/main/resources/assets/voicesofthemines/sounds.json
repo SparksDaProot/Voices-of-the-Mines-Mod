@@ -242,5 +242,7 @@
   "impact_drive_0002": { "sounds": [ "voicesofthemines:impact_drive_0002" ] },
   "impact_drive_0003": { "sounds": [ "voicesofthemines:impact_drive_0003" ] },
   "drone": { "sounds": [ "voicesofthemines:drone" ] },
-  "email": { "sounds": [ "voicesofthemines:email" ] }
+  "email": { "sounds": [ "voicesofthemines:email" ] },
+  "servomotor_loop": { "sounds": [ "voicesofthemines:servomotor_loop" ] },
+  "serverdown": { "sounds": [ "voicesofthemines:serverdown" ] }
 }

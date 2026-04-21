@@ -350,6 +350,18 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Item> HAZARD_BOOTS = ITEMS.register("hazard_boots", () -> new ArmorItem(HazardArmorMaterial.HAZARD, ArmorItem.Type.BOOTS, new Item.Properties()));
 
 
+    public static final RegistryObject<Item> DISK_BLUE = ITEMS.register("disk_blue",
+            () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Block> SERVER_BLOCK = BLOCKS.register("server_block",
+            () -> new net.votmdevs.voicesofthemines.block.ServerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+
+    public static final RegistryObject<Item> SERVER_BLOCK_ITEM = ITEMS.register("server_block",
+            () -> new BlockItem(SERVER_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ServerBlockEntity>> SERVER_BE = BLOCK_ENTITIES.register("server_be",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ServerBlockEntity::new, SERVER_BLOCK.get()).build(null));
+
     // drone
 
 
@@ -508,6 +520,7 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(SERVER_BE.get(), ServerRenderer::new);
                 event.registerEntityRenderer(KERFUR.get(), KerfurRenderer::new);
                 event.registerEntityRenderer(FLESH.get(), FleshRenderer::new);
                 event.registerEntityRenderer(COCKROACH.get(), CockroachRenderer::new);

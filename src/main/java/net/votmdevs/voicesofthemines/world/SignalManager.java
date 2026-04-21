@@ -80,7 +80,7 @@ public class SignalManager extends SavedData {
 
     public void tick() {
         tickCounter++;
-        if (tickCounter >= 1000) {
+        if (tickCounter >= 2000) {
             tickCounter = 0;
             if (getUncaughtSignals().size() < 15) {
                 float randX = (float) ((Math.random() - 0.5) * 10000);

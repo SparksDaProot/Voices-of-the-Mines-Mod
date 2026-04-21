@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.votmdevs.voicesofthemines.VotmSounds;
 import org.jetbrains.annotations.Nullable;
 
 public class VotvTerminalBlock extends BaseEntityBlock {
@@ -38,6 +39,16 @@ public class VotvTerminalBlock extends BaseEntityBlock {
     @Override
     public net.minecraft.world.InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, net.minecraft.world.InteractionHand hand, net.minecraft.world.phys.BlockHitResult hit) {
         if (this == VoicesOfTheMines.TABLE.get() && !player.getItemInHand(hand).isEmpty()) {
+            if (player.getItemInHand(hand).getCount() > 50) {
+                if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                    net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
+                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.NotificationPacket("ERR: Max stack size for sale is 50!"),
+                            sp.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
+                    );
+                    level.playSound(null, pos, VotmSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 0.5F);
+                }
+                return net.minecraft.world.InteractionResult.SUCCESS;
+            }
             if (level.isClientSide()) {
                 net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.SellItemScreen(player.getItemInHand(hand)));
             }
@@ -48,6 +59,27 @@ public class VotvTerminalBlock extends BaseEntityBlock {
             net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(serverPlayer.serverLevel());
 
             manager.getGlobalPlayerData().initPlayerIfNeeded(serverPlayer.getUUID(), serverPlayer.getScoreboardName());
+
+            boolean isBaseBroken = false;
+            for (BlockPos p : BlockPos.betweenClosed(pos.offset(-50, -20, -50), pos.offset(50, 20, 50))) {
+                BlockState st = level.getBlockState(p);
+                if (st.getBlock() == VoicesOfTheMines.SERVER_BLOCK.get() &&
+                        st.getValue(net.votmdevs.voicesofthemines.block.ServerBlock.TYPE) == net.votmdevs.voicesofthemines.block.ServerType.BASE &&
+                        st.getValue(net.votmdevs.voicesofthemines.block.ServerBlock.BROKEN)) {
+                    isBaseBroken = true;
+                    break;
+                }
+            }
+            if (isBaseBroken) {
+                net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
+                        new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.NotificationPacket("ERR: BASE SERVER OFFLINE. CONNECTION LOST."),
+                        serverPlayer.connection.connection,
+                        net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
+                );
+
+                level.playSound(null, pos, VotmSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 0.5F);
+                return net.minecraft.world.InteractionResult.SUCCESS;
+            }
 
             if (this == VoicesOfTheMines.TERMINAL_FIND.get()) {
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
