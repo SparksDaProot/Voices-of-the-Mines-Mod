@@ -674,6 +674,15 @@ public class KerfurPacketHandler {
                                 pd.addDelivery(player.getUUID(), boughtLot.stack);
                                 pd.addPoints(boughtLot.sellerId, boughtLot.price); // Переводим деньги продавцу
                                 pd.addEmail(boughtLot.sellerId, "Market", "Item Sold", "Your item '" + boughtLot.stack.getHoverName().getString() + "' was bought! " + boughtLot.price + " points added to balance.");
+
+                                ServerPlayer sellerPlayer = player.server.getPlayerList().getPlayer(boughtLot.sellerId);
+                                if (sellerPlayer != null) {
+                                    KerfurPacketHandler.INSTANCE.sendTo(
+                                            new EmailNotificationPacket(),
+                                            sellerPlayer.connection.connection,
+                                            net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
+                                    );
+                                }
                             }
                         }
 
