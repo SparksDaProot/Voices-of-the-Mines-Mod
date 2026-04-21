@@ -1,68 +1,68 @@
 {
-  "idle": { "sounds": [ "kerfurpet:idle" ] },
-  "jump": { "sounds": [ "kerfurpet:jump" ] },
-  "meow": { "sounds": [ "kerfurpet:meow" ] },
-  "shutdown": { "sounds": [ "kerfurpet:shutdown" ] },
-  "craft": { "sounds": [ "kerfurpet:craft" ] },
-  "open_storage": { "sounds": [ "kerfurpet:open_storage" ] },
-  "flashlight": { "sounds": [ "kerfurpet:flashlight" ] },
-  "bubble": { "sounds": [ "kerfurpet:bubble" ] },
-  "walk": { "sounds": [ "kerfurpet:walk" ] },
-  "warning": { "sounds": [ "kerfurpet:warning" ] },
+  "idle": { "sounds": [ "voicesofthemines:idle" ] },
+  "jump": { "sounds": [ "voicesofthemines:jump" ] },
+  "meow": { "sounds": [ "voicesofthemines:meow" ] },
+  "shutdown": { "sounds": [ "voicesofthemines:shutdown" ] },
+  "craft": { "sounds": [ "voicesofthemines:craft" ] },
+  "open_storage": { "sounds": [ "voicesofthemines:open_storage" ] },
+  "flashlight": { "sounds": [ "voicesofthemines:flashlight" ] },
+  "bubble": { "sounds": [ "voicesofthemines:bubble" ] },
+  "walk": { "sounds": [ "voicesofthemines:walk" ] },
+  "warning": { "sounds": [ "voicesofthemines:warning" ] },
 
   "flesh_grab": {
     "sounds": [
-      "kerfurpet:flesh_1",
-      "kerfurpet:flesh_2",
-      "kerfurpet:flesh_3"
+      "voicesofthemines:flesh_1",
+      "voicesofthemines:flesh_2",
+      "voicesofthemines:flesh_3"
     ]
   },
   "flesh_drop": {
     "sounds": [
-      "kerfurpet:flesh_impact_2",
-      "kerfurpet:flesh_impact_3",
-      "kerfurpet:flesh_impact_4"
+      "voicesofthemines:flesh_impact_2",
+      "voicesofthemines:flesh_impact_3",
+      "voicesofthemines:flesh_impact_4"
     ]
   },
   "garbage_grab": {
     "sounds": [
-      "kerfurpet:garbage_grab1",
-      "kerfurpet:garbage_grab2",
-      "kerfurpet:garbage_grab3"
+      "voicesofthemines:garbage_grab1",
+      "voicesofthemines:garbage_grab2",
+      "voicesofthemines:garbage_grab3"
     ]
   },
   "garbage_drop": {
     "sounds": [
-      "kerfurpet:pl_dirt1",
-      "kerfurpet:pl_dirt2",
-      "kerfurpet:pl_dirt3"
+      "voicesofthemines:pl_dirt1",
+      "voicesofthemines:pl_dirt2",
+      "voicesofthemines:pl_dirt3"
     ]
   },
 
   "murder_meow": {
-    "sounds": [ "kerfurpet:murder_kerfur_meow" ]
+    "sounds": [ "voicesofthemines:murder_kerfur_meow" ]
   },
   "murder_random": {
     "sounds": [
-      "kerfurpet:murderfur_1",
-      "kerfurpet:murderfur_2",
-      "kerfurpet:murderfur_3",
-      "kerfurpet:murderfur_4",
-      "kerfurpet:murderfur_5",
-      "kerfurpet:murderfur_6"
+      "voicesofthemines:murderfur_1",
+      "voicesofthemines:murderfur_2",
+      "voicesofthemines:murderfur_3",
+      "voicesofthemines:murderfur_4",
+      "voicesofthemines:murderfur_5",
+      "voicesofthemines:murderfur_6"
     ]
   },
 
-  "maxwell_theme": { "sounds": [ "kerfurpet:maxwell_theme" ] },
-  "meow1": { "sounds": [ "kerfurpet:meow1" ] },
-  "meow2": { "sounds": [ "kerfurpet:meow2" ] },
-  "dududu": { "sounds": [ "kerfurpet:dududu" ] },
+  "maxwell_theme": { "sounds": [ "voicesofthemines:maxwell_theme" ] },
+  "meow1": { "sounds": [ "voicesofthemines:meow1" ] },
+  "meow2": { "sounds": [ "voicesofthemines:meow2" ] },
+  "dududu": { "sounds": [ "voicesofthemines:dududu" ] },
 
   "player_cough": {
     "sounds": [
-      "kerfurpet:cough-01",
-      "kerfurpet:cough-02",
-      "kerfurpet:cough-03"
+      "voicesofthemines:cough-01",
+      "voicesofthemines:cough-02",
+      "voicesofthemines:cough-03"
     ]
   },
 

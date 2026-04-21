@@ -47,6 +47,8 @@ public class ComputerScreen extends Screen {
     private SimpleSoundInstance startupSound;
     private GuiLoopSound workingSound;
 
+    public static List<net.votmdevs.voicesofthemines.world.PlayerData.CustomLot> CUSTOM_MARKET = new ArrayList<>();
+
     // store system
     private static class StoreItem {
         String id; String name; ItemStack icon; int price; int size;
@@ -120,9 +122,14 @@ public class ComputerScreen extends Screen {
     private void updateSearch() {
         String query = searchBox.getValue().toLowerCase();
         filteredItems.clear();
+
         for (StoreItem item : allItems) {
-            if (item.name.toLowerCase().contains(query)) {
-                filteredItems.add(item);
+            if (item.name.toLowerCase().contains(query)) filteredItems.add(item);
+        }
+        for (net.votmdevs.voicesofthemines.world.PlayerData.CustomLot lot : CUSTOM_MARKET) {
+            String lotName = lot.stack.getHoverName().getString();
+            if (lotName.toLowerCase().contains(query)) {
+                filteredItems.add(new StoreItem("custom_" + lot.lotId, lotName + " (Market)", lot.stack, lot.price, lot.stack.getCount()));
             }
         }
     }
@@ -267,8 +274,19 @@ public class ComputerScreen extends Screen {
             int leftX = startX + 10; int leftY = startY + 35; int leftW = 120; int leftH = 195;
             int rightX = startX + 140; int rightY = startY + 35; int rightW = 250; int rightH = 195;
 
+            // === ИСПРАВЛЕНИЕ РЕНДЕРА: Сначала рисуем фоны! ===
             guiGraphics.fill(leftX - 1, leftY - 1, leftX + leftW + 1, leftY + leftH + 1, 0xFFFFFFFF);
             guiGraphics.fill(leftX, leftY, leftX + leftW, leftY + leftH, 0xFF000000);
+
+            guiGraphics.fill(rightX - 1, rightY - 1, rightX + rightW + 1, rightY + rightH + 1, 0xFFFFFFFF);
+            guiGraphics.fill(rightX, rightY, rightX + rightW, rightY + rightH, 0xFF000000);
+
+            // Кнопка SEND (теперь рисуется ПОВЕРХ фона)
+            int sendX = rightX + rightW - 40; int sendY = rightY + 5;
+            boolean hoverSend = mouseX >= sendX && mouseX <= sendX + 35 && mouseY >= sendY && mouseY <= sendY + 12;
+            guiGraphics.fill(sendX - 1, sendY - 1, sendX + 36, sendY + 13, hoverSend ? 0xFFFFAA00 : 0xFF553300);
+            guiGraphics.fill(sendX, sendY, sendX + 35, sendY + 12, 0xFF000000);
+            guiGraphics.drawString(this.font, "SEND", sendX + 5, sendY + 2, 0xFFFFAA00, false);
 
             double scale = this.minecraft.getWindow().getGuiScale();
             RenderSystem.enableScissor((int)(leftX * scale), (int)((this.height - leftY - leftH) * scale), (int)(leftW * scale), (int)(leftH * scale));
@@ -293,9 +311,6 @@ public class ComputerScreen extends Screen {
                 guiGraphics.fill(leftX, emailY + 29, leftX + leftW, emailY + 30, 0xFF333333); // Линия
             }
             RenderSystem.disableScissor();
-
-            guiGraphics.fill(rightX - 1, rightY - 1, rightX + rightW + 1, rightY + rightH + 1, 0xFFFFFFFF);
-            guiGraphics.fill(rightX, rightY, rightX + rightW, rightY + rightH, 0xFF000000);
 
             if (selectedEmailIndex >= 0 && selectedEmailIndex < EMAILS.size()) {
                 net.votmdevs.voicesofthemines.world.PlayerData.Email e = EMAILS.get(selectedEmailIndex);
@@ -495,23 +510,22 @@ public class ComputerScreen extends Screen {
                 }
             }
 
- // buy button
-            int buyBtnX = cartX + cartW - 50;
-            int buyBtnY = cartY + cartH - 16;
+// BUY button
+            int buyBtnX = cartX + cartW - 50; int buyBtnY = cartY + cartH - 16;
             if (mouseX >= buyBtnX && mouseX <= buyBtnX + 45 && mouseY >= buyBtnY && mouseY <= buyBtnY + 12) {
                 int totalPrice = shoppingCart.stream().mapToInt(i -> i.price).sum();
                 if (totalPrice > 0 && POINTS >= totalPrice) {
                     Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
 
-                    // what you buy
-                    java.util.List<String> itemIds = new java.util.ArrayList<>();
+                    java.util.List<String> standardIds = new java.util.ArrayList<>();
+                    java.util.List<String> customIds = new java.util.ArrayList<>();
                     for (StoreItem item : shoppingCart) {
-                        itemIds.add(item.id);
+                        if (item.id.startsWith("custom_")) customIds.add(item.id.replace("custom_", ""));
+                        else standardIds.add(item.id);
                     }
                     net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(
-                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.BuyStorePacket(totalPrice, itemIds)
+                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.BuyStorePacket(totalPrice, standardIds, customIds)
                     );
-
                     shoppingCart.clear();
                 } else {
                     Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUG_ALERT.get(), 1.0F, 0.5F));
@@ -520,6 +534,14 @@ public class ComputerScreen extends Screen {
             }
         } else if (activeTab == 2) {
             int leftX = startX + 10; int leftY = startY + 35; int leftW = 120; int leftH = 195;
+            int rightX = startX + 140; int rightY = startY + 35; int rightW = 250; int rightH = 195;
+
+            int sendX = rightX + rightW - 40; int sendY = rightY + 5;
+            if (mouseX >= sendX && mouseX <= sendX + 35 && mouseY >= sendY && mouseY <= sendY + 12) {
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+                Minecraft.getInstance().setScreen(new SendEmailScreen());
+                return true;
+            }
 
             if (mouseX >= leftX && mouseX <= leftX + leftW && mouseY >= leftY && mouseY <= leftY + leftH) {
                 for (int i = 0; i < EMAILS.size(); i++) {

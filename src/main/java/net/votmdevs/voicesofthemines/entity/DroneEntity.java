@@ -26,7 +26,8 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
     // 0=Approach, 1=Descend, 2=Wait, 3=Ascend, 4=Leave
     public static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(DroneEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<BlockPos> TARGET = SynchedEntityData.defineId(DroneEntity.class, EntityDataSerializers.BLOCK_POS);
-
+    private java.util.UUID ownerId = null;
+    public void setOwnerId(java.util.UUID uuid) { this.ownerId = uuid; }
     public int waitTimer = 0;
     public final SimpleContainer inventory = new SimpleContainer(27);
 
@@ -125,10 +126,10 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
 
                     if (soldAnything) {
                         net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get((net.minecraft.server.level.ServerLevel) this.level());
-                        manager.getGlobalPlayerData().addPoints(earnedPoints);
+                        manager.getGlobalPlayerData().addPoints(this.ownerId, earnedPoints);
 
                         receipt.append("\n").append(earnedPoints).append(" points in total has been sent to your account balance.");
-                        manager.getGlobalPlayerData().addEmail("Auto", "Package received", receipt.toString());
+                        manager.getGlobalPlayerData().addEmail(this.ownerId, "Auto", "Package received", receipt.toString());
 
                         manager.setDirty();
                         net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.send(
@@ -175,17 +176,15 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
         super.addAdditionalSaveData(tag);
         tag.put("Inventory", this.inventory.createTag());
         tag.putInt("WaitTimer", this.waitTimer);
+        if (this.ownerId != null) tag.putUUID("OwnerId", this.ownerId);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains("Inventory")) {
-            this.inventory.fromTag(tag.getList("Inventory", 10));
-        }
-        if (tag.contains("WaitTimer")) {
-            this.waitTimer = tag.getInt("WaitTimer");
-        }
+        if (tag.contains("Inventory")) this.inventory.fromTag(tag.getList("Inventory", 10));
+        if (tag.contains("WaitTimer")) this.waitTimer = tag.getInt("WaitTimer");
+        if (tag.hasUUID("OwnerId")) this.ownerId = tag.getUUID("OwnerId");
     }
 
     // sell prices

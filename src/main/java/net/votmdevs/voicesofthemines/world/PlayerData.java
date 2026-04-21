@@ -5,21 +5,37 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class PlayerData implements INBTSerializable<CompoundTag> {
-    private int points = 0; // Наша валюта
 
-    // Upgrades
-    private int upgradeCursorSpeed = 0; // max 16
-    private int upgradePingCooldown = 0; // max 16
-    private int upgradeProcessingSpeed = 0; // max 16
-    private int upgradeProcessingLevel = 0; // max 3
-    // delvery
-    private final NonNullList<ItemStack> deliveryQueue = NonNullList.create();
+    private int upgradeCursorSpeed = 0;
+    private int upgradePingCooldown = 0;
+    private int upgradeProcessingSpeed = 0;
+    private int upgradeProcessingLevel = 0;
 
-    // === НОВОЕ: ПОЧТА ===
+    private final Map<UUID, Integer> playerPoints = new HashMap<>();
+    private final Map<UUID, NonNullList<ItemStack>> playerDeliveryQueues = new HashMap<>();
+    private final Map<UUID, List<Email>> playerEmails = new HashMap<>();
+
+    private final Map<String, UUID> usernameCache = new HashMap<>();
+    public final List<CustomLot> customMarket = new ArrayList<>();
+
+    public static class CustomLot {
+        public String lotId;
+        public UUID sellerId;
+        public ItemStack stack;
+        public int price;
+        public CustomLot(String lotId, UUID sellerId, ItemStack stack, int price) {
+            this.lotId = lotId; this.sellerId = sellerId; this.stack = stack; this.price = price;
+        }
+    }
+
     public static class Email {
         public String sender;
         public String title;
@@ -27,102 +43,63 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
         public boolean isRead;
 
         public Email(String sender, String title, String text, boolean isRead) {
-            this.sender = sender;
-            this.title = title;
-            this.text = text;
-            this.isRead = isRead;
+            this.sender = sender; this.title = title; this.text = text; this.isRead = isRead;
         }
     }
 
-    private final List<Email> emails = new ArrayList<>();
-    private boolean hasInitializedEmails = false;
+    public PlayerData() {}
 
-    public PlayerData() {
-        checkInitEmails();
-    }
+    public void initPlayerIfNeeded(UUID uuid, String username) {
+        usernameCache.put(username, uuid); // Запоминаем ник
+        if (!playerPoints.containsKey(uuid)) playerPoints.put(uuid, 0);
+        if (!playerDeliveryQueues.containsKey(uuid)) playerDeliveryQueues.put(uuid, NonNullList.create());
 
-    private void checkInitEmails() {
-        if (!hasInitializedEmails) {
-            hasInitializedEmails = true;
-            emails.add(new Email("Prof_Lea", "Welcome!", "Welcome to your new job, Dr.Steve. My name is Lea, your main supervisor. You've probably got through the learning period, but I'll remind you what your job is and what to do. In short, your job is basically scanning the sky for anomalous signals. That is your main task. Another task is to process the data of these signals and send us the data stored on analogue drives. You will get a reward for each drive, and if you process the signal on further levels, you will get more points. Next task is to look after these big satellite dishes, its servers, and calibration. You can re-calibrate satelites remotely through the console panel, but if the satellites server shuts down, you have to manually fix it. The server is inside the satellites. Alright, I think that is it - the nuclear reactor is not implemented, yet so you don't need to worry about that. Gather the signals, process them, sell results to us, look after the satellites, that's it. Good luck. Prof.Lea", false));
-            emails.add(new Email("Dr Bao", "Hi", "Hello! I am Dr. Bao. I will be responsible for your daily tasks. In short, I will ask you to do a quick task at the start of every day. First, I will request a specific amount of drives. These can range from level 0 drives to level 3. I understand your \"situation\" however, and will not request a drive you can't obtain. The second task I will ask of you is a simple satelite checkup. Go to the satellite, type in \"sv.hash\" into the server, and write down the server and number in a note. For example, \"Bravo 02A421A095\". Once you've done that, attatch it to the lid of a drive box, and send it off with the drone. I've left a little notebook on the table you can tear some pages out of for the notes. As usual, you will get a nice point bonus if you complete these for me. Have a nice day/night wherever you are! - Dr. Bao", false));
+        if (!playerEmails.containsKey(uuid)) {
+            List<Email> startingEmails = new ArrayList<>();
+            startingEmails.add(new Email("Prof_Lea", "Welcome!", "Welcome to your new job...", false));
+            startingEmails.add(new Email("Dr Bao", "Hi", "Hello! I am Dr. Bao. I will be responsible...", false));
+            playerEmails.put(uuid, startingEmails);
         }
     }
 
-    public List<Email> getEmails() {
-        return emails;
-    }
+    public UUID getUUIDByName(String name) { return usernameCache.get(name); }
 
-    public void addEmail(String sender, String title, String text) {
-        emails.add(0, new Email(sender, title, text, false)); // Добавляем в начало списка
+    public int getPoints(UUID uuid) { return playerPoints.getOrDefault(uuid, 0); }
+    public void addPoints(UUID uuid, int amount) {
+        if(playerPoints.containsKey(uuid)) playerPoints.put(uuid, playerPoints.get(uuid) + amount);
     }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void addPoints(int amount) {
-        this.points += amount;
-    }
-
-    public boolean spendPoints(int amount) {
-        if (this.points >= amount) {
-            this.points -= amount;
-            return true;
-        }
+    public boolean spendPoints(UUID uuid, int amount) {
+        if (!playerPoints.containsKey(uuid)) return false;
+        int current = playerPoints.get(uuid);
+        if (current >= amount) { playerPoints.put(uuid, current - amount); return true; }
         return false;
     }
 
-    public int getCursorSpeedLvl() {
-        return upgradeCursorSpeed;
+    public NonNullList<ItemStack> getDeliveryQueue(UUID uuid) { return playerDeliveryQueues.getOrDefault(uuid, NonNullList.create()); }
+    public void addDelivery(UUID uuid, ItemStack stack) { if (playerDeliveryQueues.containsKey(uuid)) playerDeliveryQueues.get(uuid).add(stack); }
+
+    public List<Email> getEmails(UUID uuid) { return playerEmails.getOrDefault(uuid, new ArrayList<>()); }
+    public void addEmail(UUID uuid, String sender, String title, String text) {
+        if (playerEmails.containsKey(uuid)) playerEmails.get(uuid).add(0, new Email(sender, title, text, false));
     }
 
-    public int getPingCooldownLvl() {
-        return upgradePingCooldown;
+    public void broadcastEmail(String sender, String title, String text) {
+        for (UUID uuid : playerEmails.keySet()) playerEmails.get(uuid).add(0, new Email(sender, title, text, false));
     }
 
-    public int getProcessingSpeedLvl() {
-        return upgradeProcessingSpeed;
-    }
+    public int getCursorSpeedLvl() { return upgradeCursorSpeed; }
+    public int getPingCooldownLvl() { return upgradePingCooldown; }
+    public int getProcessingSpeedLvl() { return upgradeProcessingSpeed; }
+    public int getProcessingLevelLvl() { return upgradeProcessingLevel; }
 
-    public int getProcessingLevelLvl() {
-        return upgradeProcessingLevel;
-    }
-
-    public NonNullList<ItemStack> getDeliveryQueue() {
-        return deliveryQueue;
-    }
-
-    public void addDelivery(ItemStack stack) {
-        deliveryQueue.add(stack);
-    }
-
-    public boolean buyUpgrade(String type) {
-        int cost = 0;
-        if (type.equals("cursor_speed") && upgradeCursorSpeed < 16) {
-            cost = 5 + (upgradeCursorSpeed * 5);
-            if (spendPoints(cost)) {
-                upgradeCursorSpeed++;
-                return true;
-            }
-        } else if (type.equals("ping_cooldown") && upgradePingCooldown < 16) {
-            cost = 15 + (upgradePingCooldown * 5);
-            if (spendPoints(cost)) {
-                upgradePingCooldown++;
-                return true;
-            }
-        } else if (type.equals("processing_speed") && upgradeProcessingSpeed < 16) {
-            cost = 20 + (upgradeProcessingSpeed * 5);
-            if (spendPoints(cost)) {
-                upgradeProcessingSpeed++;
-                return true;
-            }
-        } else if (type.equals("processing_level") && upgradeProcessingLevel < 3) {
-            cost = 30 + (upgradeProcessingLevel * 20);
-            if (spendPoints(cost)) {
-                upgradeProcessingLevel++;
-                return true;
-            }
+    public boolean buyUpgrade(UUID uuid, String type) {
+        int cost = getNextCost(type);
+        if (cost != -1 && spendPoints(uuid, cost)) {
+            if (type.equals("cursor_speed")) upgradeCursorSpeed++;
+            else if (type.equals("ping_cooldown")) upgradePingCooldown++;
+            else if (type.equals("processing_speed")) upgradeProcessingSpeed++;
+            else if (type.equals("processing_level")) upgradeProcessingLevel++;
+            return true;
         }
         return false;
     }
@@ -130,53 +107,95 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
     public int getNextCost(String type) {
         if (type.equals("cursor_speed")) return upgradeCursorSpeed >= 16 ? -1 : 5 + (upgradeCursorSpeed * 5);
         if (type.equals("ping_cooldown")) return upgradePingCooldown >= 16 ? -1 : 15 + (upgradePingCooldown * 5);
-        if (type.equals("processing_speed"))
-            return upgradeProcessingSpeed >= 16 ? -1 : 20 + (upgradeProcessingSpeed * 5);
-        if (type.equals("processing_level"))
-            return upgradeProcessingLevel >= 3 ? -1 : 30 + (upgradeProcessingLevel * 20);
+        if (type.equals("processing_speed")) return upgradeProcessingSpeed >= 16 ? -1 : 20 + (upgradeProcessingSpeed * 5);
+        if (type.equals("processing_level")) return upgradeProcessingLevel >= 3 ? -1 : 30 + (upgradeProcessingLevel * 20);
         return -1;
     }
 
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
-        tag.putInt("points", points);
         tag.putInt("upg_cursor", upgradeCursorSpeed);
         tag.putInt("upg_ping", upgradePingCooldown);
         tag.putInt("upg_procspeed", upgradeProcessingSpeed);
         tag.putInt("upg_proclvl", upgradeProcessingLevel);
 
-        ListTag queueTag = new ListTag();
-        for (ItemStack stack : deliveryQueue) {
-            queueTag.add(stack.save(new CompoundTag()));
+        ListTag playersList = new ListTag();
+        for (UUID uuid : playerPoints.keySet()) {
+            CompoundTag pTag = new CompoundTag();
+            pTag.putUUID("uuid", uuid);
+            pTag.putInt("points", playerPoints.get(uuid));
+
+            ListTag queueTag = new ListTag();
+            for (ItemStack stack : playerDeliveryQueues.get(uuid)) queueTag.add(stack.save(new CompoundTag()));
+            pTag.put("DeliveryQueue", queueTag);
+
+            ListTag emailsTag = new ListTag();
+            for (Email e : playerEmails.get(uuid)) {
+                CompoundTag eTag = new CompoundTag();
+                eTag.putString("sender", e.sender); eTag.putString("title", e.title);
+                eTag.putString("text", e.text); eTag.putBoolean("read", e.isRead);
+                emailsTag.add(eTag);
+            }
+            pTag.put("Emails", emailsTag);
+            playersList.add(pTag);
         }
-        tag.put("DeliveryQueue", queueTag);
+        tag.put("Players", playersList);
+
+        CompoundTag namesTag = new CompoundTag();
+        for (Map.Entry<String, UUID> entry : usernameCache.entrySet()) namesTag.putUUID(entry.getKey(), entry.getValue());
+        tag.put("Usernames", namesTag);
+
+        ListTag marketTag = new ListTag();
+        for (CustomLot lot : customMarket) {
+            CompoundTag lTag = new CompoundTag();
+            lTag.putString("id", lot.lotId); lTag.putUUID("seller", lot.sellerId);
+            lTag.put("item", lot.stack.save(new CompoundTag())); lTag.putInt("price", lot.price);
+            marketTag.add(lTag);
+        }
+        tag.put("Market", marketTag);
+
         return tag;
     }
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
-        this.points = tag.getInt("points");
-        this.upgradeCursorSpeed = tag.getInt("upg_cursor");
-        this.upgradePingCooldown = tag.getInt("upg_ping");
-        this.upgradeProcessingSpeed = tag.getInt("upg_procspeed");
-        this.upgradeProcessingLevel = tag.getInt("upg_proclvl");
+        this.upgradeCursorSpeed = tag.getInt("upg_cursor"); this.upgradePingCooldown = tag.getInt("upg_ping");
+        this.upgradeProcessingSpeed = tag.getInt("upg_procspeed"); this.upgradeProcessingLevel = tag.getInt("upg_proclvl");
 
-        if (tag.contains("DeliveryQueue")) {
-            ListTag queueTag = tag.getList("DeliveryQueue", 10);
-            deliveryQueue.clear();
-            for (int i = 0; i < queueTag.size(); i++) {
-                deliveryQueue.add(ItemStack.of(queueTag.getCompound(i)));
-            }
-            if (tag.contains("Emails")) {
-                ListTag emailsTag = tag.getList("Emails", 10);
-                emails.clear();
-                for (int i = 0; i < emailsTag.size(); i++) {
-                    CompoundTag eTag = emailsTag.getCompound(i);
+        playerPoints.clear(); playerDeliveryQueues.clear(); playerEmails.clear(); usernameCache.clear(); customMarket.clear();
+
+        if (tag.contains("Players")) {
+            ListTag playersList = tag.getList("Players", 10);
+            for (int i = 0; i < playersList.size(); i++) {
+                CompoundTag pTag = playersList.getCompound(i);
+                UUID uuid = pTag.getUUID("uuid");
+                playerPoints.put(uuid, pTag.getInt("points"));
+
+                NonNullList<ItemStack> queue = NonNullList.create();
+                ListTag queueTag = pTag.getList("DeliveryQueue", 10);
+                for (int q = 0; q < queueTag.size(); q++) queue.add(ItemStack.of(queueTag.getCompound(q)));
+                playerDeliveryQueues.put(uuid, queue);
+
+                List<Email> emails = new ArrayList<>();
+                ListTag emailsTag = pTag.getList("Emails", 10);
+                for (int e = 0; e < emailsTag.size(); e++) {
+                    CompoundTag eTag = emailsTag.getCompound(e);
                     emails.add(new Email(eTag.getString("sender"), eTag.getString("title"), eTag.getString("text"), eTag.getBoolean("read")));
                 }
+                playerEmails.put(uuid, emails);
             }
-            checkInitEmails();
+        }
+        if (tag.contains("Usernames")) {
+            CompoundTag namesTag = tag.getCompound("Usernames");
+            for (String key : namesTag.getAllKeys()) usernameCache.put(key, namesTag.getUUID(key));
+        }
+        if (tag.contains("Market")) {
+            ListTag marketTag = tag.getList("Market", 10);
+            for (int i = 0; i < marketTag.size(); i++) {
+                CompoundTag lTag = marketTag.getCompound(i);
+                customMarket.add(new CustomLot(lTag.getString("id"), lTag.getUUID("seller"), ItemStack.of(lTag.getCompound("item")), lTag.getInt("price")));
+            }
         }
     }
 }

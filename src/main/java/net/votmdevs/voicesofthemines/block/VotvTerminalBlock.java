@@ -37,8 +37,17 @@ public class VotvTerminalBlock extends BaseEntityBlock {
     // server
     @Override
     public net.minecraft.world.InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, net.minecraft.world.InteractionHand hand, net.minecraft.world.phys.BlockHitResult hit) {
+        if (this == VoicesOfTheMines.TABLE.get() && !player.getItemInHand(hand).isEmpty()) {
+            if (level.isClientSide()) {
+                net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.SellItemScreen(player.getItemInHand(hand)));
+            }
+            return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
         if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
             net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(serverPlayer.serverLevel());
+
+            manager.getGlobalPlayerData().initPlayerIfNeeded(serverPlayer.getUUID(), serverPlayer.getScoreboardName());
 
             if (this == VoicesOfTheMines.TERMINAL_FIND.get()) {
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
@@ -67,7 +76,15 @@ public class VotvTerminalBlock extends BaseEntityBlock {
                 net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
 
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
-                        new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncComputerDataPacket(pd.getPoints(), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl(),pd.getEmails()),
+                        new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncComputerDataPacket(
+                                pd.getPoints(serverPlayer.getUUID()),
+                                pd.getCursorSpeedLvl(),
+                                pd.getPingCooldownLvl(),
+                                pd.getProcessingSpeedLvl(),
+                                pd.getProcessingLevelLvl(),
+                                pd.getEmails(serverPlayer.getUUID()),
+                                pd.customMarket
+                        ),
                         serverPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
                 );
             }

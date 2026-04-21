@@ -40,8 +40,10 @@ public class DronePanelBlock extends BaseEntityBlock {
                                 drone.setPos(target.getX() - 100, target.getY() + 30, target.getZ());
                                 drone.setTargetPosition(target);
 
+                                drone.setOwnerId(player.getUUID());
+
                                 net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get((net.minecraft.server.level.ServerLevel)level);
-                                net.minecraft.core.NonNullList<net.minecraft.world.item.ItemStack> queue = manager.getGlobalPlayerData().getDeliveryQueue();
+                                net.minecraft.core.NonNullList<net.minecraft.world.item.ItemStack> queue = manager.getGlobalPlayerData().getDeliveryQueue(player.getUUID());
 
                                 int slot = 0;
                                 java.util.Iterator<net.minecraft.world.item.ItemStack> it = queue.iterator();

@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "kerfurpet:block/target_drone_block" }
+    "": { "model": "voicesofthemines:block/target_drone_block" }
   }
 }
