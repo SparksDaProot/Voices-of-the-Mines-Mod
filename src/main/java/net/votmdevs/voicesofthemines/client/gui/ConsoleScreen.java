@@ -137,7 +137,7 @@ public class ConsoleScreen extends Screen {
                 if (lowerCmd.equals("sd.calall")) {
                     String[] sats = {"Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec", "Romeo", "Tango", "Victor", "Echo", "Xray", "Yankee", "Uniform", "Sierra", "Whiskey", "Golf", "Delta", "Charlie", "Bravo", "Hotel", "India", "Juliett", "Foxtrot"};
                     for (String s : sats) calQueue.add(s);
-                } else if (lowerCmd.startsWith("sd.call ")) {
+                } else if (lowerCmd.startsWith("sd.cal ")) {
                     String[] args = cmd.split(" ");
                     if (args.length > 1) calQueue.add(args[1]);
                 } else if (lowerCmd.equals("clear")) {
@@ -180,7 +180,7 @@ public class ConsoleScreen extends Screen {
         guiGraphics.drawString(this.font, "sd.calall", rightX + 5, ty + 30, 0xFFFFFF, false);
         guiGraphics.drawString(this.font, "Callibrate all", rightX + 5, ty + 40, 0x55FF55, false);
 
-        guiGraphics.drawString(this.font, "sd.call \"name\"", rightX + 5, ty + 60, 0xFFFFFF, false);
+        guiGraphics.drawString(this.font, "sd.cal \"name\"", rightX + 5, ty + 60, 0xFFFFFF, false);
         guiGraphics.drawString(this.font, "Callibrate satellite", rightX + 5, ty + 70, 0x55FF55, false);
 
         guiGraphics.drawString(this.font, "day", rightX + 5, ty + 90, 0xFFFFFF, false);
