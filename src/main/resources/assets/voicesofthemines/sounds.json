@@ -104,7 +104,8 @@
     "sounds": [
       "voicesofthemines:foot_wood_0001",
       "voicesofthemines:foot_wood_0002",
-      "voicesofthemines:foot_wood_0003"
+      "voicesofthemines:foot_wood_0003",
+      "voicesofthemines:foot_wood_0004"
     ]
   },
   "omega_step_default": {
@@ -262,5 +263,20 @@
   "server5": { "sounds": [ "voicesofthemines:server5" ] },
   "server6": { "sounds": [ "voicesofthemines:server6" ] },
   "server7": { "sounds": [ "voicesofthemines:server7" ] },
-  "server8": { "sounds": [ "voicesofthemines:server8" ] }
+  "server8": { "sounds": [ "voicesofthemines:server8" ] },
+
+  "mannequin_hurt": {
+    "sounds": [
+      "voicesofthemines:damage_wood_1",
+      "voicesofthemines:damage_wood_2",
+      "voicesofthemines:damage_wood_3"
+    ]
+  },
+  "mannequin_attack": {
+    "sounds": [
+      "voicesofthemines:attack1",
+      "voicesofthemines:attack2",
+      "voicesofthemines:attack3"
+    ]
+  }
 }

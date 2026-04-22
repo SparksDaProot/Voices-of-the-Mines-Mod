@@ -25,6 +25,9 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> PC_STARTUP = registerSoundEvent("pcstartup");
     public static final RegistryObject<SoundEvent> PC_WORKING_LOOP = registerSoundEvent("computerworking_loop");
 
+    public static final RegistryObject<SoundEvent> MANNEQUIN_HURT = registerSoundEvent("mannequin_hurt");
+    public static final RegistryObject<SoundEvent> MANNEQUIN_ATTACK = registerSoundEvent("mannequin_attack");
+
     public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLICK1 = registerSoundEvent("click1");
     public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLICK2 = registerSoundEvent("click2");
     public static final RegistryObject<net.minecraft.sounds.SoundEvent> CLICK3 = registerSoundEvent("click3");

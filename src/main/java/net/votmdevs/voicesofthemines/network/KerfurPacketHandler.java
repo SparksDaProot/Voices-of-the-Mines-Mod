@@ -3,6 +3,7 @@ package net.votmdevs.voicesofthemines.network;
 import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.client.gui.GmodNotificationManager;
+import net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity;
 import net.votmdevs.voicesofthemines.entity.FleshEntity;
 import net.votmdevs.voicesofthemines.entity.FuelCanEntity;
 import net.votmdevs.voicesofthemines.entity.GarbageEntity;
@@ -112,6 +113,11 @@ public class KerfurPacketHandler {
                             if (!fuelCan.isHeld()) fuelCan.setHeldBy(player.getUUID());
                         } else if (e instanceof net.votmdevs.voicesofthemines.entity.AtvEntity atv) {
                             if (!atv.isHeld()) atv.setHeldBy(player.getUUID());
+                        } else if (e instanceof net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity mannequin) {
+                            if (!mannequin.isHeld()) {
+                                mannequin.setHeldBy(player.getUUID());
+                                mannequin.playSound(net.votmdevs.voicesofthemines.VotmSounds.OMEGA_STEP_WOOD.get(), 1.0F, 1.0F);
+                            }
                         }
                     } else {
                         for (Entity e : player.level().getEntitiesOfClass(FleshEntity.class, player.getBoundingBox().inflate(10.0D))) {
@@ -131,6 +137,9 @@ public class KerfurPacketHandler {
                         }
                         for (Entity e : player.level().getEntitiesOfClass(net.votmdevs.voicesofthemines.entity.AtvEntity.class, player.getBoundingBox().inflate(10.0D))) {
                             if (e instanceof net.votmdevs.voicesofthemines.entity.AtvEntity atv && player.getUUID().equals(atv.getHeldBy().orElse(null))) atv.setHeldBy(null);
+                        }
+                        for (Entity e : player.level().getEntitiesOfClass(net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity.class, player.getBoundingBox().inflate(10.0D))) {
+                            if (e instanceof net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity mannequin && player.getUUID().equals(mannequin.getHeldBy().orElse(null))) mannequin.setHeldBy(null);
                         }
                     }
                 }
@@ -932,7 +941,7 @@ public class KerfurPacketHandler {
 
 
                     else if (cmd.equals("alien")) {
-                        sendOutput(player, "[IMG]alien"); // Отправляем команду на клиент
+                        sendOutput(player, "[IMG]alien");
                         player.level().playSound(null, player.blockPosition(), net.votmdevs.voicesofthemines.VotmSounds.ALIENMEME.get(), net.minecraft.sounds.SoundSource.MASTER, 1.0F, 1.0F);
                     } else if (cmd.equals("floppa")) {
                         sendOutput(player, "[IMG]floppa");

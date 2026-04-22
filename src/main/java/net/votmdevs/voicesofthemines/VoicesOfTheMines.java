@@ -251,6 +251,29 @@ public class VoicesOfTheMines {
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.VotvDoorBlockEntity::new, VOTV_DOOR.get()).build(null));
 
 
+    public static final RegistryObject<EntityType<MannequinEntity>> MANNEQUIN = ENTITY_TYPES.register("mannequin",
+            () -> EntityType.Builder.of(MannequinEntity::new, MobCategory.MISC)
+                    .sized(0.6f, 1.8f)
+                    .build(new ResourceLocation(MODID, "mannequin").toString()));
+
+    public static final RegistryObject<Item> MANNEQUIN_SPAWN_EGG = ITEMS.register("mannequin_spawn_egg",
+            () -> new ForgeSpawnEggItem(MANNEQUIN, 0x8B7355, 0x5C4033, new Item.Properties()));
+
+    public static final RegistryObject<EntityType<HostileMannequinEntity>> HOSTILE_MANNEQUIN = ENTITY_TYPES.register("hostile_mannequin",
+            () -> EntityType.Builder.of(HostileMannequinEntity::new, MobCategory.MONSTER)
+                    .sized(0.6f, 1.8f)
+                    .build(new ResourceLocation(MODID, "hostile_mannequin").toString()));
+
+    public static final RegistryObject<Item> HOSTILE_MANNEQUIN_SPAWN_EGG = ITEMS.register("hostile_mannequin_spawn_egg",
+            () -> new ForgeSpawnEggItem(HOSTILE_MANNEQUIN, 0x8B7355, 0xFF0000, new Item.Properties()));
+
+    public static final RegistryObject<EntityType<MannequinStandEntity>> MANNEQUIN_STAND = ENTITY_TYPES.register("mannequin_stand",
+            () -> EntityType.Builder.of(MannequinStandEntity::new, MobCategory.MISC)
+                    .sized(0.6f, 0.1f)
+                    .build(new ResourceLocation(MODID, "mannequin_stand").toString()));
+
+
+
     public static final RegistryObject<EntityType<AtvEntity>> ATV = ENTITY_TYPES.register("atv",
             () -> EntityType.Builder.of(AtvEntity::new, MobCategory.MISC)
                     .sized(1.5f, 1.2f)
@@ -490,6 +513,8 @@ public class VoicesOfTheMines {
         }
 
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            event.accept(MANNEQUIN_SPAWN_EGG);
+            event.accept(HOSTILE_MANNEQUIN_SPAWN_EGG);
             event.accept(KERFUR_SPAWN_EGG);
             event.accept(OMEGA_KERFUR_SPAWN_EGG);
             event.accept(FLESH_SPAWN_EGG);
@@ -512,6 +537,9 @@ public class VoicesOfTheMines {
     public static class CommonModEvents {
         @SubscribeEvent
         public static void onAttributeCreate(EntityAttributeCreationEvent event) {
+            event.put(MANNEQUIN.get(), MannequinEntity.createAttributes().build());
+            event.put(HOSTILE_MANNEQUIN.get(), HostileMannequinEntity.createAttributes().build());
+            event.put(MANNEQUIN_STAND.get(), MannequinStandEntity.createAttributes().build());
             event.put(KERFUR.get(), KerfurEntity.createAttributes().build());
             event.put(FLESH.get(), FleshEntity.createAttributes().build());
             event.put(BLOOD_SPLASH.get(), BloodSplashEntity.createAttributes().build());
@@ -546,6 +574,9 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerEntityRenderer(MANNEQUIN.get(), manager -> new BaseMannequinRenderer<>(manager, new MannequinModel()));
+                event.registerEntityRenderer(HOSTILE_MANNEQUIN.get(), manager -> new BaseMannequinRenderer<>(manager, new HostileMannequinModel()));
+                event.registerEntityRenderer(MANNEQUIN_STAND.get(), manager -> new BaseMannequinRenderer<>(manager, new MannequinStandModel()));
                 event.registerEntityRenderer(VoicesOfTheMines.SEAT_ENTITY.get(), SeatRenderer::new);
                 event.registerBlockEntityRenderer(SERVER_BE.get(), ServerRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.CHAIR_BE.get(), ChairRenderer::new);

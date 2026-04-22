@@ -193,15 +193,14 @@ public class ClientInputHandler {
                     currentlyHeldEntity = maxwell;
                     KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(maxwell.getId(), true));
                 }
-                else if (target instanceof net.votmdevs.voicesofthemines.entity.DriveEntity drive) {
-                    currentlyHeldEntity = drive;
-                    KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(drive.getId(), true));
+            } else if (target instanceof net.votmdevs.voicesofthemines.entity.DriveEntity drive) {
+                currentlyHeldEntity = drive;
+                KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(drive.getId(), true));
+            } else if (target instanceof net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity mannequin) {
+                if (!mc.player.isShiftKeyDown()) {
+                    currentlyHeldEntity = mannequin;
+                    KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(mannequin.getId(), true));
                 }
-            }
-        } else if (!isUseKeyDown && wasUseKeyDown) {
-            if (currentlyHeldEntity != null && !(currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.AtvEntity)) {
-                KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(0, false));
-                currentlyHeldEntity = null;
             }
 
         } else if (!isUseKeyDown && wasUseKeyDown) {
@@ -213,7 +212,6 @@ public class ClientInputHandler {
                         net.minecraft.world.level.block.Block block = state.getBlock();
 
                         if (block == VoicesOfTheMines.TERMINAL_CHECK.get() || block == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
-
                             String sigId = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID);
                             boolean isEmpty = (sigId == null || sigId.isEmpty());
 
@@ -243,9 +241,16 @@ public class ClientInputHandler {
             } else if (target instanceof net.votmdevs.voicesofthemines.entity.DriveEntity drive) {
                 currentlyHeldEntity = drive;
                 KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(drive.getId(), true));
+            } else if (target instanceof net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity mannequin) {
+                currentlyHeldEntity = mannequin;
+                KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(mannequin.getId(), true));
             }
         } else if (!isPickKeyDown && wasPickKeyDown) {
-            if (currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.AtvEntity || currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.FuelCanEntity || currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.DriveEntity) {
+            if (currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.AtvEntity ||
+                    currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.FuelCanEntity ||
+                    currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.DriveEntity ||
+                    currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity) {
+
                 KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(0, false));
                 currentlyHeldEntity = null;
             }
