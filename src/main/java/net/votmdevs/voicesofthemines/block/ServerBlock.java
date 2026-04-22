@@ -72,7 +72,7 @@ public class ServerBlock extends BaseEntityBlock {
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!state.getValue(BROKEN)) {
-            if (random.nextInt(100) < 12) {
+            if (random.nextInt(1000) < 12) {
                 BlockEntity be = level.getBlockEntity(pos);
                 if (be instanceof ServerBlockEntity serverBe) {
                     if (serverBe.diskUsesLeft > 0) {
@@ -97,7 +97,7 @@ public class ServerBlock extends BaseEntityBlock {
             }
 
             if (random.nextInt(400) == 0) {
-                int soundChoice = random.nextInt(8) + 1; // от 1 до 8
+                int soundChoice = random.nextInt(8) + 1;
                 net.minecraft.sounds.SoundEvent randomServerSound = switch (soundChoice) {
                     case 1 -> VotmSounds.SERVER1.get();
                     case 2 -> VotmSounds.SERVER2.get();
@@ -122,7 +122,7 @@ public class ServerBlock extends BaseEntityBlock {
             typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1);
             net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get((ServerLevel) level);
             manager.placedServers.put(typeName, pos);
-            manager.setDirty(); // ВАЖНО: сохраняем базу!
+            manager.setDirty();
         }
         super.setPlacedBy(level, pos, state, placer, stack);
     }

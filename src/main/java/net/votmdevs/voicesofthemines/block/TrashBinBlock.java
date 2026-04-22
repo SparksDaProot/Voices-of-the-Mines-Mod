@@ -74,7 +74,6 @@ public class TrashBinBlock extends Block {
                 }
             }
 
-            // Убрали звук раздатчика
             if (!absorbed && player.getItemInHand(hand).isEmpty() && stored > 0) {
                 level.scheduleTick(pos, this, 5);
             }
@@ -93,12 +92,10 @@ public class TrashBinBlock extends Block {
                 garbage.setDeltaMovement((random.nextDouble() - 0.5) * 0.3, 0.4, (random.nextDouble() - 0.5) * 0.3);
                 level.addFreshEntity(garbage);
 
-                // Оставили только звук вылета
                 level.playSound(null, pos, SoundEvents.CHICKEN_EGG, SoundSource.BLOCKS, 1.0F, 0.5F + random.nextFloat() * 0.5F);
             }
 
             int nextStored = stored - 1;
-            // Не забываем сохранять поворот при обновлении!
             level.setBlock(pos, state.setValue(STORED, nextStored).setValue(FACING, state.getValue(FACING)), 3);
 
             if (nextStored > 0) {
