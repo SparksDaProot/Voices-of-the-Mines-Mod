@@ -47,7 +47,7 @@ public class ConsoleScreen extends Screen {
         });
         this.addRenderableWidget(inputField);
 
-        outputHistory.add("Voices of the Mines OS v1.0");
+        outputHistory.add("OS v1.0VOTM");
         outputHistory.add("Type a command...");
     }
 

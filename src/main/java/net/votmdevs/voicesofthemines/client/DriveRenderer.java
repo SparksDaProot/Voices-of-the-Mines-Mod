@@ -20,6 +20,7 @@ public class DriveRenderer extends GeoEntityRenderer<DriveEntity> {
     public DriveRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new DriveModel());
         this.shadowRadius = 0.2f;
+        this.addRenderLayer(new DriveEmissiveLayer(this));
     }
 
     @Override

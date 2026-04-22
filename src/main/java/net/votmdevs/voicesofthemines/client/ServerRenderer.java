@@ -7,5 +7,6 @@ import software.bernie.geckolib.renderer.GeoBlockRenderer;
 public class ServerRenderer extends GeoBlockRenderer<ServerBlockEntity> {
     public ServerRenderer(BlockEntityRendererProvider.Context context) {
         super(new ServerModel());
+        this.addRenderLayer(new ServerEmissiveLayer(this));
     }
 }

@@ -16,10 +16,12 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class AtvRenderer extends GeoEntityRenderer<AtvEntity> {
     private static final ResourceLocation SELECT_ICON = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/select.png");
+    private static final ResourceLocation GLOW_TEXTURE = new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/atv_emissive.png");
 
     public AtvRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new AtvModel());
         this.shadowRadius = 0.8f;
+        this.addRenderLayer(new GenericEmissiveLayer<>(this, GLOW_TEXTURE));
     }
 
     @Override

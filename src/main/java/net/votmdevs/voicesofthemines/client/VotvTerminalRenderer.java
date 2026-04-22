@@ -7,5 +7,6 @@ import software.bernie.geckolib.renderer.GeoBlockRenderer;
 public class VotvTerminalRenderer extends GeoBlockRenderer<VotvTerminalBlockEntity> {
     public VotvTerminalRenderer(BlockEntityRendererProvider.Context context) {
         super(new VotvTerminalModel());
+        this.addRenderLayer(new TerminalEmissiveLayer(this));
     }
 }
