@@ -1,8 +1,7 @@
 package net.votmdevs.voicesofthemines;
 
-import net.votmdevs.voicesofthemines.block.KerfurWorkbenchBlock;
-import net.votmdevs.voicesofthemines.block.PosterBlockEntity;
-import net.votmdevs.voicesofthemines.block.TrashBinBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.votmdevs.voicesofthemines.block.*;
 import net.votmdevs.voicesofthemines.client.*;
 import net.votmdevs.voicesofthemines.effect.RadiationEffect;
 import net.votmdevs.voicesofthemines.entity.*;
@@ -371,6 +370,20 @@ public class VoicesOfTheMines {
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ConsoleBlockEntity>> CONSOLE_BE = BLOCK_ENTITIES.register("console_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ConsoleBlockEntity::new, CONSOLE_BLOCK.get()).build(null));
 
+    public static final RegistryObject<Block> COMPUTER_CHAIR = BLOCKS.register("computer_chair",
+            () -> new ChairBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+
+    public static final RegistryObject<BlockEntityType<ChairBlockEntity>> CHAIR_BE = BLOCK_ENTITIES.register("chair_be",
+            () -> BlockEntityType.Builder.of(ChairBlockEntity::new, COMPUTER_CHAIR.get()).build(null));
+
+    public static final RegistryObject<Item> COMPUTER_CHAIR_ITEM = ITEMS.register("computer_chair",
+            () -> new BlockItem(COMPUTER_CHAIR.get(), new Item.Properties()));
+
+    public static final RegistryObject<EntityType<SeatEntity>> SEAT_ENTITY = ENTITY_TYPES.register("seat",
+            () -> EntityType.Builder.<SeatEntity>of(SeatEntity::new, MobCategory.MISC)
+                    .sized(0.01f, 0.01f)
+                    .build("seat"));
+
     // drone
 
 
@@ -423,6 +436,9 @@ public class VoicesOfTheMines {
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+            event.accept(SERVER_BLOCK_ITEM);
+            event.accept(COMPUTER_CHAIR_ITEM);
+            event.accept(CONSOLE_BLOCK_ITEM);
             event.accept(KERFUR_WORKBENCH_ITEM);
             event.accept(TRASH_BIN_ITEM);
             event.accept(POSTER_ITEM);
@@ -481,6 +497,7 @@ public class VoicesOfTheMines {
             event.accept(DRIVE_SPAWN_EGG);
         }
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(DISK_BLUE);
             event.accept(TRASH_BAG);
             event.accept(TRASH_ROLL);
             event.accept(HOOK_ITEM);
@@ -529,7 +546,9 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerEntityRenderer(VoicesOfTheMines.SEAT_ENTITY.get(), SeatRenderer::new);
                 event.registerBlockEntityRenderer(SERVER_BE.get(), ServerRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.CHAIR_BE.get(), ChairRenderer::new);
                 event.registerEntityRenderer(KERFUR.get(), KerfurRenderer::new);
                 event.registerEntityRenderer(FLESH.get(), FleshRenderer::new);
                 event.registerBlockEntityRenderer(CONSOLE_BE.get(), ConsoleRenderer::new);
