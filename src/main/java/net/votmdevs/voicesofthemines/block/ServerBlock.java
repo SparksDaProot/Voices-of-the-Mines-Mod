@@ -4,6 +4,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -30,6 +33,11 @@ public class ServerBlock extends BaseEntityBlock {
     public static final EnumProperty<ServerType> TYPE = EnumProperty.create("type", ServerType.class);
     public static final BooleanProperty BROKEN = BooleanProperty.create("broken");
 
+    private static final VoxelShape SHAPE = Block.box(
+            0.0D, 0.0D, 0.0D,
+            16.0D, 32.0D, 16.0D
+    );
+
     public ServerBlock(Properties properties) {
         super(properties.randomTicks());
         this.registerDefaultState(this.stateDefinition.any()
@@ -37,6 +45,7 @@ public class ServerBlock extends BaseEntityBlock {
                 .setValue(TYPE, ServerType.BASE)
                 .setValue(BROKEN, false));
     }
+
 
     @Override
     public void attack(BlockState state, Level level, BlockPos pos, Player player) {
@@ -214,4 +223,14 @@ public class ServerBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new ServerBlockEntity(pos, state); }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
+    }
 }

@@ -11,6 +11,7 @@ import net.votmdevs.voicesofthemines.network.KerfurPacketHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
@@ -54,6 +55,7 @@ public class VoicesOfTheMines {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, MODID);
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     public static final RegistryObject<MobEffect> RADIATION = EFFECTS.register("radiation", RadiationEffect::new);
 
@@ -439,6 +441,18 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Item> KERFUR_SPAWN_EGG = ITEMS.register("kerfur_spawn_egg",
             () -> new ForgeSpawnEggItem(KERFUR, 0xFFFFFF, 0x000000, new Item.Properties()));
 
+    // Adds all mod items to custom creative menu tab
+    public static final RegistryObject<CreativeModeTab> VOICES_OF_THE_MINES_TAB =
+            CREATIVE_MODE_TABS.register("voices_of_the_mines", () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.voicesofthemines"))
+                    .icon(() -> new ItemStack(SERVER_BLOCK_ITEM.get()))
+                    .displayItems((parameters, output) -> {
+                        for (RegistryObject<Item> item : ITEMS.getEntries()) {
+                            output.accept(item.get());
+                        }
+                    })
+                    .build());
+
     public VoicesOfTheMines(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
@@ -452,6 +466,7 @@ public class VoicesOfTheMines {
         VotmSounds.SOUNDS.register(modEventBus);
         MENUS.register(modEventBus);
         EFFECTS.register(modEventBus);
+        CREATIVE_MODE_TABS.register(modEventBus);
         KerfurPacketHandler.register();
 
         MinecraftForge.EVENT_BUS.register(this);

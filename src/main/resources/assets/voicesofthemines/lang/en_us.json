@@ -3,10 +3,12 @@
   "item.voicesofthemines.burger": "Burger",
   "item.voicesofthemines.cheese": "Cheese",
   "item.voicesofthemines.taco": "Taco",
+  "item.voicesofthemines.maxwell_item": "Maxwell",
   "item.voicesofthemines.toblerone": "Toblerone",
   "item.voicesofthemines.trash_bag": "Trash Bag",
   "item.voicesofthemines.trash_roll": "Trash Roll",
   "item.voicesofthemines.hook": "Hook",
+  "item.voicesofthemines.disk_blue": "Blue Disk",
   "item.voicesofthemines.hazard_helmet": "Hazmat Helmet",
   "item.voicesofthemines.hazard_chestplate": "Hazmat Chestplate",
   "item.voicesofthemines.hazard_leggings": "Hazmat Leggings",
@@ -32,7 +34,12 @@
   "item.voicesofthemines.omega_kerfur_spawn_egg": "Kerfur-O Spawn Egg",
   "item.voicesofthemines.flesh_spawn_egg": "Flesh Spawn Egg",
   "item.voicesofthemines.atv_spawn_egg": "ATV Spawn Egg",
+  "item.voicesofthemines.hostile_mannequin_spawn_egg": "Hostile Mannequin Spawn Egg",
+  "item.voicesofthemines.mannequin_spawn_egg": "Mannequin Spawn Egg",
   "item.voicesofthemines.drive_spawn_egg": "Drive Spawn Egg",
+  "item.voicesofthemines.cockroach_spawn_egg": "Cockroach Spawn Egg",
+  "item.voicesofthemines.fuel_can_spawn_egg": "Fuel Can",
+
 
 
   "block.voicesofthemines.kerfur_workbench": "Workbench",
@@ -41,13 +48,20 @@
   "block.voicesofthemines.keypad": "Keypad",
   "block.voicesofthemines.votv_door": "Sliding Door",
   "block.voicesofthemines.table": "Main Desk",
+  "block.voicesofthemines.computer_chair": "Computer Chair",
   "block.voicesofthemines.wall_behind": "Signal Station Wall",
   "block.voicesofthemines.terminal_find": "Signal Location Terminal",
   "block.voicesofthemines.terminal_processing": "Signal Processing Terminal",
   "block.voicesofthemines.terminal_check": "Signal Checking Terminal",
   "block.voicesofthemines.terminal_calibrate": "Signal Calibration Terminal",
+  "block.voicesofthemines.server_block": "Server",
+  "block.voicesofthemines.console_block": "Console",
   "block.voicesofthemines.book_kerfur_recipe": "Kerfur Recipe Book",
+  "block.voicesofthemines.drone_panel": "Drone Panel",
+  "block.voicesofthemines.target_drone_block": "Drone Target Block",
 
+
+  "itemGroup.voicesofthemines": "Voices of the Mines",
 
   "effect.voicesofthemines.radiation": "Radiation Poisoning"
 }
