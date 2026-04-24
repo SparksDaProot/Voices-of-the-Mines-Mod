@@ -186,12 +186,59 @@ public class VoicesOfTheMines {
             ()-> new Item(new Item.Properties().food(net.votmdevs.voicesofthemines.item.ModFoods.BURGER)));
 
     // term items
-    public static final RegistryObject<Item> TABLE_ITEM = ITEMS.register("table", () -> new BlockItem(TABLE.get(), new Item.Properties()));
-    public static final RegistryObject<Item> WALL_BEHIND_ITEM = ITEMS.register("wall_behind", () -> new BlockItem(WALL_BEHIND.get(), new Item.Properties()));
-    public static final RegistryObject<Item> TERMINAL_FIND_ITEM = ITEMS.register("terminal_find", () -> new BlockItem(TERMINAL_FIND.get(), new Item.Properties()));
-    public static final RegistryObject<Item> TERMINAL_PROCESSING_ITEM = ITEMS.register("terminal_processing", () -> new BlockItem(TERMINAL_PROCESSING.get(), new Item.Properties()));
-    public static final RegistryObject<Item> TERMINAL_CHECK_ITEM = ITEMS.register("terminal_check", () -> new BlockItem(TERMINAL_CHECK.get(), new Item.Properties()));
-    public static final RegistryObject<Item> TERMINAL_CALIBRATE_ITEM = ITEMS.register("terminal_calibrate", () -> new BlockItem(TERMINAL_CALIBRATE.get(), new Item.Properties()));
+    public static final RegistryObject<Item> TABLE_ITEM = ITEMS.register("table",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    TABLE.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/table.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/table.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
+
+    public static final RegistryObject<Item> WALL_BEHIND_ITEM = ITEMS.register("wall_behind",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    WALL_BEHIND.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/wall_behind.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/wall_behind.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
+
+    public static final RegistryObject<Item> TERMINAL_FIND_ITEM = ITEMS.register("terminal_find",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    TERMINAL_FIND.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/terminal_find.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/terminal_find.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
+
+    public static final RegistryObject<Item> TERMINAL_PROCESSING_ITEM = ITEMS.register("terminal_processing",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    TERMINAL_PROCESSING.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/terminal_processing.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/terminal_processing.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
+
+    public static final RegistryObject<Item> TERMINAL_CHECK_ITEM = ITEMS.register("terminal_check",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    TERMINAL_CHECK.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/terminal_check.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/terminal_check.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
+
+    public static final RegistryObject<Item> TERMINAL_CALIBRATE_ITEM = ITEMS.register("terminal_calibrate",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    TERMINAL_CALIBRATE.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/terminal_calibrate.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/terminal_calibrate.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
 
     public static final RegistryObject<Item> ACCESSORY_MAID = ITEMS.register("maid", () -> new Item(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> ACCESSORY_RIBBON = ITEMS.register("ribbon", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -220,7 +267,13 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.block.VotvDoorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
 
     public static final RegistryObject<Item> VOTV_DOOR_ITEM = ITEMS.register("votv_door",
-            () -> new BlockItem(VOTV_DOOR.get(), new Item.Properties()));
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    VOTV_DOOR.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/votv_door.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/votv_door.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
 
     public static final RegistryObject<EntityType<OmegaKerfurEntity>> OMEGA_KERFUR = ENTITY_TYPES.register("omega_kerfur",
             () -> EntityType.Builder.of(OmegaKerfurEntity::new, MobCategory.CREATURE)
@@ -381,7 +434,13 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.block.ServerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
 
     public static final RegistryObject<Item> SERVER_BLOCK_ITEM = ITEMS.register("server_block",
-            () -> new BlockItem(SERVER_BLOCK.get(), new Item.Properties()));
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    SERVER_BLOCK.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/server.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/server.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
 
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ServerBlockEntity>> SERVER_BE = BLOCK_ENTITIES.register("server_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ServerBlockEntity::new, SERVER_BLOCK.get()).build(null));
@@ -390,7 +449,13 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.block.ConsoleBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
 
     public static final RegistryObject<Item> CONSOLE_BLOCK_ITEM = ITEMS.register("console_block",
-            () -> new BlockItem(CONSOLE_BLOCK.get(), new Item.Properties()));
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    CONSOLE_BLOCK.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/console.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/console.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
 
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ConsoleBlockEntity>> CONSOLE_BE = BLOCK_ENTITIES.register("console_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ConsoleBlockEntity::new, CONSOLE_BLOCK.get()).build(null));
@@ -402,7 +467,13 @@ public class VoicesOfTheMines {
             () -> BlockEntityType.Builder.of(ChairBlockEntity::new, COMPUTER_CHAIR.get()).build(null));
 
     public static final RegistryObject<Item> COMPUTER_CHAIR_ITEM = ITEMS.register("computer_chair",
-            () -> new BlockItem(COMPUTER_CHAIR.get(), new Item.Properties()));
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    COMPUTER_CHAIR.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/chair.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/chair.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
 
     public static final RegistryObject<EntityType<SeatEntity>> SEAT_ENTITY = ENTITY_TYPES.register("seat",
             () -> EntityType.Builder.<SeatEntity>of(SeatEntity::new, MobCategory.MISC)
@@ -422,7 +493,13 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.block.DronePanelBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
 
     public static final RegistryObject<Item> DRONE_PANEL_ITEM = ITEMS.register("drone_panel",
-            () -> new BlockItem(DRONE_PANEL.get(), new Item.Properties()));
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    DRONE_PANEL.get(),
+                    new Item.Properties(),
+                    new ResourceLocation(MODID, "geo/drone_panel.geo.json"),
+                    new ResourceLocation(MODID, "textures/block/drone_panel.png"),
+                    new ResourceLocation(MODID, "animations/empty.animation.json")
+            ));
 
     public static final RegistryObject<EntityType<net.votmdevs.voicesofthemines.entity.DroneEntity>> DRONE = ENTITY_TYPES.register("drone",
             () -> EntityType.Builder.of(net.votmdevs.voicesofthemines.entity.DroneEntity::new, MobCategory.MISC)
