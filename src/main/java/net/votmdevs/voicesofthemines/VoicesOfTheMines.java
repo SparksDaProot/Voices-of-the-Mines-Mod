@@ -372,6 +372,15 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Item> DRIVE_SPAWN_EGG = ITEMS.register("drive_spawn_egg",
             () -> new ForgeSpawnEggItem(DRIVE, 0x111111, 0x555555, new Item.Properties()));
 
+    public static final RegistryObject<Block> DRIVE_BOX = BLOCKS.register("drive_box",
+            () -> new DriveBoxBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(0.2F).noOcclusion()));
+
+    public static final RegistryObject<Item> DRIVE_BOX_ITEM = ITEMS.register("drive_box",
+            () -> new net.votmdevs.voicesofthemines.item.DriveBoxItem(DRIVE_BOX.get(), new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<DriveBoxBlockEntity>> DRIVE_BOX_BE = BLOCK_ENTITIES.register("drive_box_be",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(DriveBoxBlockEntity::new, DRIVE_BOX.get()).build(null));
+
 
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity>> TERMINAL_BE = BLOCK_ENTITIES.register("terminal_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity::new,
@@ -666,6 +675,7 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(DRIVE_BOX_BE.get(), DriveBoxRenderer::new);
                 event.registerEntityRenderer(MANNEQUIN.get(), manager -> new BaseMannequinRenderer<>(manager, new MannequinModel()));
                 event.registerEntityRenderer(HOSTILE_MANNEQUIN.get(), manager -> new BaseMannequinRenderer<>(manager, new HostileMannequinModel()));
                 event.registerEntityRenderer(MANNEQUIN_STAND.get(), manager -> new BaseMannequinRenderer<>(manager, new MannequinStandModel()));

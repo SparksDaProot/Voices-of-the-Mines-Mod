@@ -113,7 +113,7 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
                     for (int i = 0; i < this.inventory.getContainerSize(); i++) {
                         net.minecraft.world.item.ItemStack stack = this.inventory.getItem(i);
                         if (!stack.isEmpty()) {
-                            int price = getSellPrice(stack.getItem());
+                            int price = getSellPrice(stack);
                             if (price > 0) {
                                 int itemTotal = price * stack.getCount();
                                 earnedPoints += itemTotal;
@@ -188,7 +188,32 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
     }
 
     // sell prices
-    private int getSellPrice(net.minecraft.world.item.Item item) {
+    private int getSellPrice(net.minecraft.world.item.ItemStack stack) {
+        net.minecraft.world.item.Item item = stack.getItem();
+
+        // Drive sells
+        if (item == VoicesOfTheMines.DRIVE_BOX_ITEM.get()) {
+            int totalBoxPrice = 0;
+            if (stack.hasTag() && stack.getTag().contains("Inventory")) {
+                net.minecraft.nbt.CompoundTag inventoryTag = stack.getTag().getCompound("Inventory");
+                net.minecraftforge.items.ItemStackHandler handler = new net.minecraftforge.items.ItemStackHandler(6);
+                handler.deserializeNBT(inventoryTag);
+
+                for (int i = 0; i < handler.getSlots(); i++) {
+                    net.minecraft.world.item.ItemStack diskStack = handler.getStackInSlot(i);
+                    if (!diskStack.isEmpty() && diskStack.hasTag()) {
+                        int sigLevel = diskStack.getTag().getInt("SignalLevel");
+                        if (sigLevel == 0) totalBoxPrice += 5;
+                        else if (sigLevel == 1) totalBoxPrice += 10;
+                        else if (sigLevel == 2) totalBoxPrice += 15;
+                        else if (sigLevel >= 3) totalBoxPrice += 30;
+                    }
+                }
+            }
+            return totalBoxPrice; // summ
+        }
+
+        // other items to sell
         if (item == VoicesOfTheMines.HAZARD_HELMET.get() ||
                 item == VoicesOfTheMines.HAZARD_CHESTPLATE.get() ||
                 item == VoicesOfTheMines.HAZARD_LEGGINGS.get() ||
@@ -200,10 +225,10 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
         if (item == VoicesOfTheMines.ACCESSORY_JACKET.get()) return 1;
         if (item == VoicesOfTheMines.KEYPAD_ITEM.get()) return 10;
         if (item == VoicesOfTheMines.POSTER_ITEM.get()) return 5;
-        if (item == VoicesOfTheMines.TACO.get()) return 1;
-        if (item == VoicesOfTheMines.TOBLERONE.get()) return 1;
-        if (item == VoicesOfTheMines.CHEESE.get()) return 1;
-        if (item == VoicesOfTheMines.BURGER.get()) return 1;
+        if (item == VoicesOfTheMines.TACO.get()) return 2;
+        if (item == VoicesOfTheMines.TOBLERONE.get()) return 2;
+        if (item == VoicesOfTheMines.CHEESE.get()) return 2;
+        if (item == VoicesOfTheMines.BURGER.get()) return 2;
 
         if (item == VoicesOfTheMines.PAINTER_BLACK.get() ||
                 item == VoicesOfTheMines.PAINTER_BLUE.get() ||
@@ -213,7 +238,7 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
                 item == VoicesOfTheMines.PAINTER_WHITE.get() ||
                 item == VoicesOfTheMines.PAINTER_YELLOW.get()) return 20;
 
-        return 0; // garbage 0 points :C
+        return 1; // garbage 1 points :C
     }
 
     @Override

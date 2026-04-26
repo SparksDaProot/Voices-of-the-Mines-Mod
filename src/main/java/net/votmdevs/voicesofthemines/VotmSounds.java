@@ -148,6 +148,9 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> MEOW_2 = registerSoundEvent("meow2");
     public static final RegistryObject<SoundEvent> DUDUDU = registerSoundEvent("dududu");
 
+    public static final RegistryObject<SoundEvent> DRIVEBOX_OPEN = registerSoundEvent("drivebox_open");
+    public static final RegistryObject<SoundEvent> DRIVEBOX_CLOSE = registerSoundEvent("drivebox_close");
+
     public static final RegistryObject<SoundEvent> OMEGA_SPRINT = registerSoundEvent("omega_sprint");
     public static final RegistryObject<SoundEvent> OMEGA_BONK = registerSoundEvent("omega_bonk");
     public static final RegistryObject<SoundEvent> OMEGA_STEP_DIRT = registerSoundEvent("omega_step_dirt");

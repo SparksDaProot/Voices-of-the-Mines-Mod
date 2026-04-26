@@ -264,6 +264,8 @@
   "server6": { "sounds": [ "voicesofthemines:server6" ] },
   "server7": { "sounds": [ "voicesofthemines:server7" ] },
   "server8": { "sounds": [ "voicesofthemines:server8" ] },
+  "drivebox_close": { "sounds": [ "voicesofthemines:drivebox_close" ] },
+  "drivebox_open": { "sounds": [ "voicesofthemines:drivebox_open" ] },
 
   "mannequin_hurt": {
     "sounds": [

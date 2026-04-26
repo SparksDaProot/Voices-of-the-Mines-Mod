@@ -63,8 +63,8 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
         if (!this.level().isClientSide()) {
             boolean isColliding = this.horizontalCollision || this.verticalCollision;
             if (isColliding && !this.wasCollidingLastTick) {
-                SoundEvent[] impactSounds = {VotmSounds.IMPACT_DRIVE_1.get(), VotmSounds.IMPACT_DRIVE_2.get(), VotmSounds.IMPACT_DRIVE_3.get()};
-                SoundEvent selectedSound = impactSounds[this.random.nextInt(impactSounds.length)];
+                net.minecraft.sounds.SoundEvent[] impactSounds = {VotmSounds.IMPACT_DRIVE_1.get(), VotmSounds.IMPACT_DRIVE_2.get(), VotmSounds.IMPACT_DRIVE_3.get()};
+                net.minecraft.sounds.SoundEvent selectedSound = impactSounds[this.random.nextInt(impactSounds.length)];
                 this.playSound(selectedSound, 0.6F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
             this.wasCollidingLastTick = isColliding;
@@ -92,17 +92,19 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
                     for (net.minecraft.core.BlockPos bp : net.minecraft.core.BlockPos.betweenClosed(minPos, maxPos)) {
                         if (inserted) break;
                         net.minecraft.world.level.block.state.BlockState state = this.level().getBlockState(bp);
+                        net.minecraft.world.level.block.Block currentBlock = state.getBlock();
 
-                        if (state.getBlock() == VoicesOfTheMines.TERMINAL_CHECK.get() ||
-                                state.getBlock() == VoicesOfTheMines.TERMINAL_PROCESSING.get() ||
-                                state.getBlock() == VoicesOfTheMines.PHANTOM_BLOCK.get()) {
+                        // Insert
+                        if (currentBlock == VoicesOfTheMines.TERMINAL_CHECK.get() ||
+                                currentBlock == VoicesOfTheMines.TERMINAL_PROCESSING.get() ||
+                                currentBlock == VoicesOfTheMines.PHANTOM_BLOCK.get() ||
+                                currentBlock == VoicesOfTheMines.DRIVE_BOX.get()) {
 
                             for (net.minecraft.core.BlockPos searchPos : net.minecraft.core.BlockPos.betweenClosed(bp.offset(-2, -1, -2), bp.offset(2, 1, 2))) {
                                 net.minecraft.world.level.block.Block searchBlock = this.level().getBlockState(searchPos).getBlock();
 
-                                if (searchBlock == VoicesOfTheMines.TERMINAL_CHECK.get() ||
-                                        searchBlock == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
-
+                                // Terminals
+                                if (searchBlock == VoicesOfTheMines.TERMINAL_CHECK.get() || searchBlock == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
                                     net.minecraft.world.level.block.entity.BlockEntity be = this.level().getBlockEntity(searchPos);
 
                                     if (be instanceof net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal) {
@@ -116,12 +118,47 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
                                             int sigLevel = this.entityData.get(SIGNAL_LEVEL);
 
                                             terminal.setDrive(true, sigId != null ? sigId : "", sigType != null ? sigType : "", sigLevel);
-
                                             this.level().playSound(null, searchPos, VotmSounds.DRIVE_IN.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
 
                                             this.discard();
                                             inserted = true;
                                             break;
+                                        }
+                                    }
+                                }
+                                // Drive box
+                                else if (searchBlock == VoicesOfTheMines.DRIVE_BOX.get()) {
+                                    net.minecraft.world.level.block.entity.BlockEntity be = this.level().getBlockEntity(searchPos);
+                                    if (be instanceof net.votmdevs.voicesofthemines.block.DriveBoxBlockEntity driveBox) {
+                                        if (driveBox.isOpen) {
+                                            String sigId = this.entityData.get(SIGNAL_ID);
+                                            if (sigId != null && !sigId.isEmpty()) {
+                                                for (int i = 0; i < 6; i++) {
+                                                    if (driveBox.inventory.getStackInSlot(i).isEmpty()) {
+
+                                                        // copy data
+                                                        net.minecraft.world.item.ItemStack diskStack = new net.minecraft.world.item.ItemStack(VoicesOfTheMines.DISK_BLUE.get());
+                                                        net.minecraft.nbt.CompoundTag diskTag = diskStack.getOrCreateTag();
+                                                        diskTag.putString("SignalId", sigId);
+                                                        diskTag.putString("SignalType", this.entityData.get(SIGNAL_TYPE));
+                                                        diskTag.putInt("SignalLevel", this.entityData.get(SIGNAL_LEVEL));
+
+                                                        // insert
+                                                        driveBox.inventory.insertItem(i, diskStack, false);
+                                                        this.level().playSound(null, searchPos, VotmSounds.DRIVE_IN.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+
+                                                        // anim
+                                                        driveBox.animState = 0;
+                                                        driveBox.setChanged();
+                                                        this.level().sendBlockUpdated(searchPos, driveBox.getBlockState(), driveBox.getBlockState(), 3);
+
+                                                        this.discard();
+                                                        inserted = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (inserted) break;
+                                            }
                                         }
                                     }
                                 }

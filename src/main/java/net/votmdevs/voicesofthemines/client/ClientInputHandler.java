@@ -1,5 +1,6 @@
 package net.votmdevs.voicesofthemines.client;
 
+import net.minecraft.core.BlockPos;
 import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.entity.FleshEntity;
@@ -207,19 +208,57 @@ public class ClientInputHandler {
             if (currentlyHeldEntity != null && !(currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.AtvEntity)) {
 
                 if (currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.DriveEntity drive) {
-                    if (mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult blockHit) {
-                        net.minecraft.world.level.block.state.BlockState state = mc.level.getBlockState(blockHit.getBlockPos());
-                        net.minecraft.world.level.block.Block block = state.getBlock();
+                    BlockPos targetPos = null;
+                    net.minecraft.world.level.block.Block targetBlock = null;
 
-                        if (block == VoicesOfTheMines.TERMINAL_CHECK.get() || block == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
-                            String sigId = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID);
-                            boolean isEmpty = (sigId == null || sigId.isEmpty());
+                    // check 5 block through (for correct ... i forgor word)
+                    net.minecraft.world.phys.HitResult blockRay = mc.player.pick(5.0D, 1.0F, false);
 
-                            if (block == VoicesOfTheMines.TERMINAL_PROCESSING.get() && isEmpty) {
-                                mc.player.playSound(VotmSounds.BUG_ALERT.get(), 1.0F, 0.5F);
-                            } else {
-                                KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.InsertDrivePacket(blockHit.getBlockPos(), drive.getId()));
+                    if (blockRay.getType() != net.minecraft.world.phys.HitResult.Type.MISS && blockRay instanceof net.minecraft.world.phys.BlockHitResult blockHit) {
+                        BlockPos hitPos = blockHit.getBlockPos();
+                        net.minecraft.world.level.block.Block b = mc.level.getBlockState(hitPos).getBlock();
+
+                        if (b == VoicesOfTheMines.TERMINAL_CHECK.get() ||
+                                b == VoicesOfTheMines.TERMINAL_PROCESSING.get() ||
+                                b == VoicesOfTheMines.DRIVE_BOX.get()) {
+
+                            targetPos = hitPos;
+                            targetBlock = b;
+                        }
+                    }
+
+                    // magnet drives to box
+                    if (targetPos == null) {
+                        BlockPos center = mc.player.blockPosition();
+                        double closestDist = 999.0;
+
+                        for (BlockPos checkPos : BlockPos.betweenClosed(center.offset(-3, -2, -3), center.offset(3, 2, 3))) {
+                            net.minecraft.world.level.block.Block b = mc.level.getBlockState(checkPos).getBlock();
+
+                            if (b == VoicesOfTheMines.TERMINAL_CHECK.get() ||
+                                    b == VoicesOfTheMines.TERMINAL_PROCESSING.get() ||
+                                    b == VoicesOfTheMines.DRIVE_BOX.get()) {
+
+                                // block searching (another check)
+                                double dist = checkPos.distToCenterSqr(mc.player.getEyePosition());
+                                if (dist < closestDist) {
+                                    closestDist = dist;
+                                    targetPos = checkPos.immutable();
+                                    targetBlock = b;
+                                }
                             }
+                        }
+                    }
+
+                    // Server packet
+                    if (targetPos != null && targetBlock != null) {
+                        String sigId = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID);
+                        boolean isEmpty = (sigId == null || sigId.isEmpty());
+
+                        if (targetBlock == VoicesOfTheMines.TERMINAL_PROCESSING.get() && isEmpty) {
+                            mc.player.playSound(VotmSounds.BUG_ALERT.get(), 1.0F, 0.5F);
+                        } else {
+                            KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.InsertDrivePacket(targetPos, drive.getId()));
                         }
                     }
                 }

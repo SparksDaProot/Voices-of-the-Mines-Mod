@@ -1,0 +1,89 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "drivebox",
+					"pivot": [-0.77143, 4, 0.71429],
+					"cubes": [
+						{"origin": [-6, 0, -4.5], "size": [12, 7, 1], "uv": [0, 26]},
+						{"origin": [-6, 0, 3.5], "size": [12, 7, 1], "uv": [26, 26]},
+						{"origin": [5, 0, -3.5], "size": [1, 7, 7], "uv": [1, 35]},
+						{"origin": [-6, 0, -3.5], "size": [1, 7, 7], "uv": [19, 35]},
+						{"origin": [-5, 0, -3.5], "size": [10, 6, 7], "uv": [1, 13]}
+					]
+				},
+				{
+					"name": "cap",
+					"parent": "drivebox",
+					"pivot": [0, 8, 0],
+					"cubes": [
+						{"origin": [-6, 7, -4.5], "size": [12, 2, 9], "uv": [1, 1]}
+					]
+				},
+				{
+					"name": "drives",
+					"parent": "drivebox",
+					"pivot": [-5.4, 3, 5]
+				},
+				{
+					"name": "d1",
+					"parent": "drives",
+					"pivot": [2.6, 7, -2],
+					"cubes": [
+						{"origin": [0.6, 6, -2.5], "size": [4, 2, 1], "uv": [36, 37]}
+					]
+				},
+				{
+					"name": "d2",
+					"parent": "drives",
+					"pivot": [2.6, 7, 0],
+					"cubes": [
+						{"origin": [0.6, 6, -0.5], "size": [4, 2, 1], "uv": [36, 37]}
+					]
+				},
+				{
+					"name": "d3",
+					"parent": "drives",
+					"pivot": [2.6, 7, 2],
+					"cubes": [
+						{"origin": [0.6, 6, 1.5], "size": [4, 2, 1], "uv": [36, 37]}
+					]
+				},
+				{
+					"name": "d4",
+					"parent": "drives",
+					"pivot": [-2.4, 7, 2],
+					"cubes": [
+						{"origin": [-4.4, 6, 1.5], "size": [4, 2, 1], "uv": [36, 37]}
+					]
+				},
+				{
+					"name": "d5",
+					"parent": "drives",
+					"pivot": [-2.4, 7, -2],
+					"cubes": [
+						{"origin": [-4.4, 6, -2.5], "size": [4, 2, 1], "uv": [36, 37]}
+					]
+				},
+				{
+					"name": "d6",
+					"parent": "drives",
+					"pivot": [-2.4, 7, 0],
+					"cubes": [
+						{"origin": [-4.4, 6, -0.5], "size": [4, 2, 1], "uv": [36, 37]}
+					]
+				}
+			]
+		}
+	]
+}
