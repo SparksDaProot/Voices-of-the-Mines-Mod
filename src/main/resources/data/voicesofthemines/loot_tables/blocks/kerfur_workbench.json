@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "kerfurpet:kerfur_workbench"
+          "name": "voicesofthemines:kerfur_workbench"
         }
       ],
       "conditions": [

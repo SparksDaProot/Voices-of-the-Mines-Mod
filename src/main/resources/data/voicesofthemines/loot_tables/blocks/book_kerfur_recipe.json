@@ -3,7 +3,7 @@
   "pools": [
     {
       "rolls": 1.0,
-      "entries": [ { "type": "minecraft:item", "name": "kerfurpet:book_kerfur_recipe" } ],
+      "entries": [ { "type": "minecraft:item", "name": "voicesofthemines:book_kerfur_recipe" } ],
       "conditions": [ { "condition": "minecraft:survives_explosion" } ]
     }
   ]
