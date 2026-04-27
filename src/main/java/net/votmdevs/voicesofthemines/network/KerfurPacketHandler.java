@@ -32,6 +32,7 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, EjectDrivePacket.class, EjectDrivePacket::encode, EjectDrivePacket::decode, EjectDrivePacket::handle);
         INSTANCE.registerMessage(id++, SyncEventStatePacket.class, SyncEventStatePacket::encode, SyncEventStatePacket::decode, SyncEventStatePacket::handle);
         INSTANCE.registerMessage(id++, ConsoleCommandPacket.class, ConsoleCommandPacket::encode, ConsoleCommandPacket::decode, ConsoleCommandPacket::handle);
         INSTANCE.registerMessage(id++, ConsoleOutputPacket.class, ConsoleOutputPacket::encode, ConsoleOutputPacket::decode, ConsoleOutputPacket::handle);
@@ -500,10 +501,12 @@ public class KerfurPacketHandler {
                                 String sigId = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID);
                                 boolean isEmpty = (sigId == null || sigId.isEmpty());
                                 net.minecraft.world.level.block.Block block = player.serverLevel().getBlockState(msg.pos).getBlock();
+
                                 if (block == VoicesOfTheMines.TERMINAL_PROCESSING.get() && isEmpty) {
                                     player.level().playSound(null, msg.pos, VotmSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 0.5F);
                                     return;
                                 }
+
                                 String sigType = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_TYPE);
                                 int sigLevel = drive.getEntityData().get(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL);
 
@@ -1089,6 +1092,42 @@ public class KerfurPacketHandler {
         public static void handle(SyncEventStatePacket msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
                 net.votmdevs.voicesofthemines.client.ClientInputHandler.IS_BAD_SUN = msg.isBadSun;
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public static class EjectDrivePacket {
+        private final BlockPos pos;
+        public EjectDrivePacket(BlockPos pos) { this.pos = pos; }
+        public static void encode(EjectDrivePacket msg, FriendlyByteBuf buffer) { buffer.writeBlockPos(msg.pos); }
+        public static EjectDrivePacket decode(FriendlyByteBuf buffer) { return new EjectDrivePacket(buffer.readBlockPos()); }
+
+        public static void handle(EjectDrivePacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    BlockEntity be = player.level().getBlockEntity(msg.pos);
+                    if (be instanceof net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal && terminal.hasDrive()) {
+                        String sigId = terminal.getDriveSignalId(), sigType = terminal.getDriveSignalType();
+                        int sigLevel = terminal.getDriveSignalLevel();
+
+                        net.votmdevs.voicesofthemines.entity.DriveEntity drive = VoicesOfTheMines.DRIVE.get().create(player.serverLevel());
+                        if (drive != null) {
+                            drive.moveTo(msg.pos.getX() + 0.5, msg.pos.getY() + 1.2, msg.pos.getZ() + 0.5, 0, 0);
+                            drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID, sigId != null ? sigId : "");
+                            drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_TYPE, sigType != null ? sigType : "");
+                            drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL, sigLevel);
+
+                            net.minecraft.world.phys.Vec3 throwVec = player.getEyePosition().subtract(drive.position()).normalize().scale(0.5D);
+                            drive.setDeltaMovement(throwVec.x, 0.3D, throwVec.z);
+
+                            player.level().addFreshEntity(drive);
+                            player.level().playSound(null, msg.pos, net.minecraft.sounds.SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 1.0F);
+                        }
+                        terminal.setDrive(false, "", "", 0);
+                    }
+                }
             });
             ctx.get().setPacketHandled(true);
         }

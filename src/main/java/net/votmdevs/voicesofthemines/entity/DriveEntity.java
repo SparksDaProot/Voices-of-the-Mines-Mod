@@ -84,7 +84,7 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
                     this.hasImpulse = true;
                     this.fallDistance = 0;
 
-                    net.minecraft.world.phys.AABB box = this.getBoundingBox().inflate(1.0D);
+                    net.minecraft.world.phys.AABB box = this.getBoundingBox().inflate(0.2D);
                     net.minecraft.core.BlockPos minPos = net.minecraft.core.BlockPos.containing(box.minX, box.minY, box.minZ);
                     net.minecraft.core.BlockPos maxPos = net.minecraft.core.BlockPos.containing(box.maxX, box.maxY, box.maxZ);
 
@@ -94,13 +94,12 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
                         net.minecraft.world.level.block.state.BlockState state = this.level().getBlockState(bp);
                         net.minecraft.world.level.block.Block currentBlock = state.getBlock();
 
-                        // Insert
                         if (currentBlock == VoicesOfTheMines.TERMINAL_CHECK.get() ||
                                 currentBlock == VoicesOfTheMines.TERMINAL_PROCESSING.get() ||
                                 currentBlock == VoicesOfTheMines.PHANTOM_BLOCK.get() ||
                                 currentBlock == VoicesOfTheMines.DRIVE_BOX.get()) {
 
-                            for (net.minecraft.core.BlockPos searchPos : net.minecraft.core.BlockPos.betweenClosed(bp.offset(-2, -1, -2), bp.offset(2, 1, 2))) {
+                            for (net.minecraft.core.BlockPos searchPos : net.minecraft.core.BlockPos.betweenClosed(bp.offset(-1, -1, -1), bp.offset(1, 1, 1))) {
                                 net.minecraft.world.level.block.Block searchBlock = this.level().getBlockState(searchPos).getBlock();
 
                                 // Terminals
@@ -111,9 +110,11 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
                                         if (!terminal.hasDrive()) {
                                             String sigId = this.entityData.get(SIGNAL_ID);
                                             boolean isEmpty = (sigId == null || sigId.isEmpty());
+
                                             if (searchBlock == VoicesOfTheMines.TERMINAL_PROCESSING.get() && isEmpty) {
                                                 continue;
                                             }
+
                                             String sigType = this.entityData.get(SIGNAL_TYPE);
                                             int sigLevel = this.entityData.get(SIGNAL_LEVEL);
 
@@ -126,6 +127,7 @@ public class DriveEntity extends PathfinderMob implements GeoEntity {
                                         }
                                     }
                                 }
+
                                 // Drive box
                                 else if (searchBlock == VoicesOfTheMines.DRIVE_BOX.get()) {
                                     net.minecraft.world.level.block.entity.BlockEntity be = this.level().getBlockEntity(searchPos);

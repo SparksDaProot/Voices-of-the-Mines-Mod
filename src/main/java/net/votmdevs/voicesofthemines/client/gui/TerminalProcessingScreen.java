@@ -124,11 +124,21 @@ public class TerminalProcessingScreen extends Screen {
             String targetLvlStr = isMax ? "[ LOCKED ]" : "[ " + (CURRENT_SIGNAL_LEVEL + 1) + " ]";
             guiGraphics.drawString(this.font, targetLvlStr, topWinX + 90, botWinY + 60, 0xFFFFFF, false);
 
+// Отрисовка кнопок START и EJECT
             int btnX = topWinX + 50;
             int btnY = botWinY + 100;
 
             guiGraphics.fill(btnX, btnY, btnX + 100, btnY + 20, isProcessing ? 0xFF555555 : (isMax ? 0xFF555555 : 0xFF55FF55));
             guiGraphics.drawString(this.font, isMax ? "MAX LEVEL" : (isProcessing ? "PROCESSING..." : "START"), btnX + (isMax ? 20 : (isProcessing ? 15 : 35)), btnY + 6, 0xFF000000, false);
+
+            if (!isProcessing) {
+                int ejectX = btnX + 110;
+                // ИСПРАВЛЕНИЕ: Квадратная красная кнопка (ширина и высота 20)
+                guiGraphics.fill(ejectX, btnY, ejectX + 20, btnY + 20, 0xFFFF3333);
+                // Добавим черную рамку для красоты
+                guiGraphics.fill(ejectX + 1, btnY + 1, ejectX + 19, btnY + 19, 0xFFFF5555);
+            }
+
         } else {
             guiGraphics.drawString(this.font, "NO DRIVE INSERTED", topWinX + 10, botWinY + 20, 0xFF5555, false);
         }
@@ -165,15 +175,23 @@ public class TerminalProcessingScreen extends Screen {
 
         int btnX = topWinX + 50;
         int btnY = botWinY + 100;
+        int ejectX = btnX + 110;
 
         if (mouseX >= btnX && mouseX <= btnX + 100 && mouseY >= btnY && mouseY <= btnY + 20) {
             if (CURRENT_SIGNAL_LEVEL >= ComputerScreen.UPG_PROC_LVL) {
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUG_ALERT.get(), 1.0F, 0.5F));
-                return true; // Блокируем, если уровень сигнала уже равен или выше купленного
+                return true;
             }
 
             isProcessing = true;
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+            return true;
+        }
+
+        if (!isProcessing && mouseX >= ejectX && mouseX <= ejectX + 20 && mouseY >= btnY && mouseY <= btnY + 20) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+            net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.EjectDrivePacket(terminalPos));
+            this.minecraft.setScreen(null);
             return true;
         }
 

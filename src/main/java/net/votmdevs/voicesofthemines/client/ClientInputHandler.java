@@ -254,7 +254,7 @@ public class ClientInputHandler {
                         BlockPos center = mc.player.blockPosition();
                         double closestDist = 999.0;
 
-                        for (BlockPos checkPos : BlockPos.betweenClosed(center.offset(-3, -2, -3), center.offset(3, 2, 3))) {
+                        for (BlockPos checkPos : BlockPos.betweenClosed(center.offset(-1, -1, -1), center.offset(1, 2, 1))) {
                             net.minecraft.world.level.block.Block b = mc.level.getBlockState(checkPos).getBlock();
 
                             if (b == VoicesOfTheMines.TERMINAL_CHECK.get() ||

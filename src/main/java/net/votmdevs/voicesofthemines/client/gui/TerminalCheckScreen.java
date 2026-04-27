@@ -154,6 +154,13 @@ public class TerminalCheckScreen extends Screen {
         guiGraphics.fill(rightX - 1, topLeftY - 1, rightX + 128 + 1, topLeftY + 128 + 1, 0xFFFFFFFF);
         guiGraphics.fill(rightX, topLeftY, rightX + 128, topLeftY + 128, 0xFF000000);
 
+        // === НОВОЕ: КНОПКА EJECT ===
+        if (!isPlaying) {
+            int ejectX = finishBtnX + 70;
+            guiGraphics.fill(ejectX, btnY, ejectX + 20, btnY + 20, 0xFFFF3333);
+            guiGraphics.fill(ejectX + 1, btnY + 1, ejectX + 19, btnY + 19, 0xFFFF5555);
+        }
+
         if (HAS_ACTIVE_SIGNAL) {
             if (arrivalTimer > 0) {
                 guiGraphics.drawString(this.font, "RECEIVING...", rightX + 40, topLeftY + 60, 0x888888, false);
@@ -252,8 +259,6 @@ public class TerminalCheckScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (!HAS_ACTIVE_SIGNAL || arrivalTimer > 0) return super.mouseClicked(mouseX, mouseY, button);
-
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         int startX = centerX - 190;
@@ -261,7 +266,24 @@ public class TerminalCheckScreen extends Screen {
         int topLeftX = startX + 20;
         int btnY = startY + 210;
         int finishBtnX = topLeftX + 70;
+        int ejectX = finishBtnX + 70;
 
+        // 1. Сначала проверяем кнопку EJECT! Она должна работать всегда (главное, чтобы не играла музыка).
+        if (!isPlaying && mouseX >= ejectX && mouseX <= ejectX + 20 && mouseY >= btnY && mouseY <= btnY + 20) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+            net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.EjectDrivePacket(terminalPos));
+
+            HAS_ACTIVE_SIGNAL = false;
+            this.minecraft.setScreen(null);
+            return true;
+        }
+
+        // 2. Если сигнала нет или он еще "скачивается", блокируем нажатия на PLAY и FINISH
+        if (!HAS_ACTIVE_SIGNAL || arrivalTimer > 0) {
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
+
+        // 3. Кнопка PLAY / STOP
         if (mouseX >= topLeftX && mouseX <= topLeftX + 60 && mouseY >= btnY && mouseY <= btnY + 20) {
             if (isPlaying) {
                 if (currentSound != null) Minecraft.getInstance().getSoundManager().stop(currentSound);
@@ -270,16 +292,12 @@ public class TerminalCheckScreen extends Screen {
                 net.minecraft.sounds.SoundEvent[] sounds;
 
                 if (CURRENT_SIGNAL_LEVEL >= 3) {
-                    // === СТАДИЯ 3 ===
                     sounds = new net.minecraft.sounds.SoundEvent[]{ getStage3Sound(CURRENT_SIGNAL_TYPE) };
                 } else if (CURRENT_SIGNAL_LEVEL == 2) {
-                    // === СТАДИЯ 2 ===
                     sounds = new net.minecraft.sounds.SoundEvent[]{VotmSounds.LOW1.get(), VotmSounds.LOW2.get(), VotmSounds.LOW3.get(), VotmSounds.LOW4.get(), VotmSounds.LOW5.get(), VotmSounds.LOW6.get(), VotmSounds.LOW7.get(), VotmSounds.LOW8.get()};
                 } else if (CURRENT_SIGNAL_LEVEL == 1) {
-                    // === СТАДИЯ 1 ===
                     sounds = new net.minecraft.sounds.SoundEvent[]{VotmSounds.NOISY1.get(), VotmSounds.NOISY2.get(), VotmSounds.NOISY3.get(), VotmSounds.NOISY4.get(), VotmSounds.NOISY5.get(), VotmSounds.NOISY6.get(), VotmSounds.NOISY7.get(), VotmSounds.NOISY8.get()};
                 } else {
-                    // === СТАДИЯ 0 (RAW) ===
                     sounds = new net.minecraft.sounds.SoundEvent[]{VotmSounds.RAW1.get(), VotmSounds.RAW2.get(), VotmSounds.RAW3.get(), VotmSounds.RAW4.get(), VotmSounds.RAW5.get(), VotmSounds.RAW6.get(), VotmSounds.RAW7.get(), VotmSounds.RAW8.get()};
                 }
 
@@ -292,6 +310,7 @@ public class TerminalCheckScreen extends Screen {
             return true;
         }
 
+        // 4. Кнопка FINISH
         if (mouseX >= finishBtnX && mouseX <= finishBtnX + 60 && mouseY >= btnY && mouseY <= btnY + 20) {
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
             if (currentSound != null) Minecraft.getInstance().getSoundManager().stop(currentSound);
