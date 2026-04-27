@@ -8,6 +8,7 @@
   "item.voicesofthemines.trash_bag": "Trash Bag",
   "item.voicesofthemines.trash_roll": "Trash Roll",
   "item.voicesofthemines.hook": "Hook",
+  "item.voicesofthemines.hook_last_part": "Hook End",
   "item.voicesofthemines.disk_blue": "Blue Disk",
   "item.voicesofthemines.hazard_helmet": "Hazmat Helmet",
   "item.voicesofthemines.hazard_chestplate": "Hazmat Chestplate",
@@ -44,6 +45,7 @@
 
 
   "block.voicesofthemines.kerfur_workbench": "Workbench",
+  "block.voicesofthemines.drive_box": "Drive Box",
   "block.voicesofthemines.trash_bin": "Trash Bin",
   "block.voicesofthemines.poster": "Poster",
   "block.voicesofthemines.keypad": "Keypad",
