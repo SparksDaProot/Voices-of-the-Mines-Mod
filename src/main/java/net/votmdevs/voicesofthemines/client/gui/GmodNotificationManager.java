@@ -42,7 +42,8 @@ public class GmodNotificationManager {
         long currentTime = System.currentTimeMillis();
         Iterator<Notification> iterator = notifications.iterator();
 
-        int yOffset = screenHeight - 80;
+        float scale = 0.8F;
+        int yOffset = screenHeight - 60;
 
         while (iterator.hasNext()) {
             Notification notif = iterator.next();
@@ -71,14 +72,22 @@ public class GmodNotificationManager {
                 xShift = boxWidth * t;
             }
 
-            int x = screenWidth - boxWidth + (int)xShift - 20;
-            int y = yOffset;
+            float screenX = screenWidth - (boxWidth * scale) + (xShift * scale) - 20;
+            float screenY = yOffset;
+
+            graphics.pose().pushPose();
+            graphics.pose().scale(scale, scale, 1.0F);
+
+            int x = (int) (screenX / scale);
+            int y = (int) (screenY / scale);
 
             graphics.fill(x, y, x + boxWidth, y + boxHeight, 0xCC000000);
             graphics.blit(ICON, x + 6, y + 8, 0, 0, 16, 16, 16, 16);
             graphics.drawString(font, notif.message, x + 28, y + 12, 0xFFFFFF);
 
-            yOffset -= (boxHeight + 5);
+            graphics.pose().popPose();
+
+            yOffset -= (int)((boxHeight + 5) * scale);
         }
     }
 

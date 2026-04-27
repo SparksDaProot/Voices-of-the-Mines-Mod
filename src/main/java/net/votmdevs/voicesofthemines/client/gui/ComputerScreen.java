@@ -582,7 +582,11 @@ public class ComputerScreen extends Screen {
             this.relative = true;
         }
         @Override
-        public void tick() {}
+        public void tick() {
+            if (!(Minecraft.getInstance().screen instanceof ComputerScreen)) {
+                this.stop();
+            }
+        }
     }
     private void checkUpgradeClick(double mX, double mY, int x, int y, String type, int curLvl, int maxLvl) {
         if (mX >= x && mX <= x + 40 && mY >= y && mY <= y + 15) {
