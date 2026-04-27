@@ -28,6 +28,7 @@ public class ClientInputHandler {
 
     private static boolean wasJumpKeyDown = false;
     private static boolean wasPickKeyDown = false;
+    public static boolean IS_BAD_SUN = false;
 
     private static net.minecraft.client.resources.sounds.SoundInstance atvSoundInstance = null;
     private static String currentAtvSoundState = "none"; // none, idle, drive_start, drive_loop
@@ -99,6 +100,27 @@ public class ClientInputHandler {
                         activeAtv = (net.votmdevs.voicesofthemines.entity.AtvEntity) e;
                     }
                 }
+            }
+        }
+
+        if (IS_BAD_SUN && mc.level.isDay()) {
+            net.minecraft.core.BlockPos eyePos = net.minecraft.core.BlockPos.containing(mc.player.getEyePosition());
+            if (mc.level.canSeeSky(eyePos)) {
+
+                float celestialAngle = mc.level.getTimeOfDay(1.0F);
+
+                float targetYaw = (celestialAngle > 0.25F && celestialAngle < 0.75F) ? 90.0F : -90.0F;
+
+                float targetPitch = (float) (Math.cos(celestialAngle * Math.PI * 2.0) * -90.0);
+
+                float currentYaw = mc.player.getYRot();
+                float currentPitch = mc.player.getXRot();
+
+                float yawDiff = net.minecraft.util.Mth.wrapDegrees(targetYaw - currentYaw);
+                float pitchDiff = targetPitch - currentPitch;
+
+                mc.player.setYRot(currentYaw + yawDiff * 0.1F);
+                mc.player.setXRot(currentPitch + pitchDiff * 0.1F);
             }
         }
 
@@ -308,6 +330,42 @@ public class ClientInputHandler {
             event.getInput().right = false;
             event.getInput().jumping = false;
             event.getInput().shiftKeyDown = false;
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRenderSky(net.minecraftforge.client.event.RenderLevelStageEvent event) {
+        if (event.getStage() == net.minecraftforge.client.event.RenderLevelStageEvent.Stage.AFTER_SKY) {
+            Minecraft mc = Minecraft.getInstance();
+
+            if (IS_BAD_SUN && mc.level != null && mc.level.isDay()) {
+                com.mojang.blaze3d.vertex.PoseStack poseStack = event.getPoseStack();
+                poseStack.pushPose();
+
+                poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-90.0F));
+                poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(mc.level.getTimeOfDay(event.getPartialTick()) * 360.0F));
+
+                org.joml.Matrix4f matrix4f = poseStack.last().pose();
+                com.mojang.blaze3d.vertex.Tesselator tesselator = com.mojang.blaze3d.vertex.Tesselator.getInstance();
+                com.mojang.blaze3d.vertex.BufferBuilder bufferbuilder = tesselator.getBuilder();
+
+                ResourceLocation BAD_SUN_TEXTURE = new ResourceLocation(VoicesOfTheMines.MODID, "textures/environment/bad_sun.png");
+                com.mojang.blaze3d.systems.RenderSystem.setShader(net.minecraft.client.renderer.GameRenderer::getPositionTexShader);
+                com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(0, BAD_SUN_TEXTURE);
+                com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+                com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
+
+                float size = 6.0F;
+                bufferbuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_TEX);
+                bufferbuilder.vertex(matrix4f, -size, 100.0F, -size).uv(0.0F, 0.0F).endVertex();
+                bufferbuilder.vertex(matrix4f, size, 100.0F, -size).uv(1.0F, 0.0F).endVertex();
+                bufferbuilder.vertex(matrix4f, size, 100.0F, size).uv(1.0F, 1.0F).endVertex();
+                bufferbuilder.vertex(matrix4f, -size, 100.0F, size).uv(0.0F, 1.0F).endVertex();
+                tesselator.end();
+
+                com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+                poseStack.popPose();
+            }
         }
     }
 

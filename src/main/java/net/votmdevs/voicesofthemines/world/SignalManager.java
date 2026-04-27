@@ -40,6 +40,8 @@ public class SignalManager extends SavedData {
     private int tickCounter = 0;
     private final PlayerData globalPlayerData = new PlayerData();
 
+    public boolean isBadSunActive = false;
+
     public int currentDay = 1;
     public final Map<String, String> dailyHashes = new HashMap<>();
     public final Map<String, Float> calibrations = new HashMap<>();
@@ -65,6 +67,13 @@ public class SignalManager extends SavedData {
     public void advanceDay() {
         currentDay++;
         generateDailyHashes();
+
+        if (currentDay % 24 == 0) {
+            isBadSunActive = true;
+        } else {
+            isBadSunActive = false;
+        }
+
         setDirty();
     }
 
@@ -149,6 +158,7 @@ public class SignalManager extends SavedData {
         tag.putInt("TickCounter", tickCounter);
 
         tag.putInt("CurrentDay", currentDay);
+        tag.putBoolean("BadSun", isBadSunActive);
         CompoundTag hashTag = new CompoundTag();
         for (Map.Entry<String, String> e : dailyHashes.entrySet()) hashTag.putString(e.getKey(), e.getValue());
         tag.put("DailyHashes", hashTag);
@@ -178,6 +188,7 @@ public class SignalManager extends SavedData {
         if (tag.contains("TickCounter")) manager.tickCounter = tag.getInt("TickCounter");
 
         if (tag.contains("CurrentDay")) manager.currentDay = tag.getInt("CurrentDay");
+        if (tag.contains("BadSun")) manager.isBadSunActive = tag.getBoolean("BadSun");
         if (tag.contains("DailyHashes")) {
             CompoundTag ht = tag.getCompound("DailyHashes");
             for (String k : ht.getAllKeys()) manager.dailyHashes.put(k, ht.getString(k));

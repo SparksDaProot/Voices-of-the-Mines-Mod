@@ -225,6 +225,7 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
         if (item == VoicesOfTheMines.ACCESSORY_JACKET.get()) return 1;
         if (item == VoicesOfTheMines.KEYPAD_ITEM.get()) return 10;
         if (item == VoicesOfTheMines.POSTER_ITEM.get()) return 5;
+        if (item == VoicesOfTheMines.MARACAS.get()) return 5;
         if (item == VoicesOfTheMines.TACO.get()) return 2;
         if (item == VoicesOfTheMines.TOBLERONE.get()) return 2;
         if (item == VoicesOfTheMines.CHEESE.get()) return 2;

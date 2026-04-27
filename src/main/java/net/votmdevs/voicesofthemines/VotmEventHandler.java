@@ -1,5 +1,6 @@
 package net.votmdevs.voicesofthemines;
 
+import net.minecraft.core.BlockPos;
 import net.votmdevs.voicesofthemines.entity.CockroachEntity;
 import net.votmdevs.voicesofthemines.entity.FleshEntity;
 import net.minecraft.server.level.ServerLevel;
@@ -36,6 +37,75 @@ public class VotmEventHandler {
         }
     }
 
+    // === ЛОГИКА ПЛОХОГО СОЛНЦА (Урон и Мясо) ===
+    @SubscribeEvent
+    public static void onLivingTick(net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent event) {
+        net.minecraft.world.entity.LivingEntity entity = event.getEntity();
+        Level level = entity.level();
+
+        if (entity instanceof net.votmdevs.voicesofthemines.entity.FleshEntity ||
+                entity instanceof net.votmdevs.voicesofthemines.entity.GarbageEntity ||
+                entity instanceof net.votmdevs.voicesofthemines.entity.FuelCanEntity ||
+                entity instanceof net.votmdevs.voicesofthemines.entity.OmegaKerfurEntity ||
+                entity instanceof net.votmdevs.voicesofthemines.entity.KerfurEntity ||
+                entity instanceof net.votmdevs.voicesofthemines.entity.DroneEntity ||
+                entity instanceof net.votmdevs.voicesofthemines.entity.DriveEntity ||
+                entity instanceof net.votmdevs.voicesofthemines.entity.BloodSplashEntity ||
+                entity instanceof net.votmdevs.voicesofthemines.entity.AtvEntity ||
+                entity instanceof net.votmdevs.voicesofthemines.entity.MaxwellEntity ||
+                entity instanceof net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity) {
+            return;
+        }
+
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
+            if (serverLevel.dimension() == Level.OVERWORLD) {
+                net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(serverLevel);
+
+                if (manager.isBadSunActive && serverLevel.isDay()) {
+                    if (entity.tickCount % 20 == 0) {
+
+                        BlockPos eyePos = BlockPos.containing(entity.getEyePosition());
+                        if (serverLevel.canSeeSky(eyePos)) {
+
+                            entity.hurt(serverLevel.damageSources().onFire(), 3.0F);
+
+                            if (serverLevel.random.nextFloat() < 0.15F) {
+                                FleshEntity flesh = VoicesOfTheMines.FLESH.get().create(serverLevel);
+                                if (flesh != null) {
+                                    flesh.moveTo(entity.getX(), entity.getY() + 1.0, entity.getZ(), 0, 0);
+                                    flesh.setDeltaMovement((serverLevel.random.nextFloat() - 0.5) * 0.3, 0.2, (serverLevel.random.nextFloat() - 0.5) * 0.3);
+                                    serverLevel.addFreshEntity(flesh);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // === КОМАНДА /votmevent badsun ===
+    @SubscribeEvent
+    public static void onCommandsRegister(net.minecraftforge.event.RegisterCommandsEvent event) {
+        event.getDispatcher().register(net.minecraft.commands.Commands.literal("votmevent")
+                .requires(s -> s.hasPermission(2)) // Доступно только админам/в одиночной игре с читами
+                .then(net.minecraft.commands.Commands.literal("badsun")
+                        .executes(context -> {
+                            ServerLevel level = context.getSource().getLevel();
+                            net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(level);
+
+                            // Переключаем статус
+                            manager.isBadSunActive = !manager.isBadSunActive;
+                            manager.setDirty();
+
+                            // Сообщаем в чат
+                            context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Bad Sun event is now: " + manager.isBadSunActive), true);
+                            return 1;
+                        })
+                )
+        );
+    }
+
     @SubscribeEvent
     public static void onLevelTick(TickEvent.LevelTickEvent event) {
         if (event.phase == TickEvent.Phase.END && !event.level.isClientSide()) {
@@ -46,6 +116,13 @@ public class VotmEventHandler {
 
                 if (level.getDayTime() > 0 && level.getDayTime() % 24000 == 0) {
                     manager.advanceDay();
+                }
+
+                if (level.getGameTime() % 60 == 0) {
+                    net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.send(
+                            net.minecraftforge.network.PacketDistributor.ALL.noArg(),
+                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncEventStatePacket(manager.isBadSunActive && level.isDay())
+                    );
                 }
 
                 if (level.getGameTime() % 6000 == 0) {

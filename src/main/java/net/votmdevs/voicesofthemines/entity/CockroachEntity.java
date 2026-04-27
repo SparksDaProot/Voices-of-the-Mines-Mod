@@ -1,5 +1,6 @@
 package net.votmdevs.voicesofthemines.entity;
 
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.VotmSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -72,6 +73,19 @@ public class CockroachEntity extends PathfinderMob implements GeoEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && !this.level().isClientSide()) {
+
+            if (player.getMainHandItem().getItem() == VoicesOfTheMines.MARACAS.get() && player.getOffhandItem().getItem() == VoicesOfTheMines.MARACAS.get()) {
+                if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                    net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
+                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.NotificationPacket("What did you expect, this isn't Alex's Mobs"),
+                            serverPlayer.connection.connection,
+                            net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
+                    );
+                }
+                player.swing(hand, true);
+                return InteractionResult.SUCCESS;
+            }
+
             this.playSound(VotmSounds.COCKROACH_EAT.get(), 1.0F, 1.0F + (this.random.nextFloat() - 0.5F) * 0.2F);
             player.getFoodData().eat(1, 0.1F);
             this.discard();

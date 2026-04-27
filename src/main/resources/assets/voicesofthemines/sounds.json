@@ -267,6 +267,12 @@
   "drivebox_close": { "sounds": [ "voicesofthemines:drivebox_close" ] },
   "drivebox_open": { "sounds": [ "voicesofthemines:drivebox_open" ] },
 
+  "maracas1": { "sounds": [ "voicesofthemines:maracas1" ] },
+  "maracas2": { "sounds": [ "voicesofthemines:maracas2" ] },
+  "maracas3": { "sounds": [ "voicesofthemines:maracas3" ] },
+  "maracas4": { "sounds": [ "voicesofthemines:maracas4" ] },
+
+
   "mannequin_hurt": {
     "sounds": [
       "voicesofthemines:damage_wood_1",

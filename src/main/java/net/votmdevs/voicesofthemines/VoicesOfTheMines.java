@@ -381,6 +381,26 @@ public class VoicesOfTheMines {
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<DriveBoxBlockEntity>> DRIVE_BOX_BE = BLOCK_ENTITIES.register("drive_box_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(DriveBoxBlockEntity::new, DRIVE_BOX.get()).build(null));
 
+    //candle handel
+
+    public static final RegistryObject<Block> CANDLE_HANDLE = BLOCKS.register("candle_handle",
+            () -> new net.votmdevs.voicesofthemines.block.CandleHandleBlock(BlockBehaviour.Properties.copy(Blocks.TORCH)
+                    .instabreak()
+                    .noOcclusion()
+                    .lightLevel(state -> state.getValue(net.votmdevs.voicesofthemines.block.CandleHandleBlock.LIT) ? 14 : 0)));
+
+    public static final RegistryObject<Item> CANDLE_HANDLE_ITEM = ITEMS.register("candle_handle",
+            () -> new BlockItem(CANDLE_HANDLE.get(), new Item.Properties()));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.CandleHandleBlockEntity>> CANDLE_HANDLE_BE = BLOCK_ENTITIES.register("candle_handle_be",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.CandleHandleBlockEntity::new, CANDLE_HANDLE.get()).build(null));
+
+
+
+    // maracas :D
+    public static final RegistryObject<Item> MARACAS = ITEMS.register("maracas",
+            () -> new net.votmdevs.voicesofthemines.item.MaracasItem(new Item.Properties().stacksTo(1)));
+
 
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity>> TERMINAL_BE = BLOCK_ENTITIES.register("terminal_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity::new,
@@ -574,6 +594,7 @@ public class VoicesOfTheMines {
             event.accept(TERMINAL_PROCESSING_ITEM);
             event.accept(TERMINAL_CHECK_ITEM);
             event.accept(TERMINAL_CALIBRATE_ITEM);
+            event.accept(CANDLE_HANDLE_ITEM);
         }
 
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
@@ -627,6 +648,7 @@ public class VoicesOfTheMines {
             event.accept(TRASH_BAG);
             event.accept(TRASH_ROLL);
             event.accept(HOOK_ITEM);
+            event.accept(MARACAS);
         }
     }
 
@@ -675,6 +697,7 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(CANDLE_HANDLE_BE.get(), CandleHandleRenderer::new);
                 event.registerBlockEntityRenderer(DRIVE_BOX_BE.get(), DriveBoxRenderer::new);
                 event.registerEntityRenderer(MANNEQUIN.get(), manager -> new BaseMannequinRenderer<>(manager, new MannequinModel()));
                 event.registerEntityRenderer(HOSTILE_MANNEQUIN.get(), manager -> new BaseMannequinRenderer<>(manager, new HostileMannequinModel()));

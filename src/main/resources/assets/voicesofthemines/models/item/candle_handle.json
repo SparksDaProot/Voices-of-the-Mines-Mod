@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "voicesofthemines:item/candle_handle_icon"
+  }
+}

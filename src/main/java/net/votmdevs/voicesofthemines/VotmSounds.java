@@ -151,6 +151,12 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> DRIVEBOX_OPEN = registerSoundEvent("drivebox_open");
     public static final RegistryObject<SoundEvent> DRIVEBOX_CLOSE = registerSoundEvent("drivebox_close");
 
+
+    public static final RegistryObject<SoundEvent> MARACAS_1 = registerSoundEvent("maracas1");
+    public static final RegistryObject<SoundEvent> MARACAS_2 = registerSoundEvent("maracas2");
+    public static final RegistryObject<SoundEvent> MARACAS_3 = registerSoundEvent("maracas3");
+    public static final RegistryObject<SoundEvent> MARACAS_4 = registerSoundEvent("maracas4");
+
     public static final RegistryObject<SoundEvent> OMEGA_SPRINT = registerSoundEvent("omega_sprint");
     public static final RegistryObject<SoundEvent> OMEGA_BONK = registerSoundEvent("omega_bonk");
     public static final RegistryObject<SoundEvent> OMEGA_STEP_DIRT = registerSoundEvent("omega_step_dirt");

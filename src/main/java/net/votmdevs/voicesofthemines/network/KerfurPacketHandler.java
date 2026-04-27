@@ -32,6 +32,7 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, SyncEventStatePacket.class, SyncEventStatePacket::encode, SyncEventStatePacket::decode, SyncEventStatePacket::handle);
         INSTANCE.registerMessage(id++, ConsoleCommandPacket.class, ConsoleCommandPacket::encode, ConsoleCommandPacket::decode, ConsoleCommandPacket::handle);
         INSTANCE.registerMessage(id++, ConsoleOutputPacket.class, ConsoleOutputPacket::encode, ConsoleOutputPacket::decode, ConsoleOutputPacket::handle);
         INSTANCE.registerMessage(id++, SetCalibrationPacket.class, SetCalibrationPacket::encode, SetCalibrationPacket::decode, SetCalibrationPacket::handle);
@@ -1075,6 +1076,19 @@ public class KerfurPacketHandler {
                 if (player != null) {
                     net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel()).calibrations.put(msg.satellite, 100.0f);
                 }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    public static class SyncEventStatePacket {
+        private final boolean isBadSun;
+        public SyncEventStatePacket(boolean isBadSun) { this.isBadSun = isBadSun; }
+        public static void encode(SyncEventStatePacket msg, FriendlyByteBuf buffer) { buffer.writeBoolean(msg.isBadSun); }
+        public static SyncEventStatePacket decode(FriendlyByteBuf buffer) { return new SyncEventStatePacket(buffer.readBoolean()); }
+
+        public static void handle(SyncEventStatePacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.votmdevs.voicesofthemines.client.ClientInputHandler.IS_BAD_SUN = msg.isBadSun;
             });
             ctx.get().setPacketHandled(true);
         }
