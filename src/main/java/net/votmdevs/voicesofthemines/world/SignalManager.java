@@ -46,6 +46,7 @@ public class SignalManager extends SavedData {
     public final Map<String, String> dailyHashes = new HashMap<>();
     public final Map<String, Float> calibrations = new HashMap<>();
     public final Map<String, BlockPos> placedServers = new HashMap<>();
+    public final Map<String, Long> lastFixedGameTimes = new HashMap<>();
 
     public SignalManager() {
         for (String sat : SATELLITES) calibrations.put(sat, 100.0f);
@@ -77,14 +78,98 @@ public class SignalManager extends SavedData {
         setDirty();
     }
 
-    public void degradeRandomCalibration() {
+    public void degradeRandomCalibration(long gameTime, long recentlyFixedProtectionTicks) {
         Random rand = new Random();
-        String target = SATELLITES[rand.nextInt(SATELLITES.length)];
-        float current = calibrations.getOrDefault(target, 100.0f);
-        current -= (1.0f + rand.nextFloat() * 2.0f); // Падение от 1 до 3%
-        if (current < 0) current = 0;
-        calibrations.put(target, current);
+
+        List<String> validTargets = new ArrayList<>();
+
+        for (String sat : SATELLITES) {
+            long lastFixed = lastFixedGameTimes.getOrDefault(sat, Long.MIN_VALUE);
+
+            boolean isProtected = recentlyFixedProtectionTicks > 0L
+                    && lastFixed != Long.MIN_VALUE
+                    && gameTime - lastFixed < recentlyFixedProtectionTicks;
+
+            if (isProtected) {
+                if (net.votmdevs.voicesofthemines.config.VotmConfig.debugSignalBreaks()) {
+                    LOGGER.info(
+                            "[VOTM Signal Debug] Skipping {} because it was recently fixed. gameTime={} | lastFixed={} | remainingProtectionTicks={}",
+                            sat,
+                            gameTime,
+                            lastFixed,
+                            recentlyFixedProtectionTicks - (gameTime - lastFixed)
+                    );
+                }
+            } else {
+                validTargets.add(sat);
+            }
+        }
+
+        if (validTargets.isEmpty()) {
+            if (net.votmdevs.voicesofthemines.config.VotmConfig.debugSignalBreaks()) {
+                LOGGER.info(
+                        "[VOTM Signal Debug] No calibration degraded. All satellites are protected. gameTime={} | protectionTicks={}",
+                        gameTime,
+                        recentlyFixedProtectionTicks
+                );
+            }
+
+            return;
+        }
+
+        String target = validTargets.get(rand.nextInt(validTargets.size()));
+
+        float oldValue = calibrations.getOrDefault(target, 100.0F);
+        float loss = 1.0F + rand.nextFloat() * 2.0F;
+        float newValue = oldValue - loss;
+
+        if (newValue < 0.0F) {
+            newValue = 0.0F;
+        }
+
+        calibrations.put(target, newValue);
         setDirty();
+
+        if (net.votmdevs.voicesofthemines.config.VotmConfig.debugSignalBreaks()) {
+            LOGGER.info(
+                    "[VOTM Signal Debug] Degraded {} calibration. old={} | loss={} | new={} | gameTime={}",
+                    target,
+                    oldValue,
+                    loss,
+                    newValue,
+                    gameTime
+            );
+        }
+    }
+
+    public void markCalibrationFixed(String satellite, long gameTime) {
+        if (satellite == null || satellite.isEmpty()) {
+            return;
+        }
+
+        lastFixedGameTimes.put(satellite, gameTime);
+        setDirty();
+    }
+
+    public void setCalibrationFixed(String satellite, float value, long gameTime) {
+        if (satellite == null || satellite.isEmpty()) {
+            return;
+        }
+
+        float clamped = Math.max(0.0F, Math.min(100.0F, value));
+
+        calibrations.put(satellite, clamped);
+        lastFixedGameTimes.put(satellite, gameTime);
+        setDirty();
+
+        if (net.votmdevs.voicesofthemines.config.VotmConfig.debugSignalBreaks()) {
+            LOGGER.info(
+                    "[VOTM Signal Debug] Marked {} as fixed. calibration={} | gameTime={}",
+                    satellite,
+                    clamped,
+                    gameTime
+            );
+        }
     }
 
     public PlayerData getGlobalPlayerData() { return globalPlayerData; }

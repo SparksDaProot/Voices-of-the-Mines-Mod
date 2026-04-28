@@ -41,6 +41,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
+import net.votmdevs.voicesofthemines.config.VotmConfig;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -49,7 +52,7 @@ import java.util.List;
 @Mod(VoicesOfTheMines.MODID)
 public class VoicesOfTheMines {
     public static final String MODID = "voicesofthemines";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
@@ -62,7 +65,7 @@ public class VoicesOfTheMines {
     public static final RegistryObject<EntityType<CockroachEntity>> COCKROACH = ENTITY_TYPES.register("cockroach",
             () -> EntityType.Builder.of(CockroachEntity::new, MobCategory.MISC)
                     .sized(0.3f, 0.1f)
-                    .build(new ResourceLocation(MODID, "cockroach").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "cockroach").toString()));
 
     public static final RegistryObject<Item> COCKROACH_SPAWN_EGG = ITEMS.register("cockroach_spawn_egg",
             () -> new ForgeSpawnEggItem(COCKROACH, 0x4B3A2A, 0x2A1F16, new Item.Properties()));
@@ -70,7 +73,7 @@ public class VoicesOfTheMines {
     public static final RegistryObject<EntityType<MaxwellEntity>> MAXWELL = ENTITY_TYPES.register("maxwell",
             () -> EntityType.Builder.of(MaxwellEntity::new, MobCategory.MISC)
                     .sized(0.6f, 0.5f)
-                    .build(new ResourceLocation(MODID, "maxwell").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "maxwell").toString()));
 
     public static final RegistryObject<Item> MAXWELL_ITEM = ITEMS.register("maxwell_item",
             () -> new Item(new Item.Properties()) {
@@ -190,54 +193,54 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     TABLE.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/table.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/table.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/table.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/table.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<Item> WALL_BEHIND_ITEM = ITEMS.register("wall_behind",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     WALL_BEHIND.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/wall_behind.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/wall_behind.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/wall_behind.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/wall_behind.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<Item> TERMINAL_FIND_ITEM = ITEMS.register("terminal_find",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     TERMINAL_FIND.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/terminal_find.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/terminal_find.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/terminal_find.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/terminal_find.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<Item> TERMINAL_PROCESSING_ITEM = ITEMS.register("terminal_processing",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     TERMINAL_PROCESSING.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/terminal_processing.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/terminal_processing.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/terminal_processing.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/terminal_processing.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<Item> TERMINAL_CHECK_ITEM = ITEMS.register("terminal_check",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     TERMINAL_CHECK.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/terminal_check.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/terminal_check.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/terminal_check.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/terminal_check.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<Item> TERMINAL_CALIBRATE_ITEM = ITEMS.register("terminal_calibrate",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     TERMINAL_CALIBRATE.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/terminal_calibrate.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/terminal_calibrate.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/terminal_calibrate.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/terminal_calibrate.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<Item> ACCESSORY_MAID = ITEMS.register("maid", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -270,15 +273,15 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     VOTV_DOOR.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/votv_door.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/votv_door.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/votv_door.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/votv_door.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<EntityType<OmegaKerfurEntity>> OMEGA_KERFUR = ENTITY_TYPES.register("omega_kerfur",
             () -> EntityType.Builder.of(OmegaKerfurEntity::new, MobCategory.CREATURE)
                     .sized(0.8f, 2.2f)
-                    .build(new ResourceLocation(MODID, "omega_kerfur").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "omega_kerfur").toString()));
 
     public static final RegistryObject<Item> OMEGA_KERFUR_SPAWN_EGG = ITEMS.register("omega_kerfur_spawn_egg",
             () -> new ForgeSpawnEggItem(OMEGA_KERFUR, 0x3F3F3F, 0x00FF00, new Item.Properties()));
@@ -309,7 +312,7 @@ public class VoicesOfTheMines {
     public static final RegistryObject<EntityType<MannequinEntity>> MANNEQUIN = ENTITY_TYPES.register("mannequin",
             () -> EntityType.Builder.of(MannequinEntity::new, MobCategory.MISC)
                     .sized(0.6f, 1.8f)
-                    .build(new ResourceLocation(MODID, "mannequin").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "mannequin").toString()));
 
     public static final RegistryObject<Item> MANNEQUIN_SPAWN_EGG = ITEMS.register("mannequin_spawn_egg",
             () -> new ForgeSpawnEggItem(MANNEQUIN, 0x8B7355, 0x5C4033, new Item.Properties()));
@@ -317,7 +320,7 @@ public class VoicesOfTheMines {
     public static final RegistryObject<EntityType<HostileMannequinEntity>> HOSTILE_MANNEQUIN = ENTITY_TYPES.register("hostile_mannequin",
             () -> EntityType.Builder.of(HostileMannequinEntity::new, MobCategory.MONSTER)
                     .sized(0.6f, 1.8f)
-                    .build(new ResourceLocation(MODID, "hostile_mannequin").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "hostile_mannequin").toString()));
 
     public static final RegistryObject<Item> HOSTILE_MANNEQUIN_SPAWN_EGG = ITEMS.register("hostile_mannequin_spawn_egg",
             () -> new ForgeSpawnEggItem(HOSTILE_MANNEQUIN, 0x8B7355, 0xFF0000, new Item.Properties()));
@@ -325,14 +328,14 @@ public class VoicesOfTheMines {
     public static final RegistryObject<EntityType<MannequinStandEntity>> MANNEQUIN_STAND = ENTITY_TYPES.register("mannequin_stand",
             () -> EntityType.Builder.of(MannequinStandEntity::new, MobCategory.MISC)
                     .sized(0.6f, 0.1f)
-                    .build(new ResourceLocation(MODID, "mannequin_stand").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "mannequin_stand").toString()));
 
 
 
     public static final RegistryObject<EntityType<AtvEntity>> ATV = ENTITY_TYPES.register("atv",
             () -> EntityType.Builder.of(AtvEntity::new, MobCategory.MISC)
                     .sized(1.5f, 1.2f)
-                    .build(new ResourceLocation(MODID, "atv").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "atv").toString()));
 
     public static final RegistryObject<Item> ATV_SPAWN_EGG = ITEMS.register("atv_spawn_egg",
             () -> new ForgeSpawnEggItem(ATV, 0x555555, 0x111111, new Item.Properties()));
@@ -341,12 +344,12 @@ public class VoicesOfTheMines {
             () -> EntityType.Builder.<net.votmdevs.voicesofthemines.entity.HookEntity>of(net.votmdevs.voicesofthemines.entity.HookEntity::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f)
                     .clientTrackingRange(20)
-                    .build(new ResourceLocation(MODID, "hook_entity").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "hook_entity").toString()));
 
     public static final RegistryObject<EntityType<FleshEntity>> FLESH = ENTITY_TYPES.register("flesh",
             () -> EntityType.Builder.of(FleshEntity::new, MobCategory.MISC)
                     .sized(0.4f, 0.4f)
-                    .build(new ResourceLocation(MODID, "flesh").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "flesh").toString()));
 
     public static final RegistryObject<Item> FLESH_SPAWN_EGG = ITEMS.register("flesh_spawn_egg",
             () -> new ForgeSpawnEggItem(FLESH, 0x880000, 0x440000, new Item.Properties()));
@@ -354,7 +357,7 @@ public class VoicesOfTheMines {
     public static final RegistryObject<EntityType<FuelCanEntity>> FUEL_CAN = ENTITY_TYPES.register("fuel_can",
             () -> EntityType.Builder.of(FuelCanEntity::new, MobCategory.MISC)
                     .sized(0.4f, 0.4f)
-                    .build(new ResourceLocation(MODID, "fuel_can").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "fuel_can").toString()));
 
     public static final RegistryObject<Item> FUEL_CAN_SPAWN_EGG = ITEMS.register("fuel_can_spawn_egg",
             () -> new ForgeSpawnEggItem(FUEL_CAN, 0x880000, 0x440000, new Item.Properties()));
@@ -362,12 +365,12 @@ public class VoicesOfTheMines {
     public static final RegistryObject<EntityType<GarbageEntity>> GARBAGE = ENTITY_TYPES.register("garbage",
             () -> EntityType.Builder.of(GarbageEntity::new, MobCategory.MISC)
                     .sized(0.4f, 0.4f)
-                    .build(new ResourceLocation(MODID, "garbage").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "garbage").toString()));
 
     public static final RegistryObject<EntityType<DriveEntity>> DRIVE = ENTITY_TYPES.register("drive",
             () -> EntityType.Builder.of(DriveEntity::new, MobCategory.MISC)
                     .sized(0.4f, 0.1f) // Плоский хитбокс
-                    .build(new ResourceLocation(MODID, "drive").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "drive").toString()));
 
     public static final RegistryObject<Item> DRIVE_SPAWN_EGG = ITEMS.register("drive_spawn_egg",
             () -> new ForgeSpawnEggItem(DRIVE, 0x111111, 0x555555, new Item.Properties()));
@@ -413,7 +416,7 @@ public class VoicesOfTheMines {
     public static final RegistryObject<EntityType<BloodSplashEntity>> BLOOD_SPLASH = ENTITY_TYPES.register("blood_splash",
             () -> EntityType.Builder.of(BloodSplashEntity::new, MobCategory.MISC)
                     .sized(1.0f, 0.1f)
-                    .build(new ResourceLocation(MODID, "blood_splash").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "blood_splash").toString()));
 
     public static final RegistryObject<Block> BOOK_RECIPE = BLOCKS.register("book_kerfur_recipe",
             () -> new net.votmdevs.voicesofthemines.block.BookRecipeBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).instabreak().noOcclusion()));
@@ -466,9 +469,9 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     SERVER_BLOCK.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/server.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/server.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/server.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/server.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ServerBlockEntity>> SERVER_BE = BLOCK_ENTITIES.register("server_be",
@@ -481,9 +484,9 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     CONSOLE_BLOCK.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/console.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/console.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/console.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/console.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ConsoleBlockEntity>> CONSOLE_BE = BLOCK_ENTITIES.register("console_be",
@@ -499,9 +502,9 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     COMPUTER_CHAIR.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/chair.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/chair.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/chair.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/chair.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<EntityType<SeatEntity>> SEAT_ENTITY = ENTITY_TYPES.register("seat",
@@ -525,16 +528,16 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
                     DRONE_PANEL.get(),
                     new Item.Properties(),
-                    new ResourceLocation(MODID, "geo/drone_panel.geo.json"),
-                    new ResourceLocation(MODID, "textures/block/drone_panel.png"),
-                    new ResourceLocation(MODID, "animations/empty.animation.json")
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/drone_panel.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/drone_panel.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
     public static final RegistryObject<EntityType<net.votmdevs.voicesofthemines.entity.DroneEntity>> DRONE = ENTITY_TYPES.register("drone",
             () -> EntityType.Builder.of(net.votmdevs.voicesofthemines.entity.DroneEntity::new, MobCategory.MISC)
                     .sized(1.5f, 1.0f)
                     .clientTrackingRange(128)
-                    .build(new ResourceLocation(MODID, "drone").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "drone").toString()));
 
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.DronePanelBlockEntity>> DRONE_PANEL_BE = BLOCK_ENTITIES.register("drone_panel_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.DronePanelBlockEntity::new, DRONE_PANEL.get()).build(null));
@@ -542,7 +545,7 @@ public class VoicesOfTheMines {
     public static final RegistryObject<EntityType<KerfurEntity>> KERFUR = ENTITY_TYPES.register("kerfur",
             () -> EntityType.Builder.of(KerfurEntity::new, MobCategory.CREATURE)
                     .sized(0.6f, 1.8f)
-                    .build(new ResourceLocation(MODID, "kerfur").toString()));
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "kerfur").toString()));
 
     public static final RegistryObject<Item> KERFUR_SPAWN_EGG = ITEMS.register("kerfur_spawn_egg",
             () -> new ForgeSpawnEggItem(KERFUR, 0xFFFFFF, 0x000000, new Item.Properties()));
@@ -560,6 +563,8 @@ public class VoicesOfTheMines {
                     .build());
 
     public VoicesOfTheMines(FMLJavaModLoadingContext context) {
+        context.registerConfig(ModConfig.Type.COMMON, VotmConfig.SERVER_SPEC);
+
         IEventBus modEventBus = context.getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
@@ -686,7 +691,7 @@ public class VoicesOfTheMines {
                     MenuScreens.register(DRONE_MENU.get(), net.votmdevs.voicesofthemines.client.gui.DroneScreen::new);
 
 
-                    net.minecraft.client.renderer.item.ItemProperties.register(VoicesOfTheMines.HOOK_ITEM.get(), new ResourceLocation(VoicesOfTheMines.MODID, "active"),
+                    net.minecraft.client.renderer.item.ItemProperties.register(VoicesOfTheMines.HOOK_ITEM.get(), ResourceLocation.fromNamespaceAndPath(VoicesOfTheMines.MODID, "active"),
                             (stack, level, entity, seed) -> {
 
                                 return stack.hasTag() && stack.getTag().getBoolean("Active") ? 1.0F : 0.0F;
@@ -731,7 +736,7 @@ public class VoicesOfTheMines {
                     net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
                     if (mc.player != null && mc.options.getCameraType().isFirstPerson()) {
                         if (mc.player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() == VoicesOfTheMines.HAZARD_HELMET.get()) {
-                            ResourceLocation HAZARD_OVERLAY = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/hazard_overlay.png");
+                            ResourceLocation HAZARD_OVERLAY = ResourceLocation.fromNamespaceAndPath(VoicesOfTheMines.MODID, "textures/gui/hazard_overlay.png");
                             com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
                             com.mojang.blaze3d.systems.RenderSystem.depthMask(false);
                             com.mojang.blaze3d.systems.RenderSystem.enableBlend();
@@ -886,7 +891,7 @@ public class VoicesOfTheMines {
                 poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(180f));
                 poseStack.scale(0.8f, 0.8f, 0.8f);
 
-                ResourceLocation SELECT_ICON = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/select.png");
+                ResourceLocation SELECT_ICON = ResourceLocation.fromNamespaceAndPath(VoicesOfTheMines.MODID, "textures/gui/select.png");
                 com.mojang.blaze3d.vertex.VertexConsumer vertexConsumer = bufferSource.getBuffer(net.minecraft.client.renderer.RenderType.entityTranslucent(SELECT_ICON));
                 org.joml.Matrix4f matrix4f = poseStack.last().pose();
                 org.joml.Matrix3f normalMatrix = poseStack.last().normal();

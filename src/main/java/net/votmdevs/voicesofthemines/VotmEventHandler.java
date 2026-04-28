@@ -125,8 +125,20 @@ public class VotmEventHandler {
                     );
                 }
 
-                if (level.getGameTime() % 6000 == 0) {
-                    manager.degradeRandomCalibration();
+                long breakIntervalTicks = net.votmdevs.voicesofthemines.config.VotmConfig.getServerBreakIntervalTicks();
+                long protectionTicks = net.votmdevs.voicesofthemines.config.VotmConfig.getRecentlyFixedProtectionTicks();
+
+                if (breakIntervalTicks > 0L && level.getGameTime() % breakIntervalTicks == 0L) {
+                    if (net.votmdevs.voicesofthemines.config.VotmConfig.debugSignalBreaks()) {
+                        VoicesOfTheMines.LOGGER.info(
+                                "[VOTM Signal Debug] Break timer fired at gameTime={} | intervalTicks={} | protectionTicks={}",
+                                level.getGameTime(),
+                                breakIntervalTicks,
+                                protectionTicks
+                        );
+                    }
+
+                    manager.degradeRandomCalibration(level.getGameTime(), protectionTicks);
                 }
             }
             if (level.getGameTime() % 20 == 0) {

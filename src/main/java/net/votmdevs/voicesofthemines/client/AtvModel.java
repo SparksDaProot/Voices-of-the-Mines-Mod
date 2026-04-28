@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class AtvModel extends GeoModel<AtvEntity> {
     @Override
     public ResourceLocation getModelResource(AtvEntity object) {
-        return new ResourceLocation(VoicesOfTheMines.MODID, "geo/atv.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(VoicesOfTheMines.MODID, "geo/atv.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(AtvEntity object) {
-        return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/atv.png");
+        return ResourceLocation.fromNamespaceAndPath(VoicesOfTheMines.MODID, "textures/entity/atv.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(AtvEntity animatable) {
-        return new ResourceLocation(VoicesOfTheMines.MODID, "animations/atv_animation.json");
+        return ResourceLocation.fromNamespaceAndPath(VoicesOfTheMines.MODID, "animations/atv_animation.json");
     }
 }
