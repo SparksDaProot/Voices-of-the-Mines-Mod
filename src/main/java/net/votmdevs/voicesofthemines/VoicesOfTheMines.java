@@ -384,6 +384,10 @@ public class VoicesOfTheMines {
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<DriveBoxBlockEntity>> DRIVE_BOX_BE = BLOCK_ENTITIES.register("drive_box_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(DriveBoxBlockEntity::new, DRIVE_BOX.get()).build(null));
 
+
+    public static final RegistryObject<Item> PAPER_SHEET = ITEMS.register("paper_sheet",
+            () -> new net.votmdevs.voicesofthemines.item.PaperSheetItem(new Item.Properties().stacksTo(16)));
+
     //candle handel
 
     public static final RegistryObject<Block> CANDLE_HANDLE = BLOCKS.register("candle_handle",

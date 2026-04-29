@@ -32,6 +32,7 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, SavePaperSheetPacket.class, SavePaperSheetPacket::encode, SavePaperSheetPacket::decode, SavePaperSheetPacket::handle);
         INSTANCE.registerMessage(id++, EjectDrivePacket.class, EjectDrivePacket::encode, EjectDrivePacket::decode, EjectDrivePacket::handle);
         INSTANCE.registerMessage(id++, SyncEventStatePacket.class, SyncEventStatePacket::encode, SyncEventStatePacket::decode, SyncEventStatePacket::handle);
         INSTANCE.registerMessage(id++, ConsoleCommandPacket.class, ConsoleCommandPacket::encode, ConsoleCommandPacket::decode, ConsoleCommandPacket::handle);
@@ -1126,6 +1127,39 @@ public class KerfurPacketHandler {
                             player.level().playSound(null, msg.pos, net.minecraft.sounds.SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 1.0F);
                         }
                         terminal.setDrive(false, "", "", 0);
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    public static class SavePaperSheetPacket {
+        private final net.minecraft.world.InteractionHand hand;
+        private final CompoundTag tag;
+
+        public SavePaperSheetPacket(net.minecraft.world.InteractionHand hand, CompoundTag tag) {
+            this.hand = hand;
+            this.tag = tag;
+        }
+
+        public static void encode(SavePaperSheetPacket msg, FriendlyByteBuf buffer) {
+            buffer.writeEnum(msg.hand);
+            buffer.writeNbt(msg.tag);
+        }
+
+        public static SavePaperSheetPacket decode(FriendlyByteBuf buffer) {
+            return new SavePaperSheetPacket(buffer.readEnum(net.minecraft.world.InteractionHand.class), buffer.readNbt());
+        }
+
+        public static void handle(SavePaperSheetPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    ItemStack stack = player.getItemInHand(msg.hand);
+                    if (stack.getItem() == VoicesOfTheMines.PAPER_SHEET.get()) {
+                        stack.getOrCreateTag().putBoolean("Written", true);
+                        stack.getOrCreateTag().put("Lines", msg.tag.getList("Lines", 8));
+                        stack.getOrCreateTag().putByteArray("Pixels", msg.tag.getByteArray("Pixels"));
                     }
                 }
             });

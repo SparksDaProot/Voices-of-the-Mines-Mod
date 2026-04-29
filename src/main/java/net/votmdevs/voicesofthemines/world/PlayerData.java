@@ -50,14 +50,14 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
     public PlayerData() {}
 
     public void initPlayerIfNeeded(UUID uuid, String username) {
-        usernameCache.put(username, uuid); // Запоминаем ник
+        usernameCache.put(username, uuid);
         if (!playerPoints.containsKey(uuid)) playerPoints.put(uuid, 0);
         if (!playerDeliveryQueues.containsKey(uuid)) playerDeliveryQueues.put(uuid, NonNullList.create());
 
         if (!playerEmails.containsKey(uuid)) {
             List<Email> startingEmails = new ArrayList<>();
-            startingEmails.add(new Email("Prof_Lea", "Welcome!", "Welcome to your new job...", false));
-            startingEmails.add(new Email("Dr Bao", "Hi", "Hello! I am Dr. Bao. I will be responsible...", false));
+            startingEmails.add(new Email("Prof_Lea", "Welcome!", "Welcome to your new job, Dr.Steve. My name is Lea, your main supervisor. You've probably got through the learning period, but I'll remind you what your job is and what to do. In short, your job is basically scanning the sky for anomalous signals. That is your main task. Another task is to process the data of these signals and send us the data stored on analogue drives. You will get a reward for each drive, and if you process the signal on further levels, you will get more points. Next task is to look after these big satellite dishes, its servers, and calibration. You can re-calibrate satelites remotely through the console panel, but if the satellites server shuts down, you have to manually fix it. The server is inside the satellites. Alright, I think that is it - the nuclear reactor is not implemented, yet so you don't need to worry about that. Gather the signals, process them, sell results to us, look after the satellites, that's it. Good luck. Prof.Lea", false));
+            startingEmails.add(new Email("Dr Bao", "Hi", "Hello! I am Dr. Bao. I will be responsible for your daily tasks. In short, I will ask you to do a quick task at the start of every day. First, I will request a specific amount of drives. These can range from level 0 drives to level 3. I understand your \"situation\" however, and will not request a drive you can't obtain. The second task I will ask of you is a simple satelite checkup. Go to the satellite, type in \"sv.hash\" into the server, and write down the server and number in a note. For example, \"Bravo 02A421A095\". Once you've done that, attatch it to the lid of a drive box, and send it off with the drone. I've left a little notebook on the table you can tear some pages out of for the notes. As usual, you will get a nice point bonus if you complete these for me. Have a nice day/night wherever you are! - Dr. Bao", false));
             playerEmails.put(uuid, startingEmails);
         }
     }
