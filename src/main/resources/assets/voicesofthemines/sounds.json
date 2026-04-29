@@ -161,6 +161,9 @@
   "pcstartup": { "sounds": [ "voicesofthemines:pcstartup" ] },
   "computerworking_loop": { "sounds": [ "voicesofthemines:computerworking_loop" ] },
 
+  "lightswitch": { "sounds": [ "voicesofthemines:lightswitch" ] },
+  "connect": { "sounds": [ "voicesofthemines:connect" ] },
+
   "raw1": { "sounds": [ "voicesofthemines:raw1" ] },
   "raw2": { "sounds": [ "voicesofthemines:raw2" ] },
   "raw3": { "sounds": [ "voicesofthemines:raw3" ] },

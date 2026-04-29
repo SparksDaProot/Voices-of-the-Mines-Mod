@@ -1,0 +1,50 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"loop": true
+		},
+		"light": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"light": {
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1.4, 1.4, 1.125]
+						},
+						"0.5": {
+							"vector": [1.5, 1.5, 1.125],
+							"easing": "easeOutSine"
+						},
+						"1.0": {
+							"vector": [1.4, 1.4, 1.125],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"light2": {
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1.4, 1.4, 1.125]
+						},
+						"0.5": {
+							"vector": [1.5, 1.5, 1.125],
+							"easing": "easeOutSine"
+						},
+						"1.0": {
+							"vector": [1.4, 1.4, 1.125],
+							"easing": "easeOutSine"
+						}
+					}
+				}
+			}
+		}
+	}
+}

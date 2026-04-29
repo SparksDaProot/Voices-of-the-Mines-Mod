@@ -1,0 +1,56 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 5,
+				"visible_bounds_offset": [0, 1.5, 0]
+			},
+			"bones": [
+				{
+					"name": "lamp",
+					"pivot": [0, -0.33333, 0.08333],
+					"cubes": [
+						{"origin": [-5, 14, -14.75], "size": [10, 2, 30], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "lampp",
+					"parent": "lamp",
+					"pivot": [2, 13, 0],
+					"cubes": [
+						{"origin": [0.5, 12, -13.75], "size": [3, 2, 28], "uv": [0, 62]}
+					]
+				},
+				{
+					"name": "light",
+					"parent": "lampp",
+					"pivot": [2, 13, -0.25],
+					"cubes": [
+						{"origin": [0.75, 12.25, -10.5], "size": [2.5, 1.5, 20.5], "uv": [62, 32]}
+					]
+				},
+				{
+					"name": "lampp2",
+					"parent": "lamp",
+					"pivot": [-2, 13, 0],
+					"cubes": [
+						{"origin": [-3.5, 12, -13.75], "size": [3, 2, 28], "uv": [0, 62]}
+					]
+				},
+				{
+					"name": "light2",
+					"parent": "lampp2",
+					"pivot": [-2, 13, -0.25],
+					"cubes": [
+						{"origin": [-3.25, 12.25, -10.5], "size": [2.5, 1.5, 20.5], "uv": [62, 32]}
+					]
+				}
+			]
+		}
+	]
+}

@@ -403,6 +403,31 @@ public class VoicesOfTheMines {
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.CandleHandleBlockEntity::new, CANDLE_HANDLE.get()).build(null));
 
 
+    // new redstone lamp?
+    public static final RegistryObject<Block> UP_LAMP = BLOCKS.register("up_lamp",
+            () -> new net.votmdevs.voicesofthemines.block.UpLampBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.of()
+                    .strength(1.0f)
+                    .noOcclusion() // Обязательно для кастомных моделей, чтобы не было рентгена соседних блоков
+                    .lightLevel(state -> state.getValue(net.votmdevs.voicesofthemines.block.UpLampBlock.LIT) ? 15 : 0))); // Лампа дает свет 15 при LIT=true
+
+    public static final RegistryObject<Block> SWITCH_BLOCK = BLOCKS.register("switch",
+            () -> new net.votmdevs.voicesofthemines.block.SwitchBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.of()
+                    .strength(0.5f)
+                    .noOcclusion()));
+
+    // items
+    public static final RegistryObject<Item> UP_LAMP_ITEM = ITEMS.register("up_lamp",
+            () -> new net.minecraft.world.item.BlockItem(UP_LAMP.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> SWITCH_ITEM = ITEMS.register("switch",
+            () -> new net.minecraft.world.item.BlockItem(SWITCH_BLOCK.get(), new Item.Properties()));
+
+    // entities
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.UpLampBlockEntity>> UP_LAMP_BE = BLOCK_ENTITIES.register("up_lamp",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.UpLampBlockEntity::new, UP_LAMP.get()).build(null));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.SwitchBlockEntity>> SWITCH_BE = BLOCK_ENTITIES.register("switch",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.SwitchBlockEntity::new, SWITCH_BLOCK.get()).build(null));
 
     // maracas :D
     public static final RegistryObject<Item> MARACAS = ITEMS.register("maracas",
@@ -706,6 +731,8 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(VoicesOfTheMines.UP_LAMP_BE.get(), net.votmdevs.voicesofthemines.client.UpLampRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.SWITCH_BE.get(), net.votmdevs.voicesofthemines.client.SwitchRenderer::new);
                 event.registerBlockEntityRenderer(CANDLE_HANDLE_BE.get(), CandleHandleRenderer::new);
                 event.registerBlockEntityRenderer(DRIVE_BOX_BE.get(), DriveBoxRenderer::new);
                 event.registerEntityRenderer(MANNEQUIN.get(), manager -> new BaseMannequinRenderer<>(manager, new MannequinModel()));

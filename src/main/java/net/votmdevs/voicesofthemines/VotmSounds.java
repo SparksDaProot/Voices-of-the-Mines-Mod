@@ -25,6 +25,9 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> PC_STARTUP = registerSoundEvent("pcstartup");
     public static final RegistryObject<SoundEvent> PC_WORKING_LOOP = registerSoundEvent("computerworking_loop");
 
+    public static final RegistryObject<SoundEvent> LIGHTSWITCH = registerSoundEvent("lightswitch");
+    public static final RegistryObject<SoundEvent> CONNECT = registerSoundEvent("connect");
+
     public static final RegistryObject<SoundEvent> MANNEQUIN_HURT = registerSoundEvent("mannequin_hurt");
     public static final RegistryObject<SoundEvent> MANNEQUIN_ATTACK = registerSoundEvent("mannequin_attack");
 
@@ -93,6 +96,7 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> SIGNAL_PLANET_NEPTUNE = registerSoundEvent("signal_planet_neptune");
     public static final RegistryObject<SoundEvent> SIGNAL_PLANET_SATURN = registerSoundEvent("signal_planet_saturn");
     public static final RegistryObject<SoundEvent> SIGNAL_HILERO = registerSoundEvent("signal_hilero");
+
 
     public static final RegistryObject<SoundEvent> EXOGEN1 = registerSoundEvent("exogen1");
     public static final RegistryObject<SoundEvent> EXOGEN2 = registerSoundEvent("exogen2");
