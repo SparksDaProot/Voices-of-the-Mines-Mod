@@ -26,6 +26,10 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
     private final Map<String, UUID> usernameCache = new HashMap<>();
     public final List<CustomLot> customMarket = new ArrayList<>();
 
+    public boolean hasAnyPlayers() {
+        return !playerPoints.isEmpty();
+    }
+
     public static class CustomLot {
         public String lotId;
         public UUID sellerId;

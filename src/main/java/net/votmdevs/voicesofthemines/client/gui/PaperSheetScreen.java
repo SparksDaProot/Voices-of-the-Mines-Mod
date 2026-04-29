@@ -94,7 +94,7 @@ public class PaperSheetScreen extends Screen {
             EditBox editBox = new EditBox(this.font, leftPos + 30, startY + (i * lineHeight), bgWidth - 60, 12, Component.empty());
             editBox.setMaxLength(40);
             editBox.setBordered(false);
-            editBox.setTextColor(0xFF737373);
+            editBox.setTextColor(0xFFEEEEEE);
 
             if (i < 2 || isReadOnly) {
                 editBox.setEditable(false);
@@ -127,7 +127,7 @@ public class PaperSheetScreen extends Screen {
         for (int x = 0; x < bgWidth; x++) {
             for (int y = 0; y < bgHeight; y++) {
                 if (pixelData[x][y] == 1) {
-                    guiGraphics.fill(leftPos + x, topPos + y, leftPos + x + 2, topPos + y + 2, 0xFF333333);
+                    guiGraphics.fill(leftPos + x, topPos + y, leftPos + x + 2, topPos + y + 2, 0xFF000000);
                 }
             }
         }
@@ -143,7 +143,7 @@ public class PaperSheetScreen extends Screen {
         renderButton(guiGraphics, BTN_REPORT, btnX, btnY + 90, smX, smY, "Report", 48);
 
         if (drawMode == 1) {
-            guiGraphics.blit(ICON_PENCIL, smX - 4, smY - 13, 0, 0, 24, 24, 24, 24);
+            guiGraphics.blit(ICON_PENCIL, smX - 4, smY - 16, 0, 0, 24, 24, 24, 24);
         } else if (drawMode == 2) {
             guiGraphics.blit(ICON_ERASER, smX - 12, smY - 10, 0, 0, 24, 24, 24, 24);
         }
@@ -180,6 +180,32 @@ public class PaperSheetScreen extends Screen {
 
         gui.blit(tex, x, y, 0, 0, width, 24, width, 24);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    // filling satellite name
+    public void fillReportData(List<String> satellites) {
+        if (isReadOnly) return;
+
+        if (satellites == null || satellites.isEmpty()) {
+            textLines.get(2).setValue("ERR: NO TASKS FOUND");
+            return;
+        }
+
+        int currentLine = 2; // 3rd line start
+        for (String sat : satellites) {
+            if (currentLine < textLines.size()) {
+                EditBox box = textLines.get(currentLine);
+                box.setValue(sat.toUpperCase() + " : ");
+                box.setCursorPosition(box.getValue().length());
+                currentLine++;
+            }
+        }
+
+        // focus write cursor
+        if (textLines.size() > 2) {
+            textLines.get(2).setFocused(true);
+            this.setFocused(textLines.get(2));
+        }
     }
 
     @Override
@@ -236,6 +262,12 @@ public class PaperSheetScreen extends Screen {
             }
             else if (smX >= btnX && smX <= btnX + 48 && smY >= btnY + 90 && smY <= btnY + 114 && !isReadOnly) {
                 Minecraft.getInstance().player.playSound(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F);
+
+                textLines.get(2).setValue("FETCHING DATA...");
+
+                net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(
+                        new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.RequestReportDataPacket()
+                );
                 return true;
             }
 

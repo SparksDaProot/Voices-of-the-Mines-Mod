@@ -4,16 +4,15 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraftforge.items.ItemStackHandler;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.Random;
+import java.util.*;
 
 public class SignalManager extends SavedData {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -36,11 +35,21 @@ public class SignalManager extends SavedData {
         }
     }
 
+    public static class DailyTask {
+        public int requiredSignalLevel;
+        public int requiredSignalAmount;
+        public List<String> requiredHashes = new ArrayList<>();
+    }
+
+    public DailyTask currentTask = new DailyTask();
+    public boolean isTaskCompletedToday = false;
+
     private final List<VotvSignal> activeSignals = new ArrayList<>();
     private int tickCounter = 0;
     private final PlayerData globalPlayerData = new PlayerData();
 
     public boolean isBadSunActive = false;
+    private boolean isFirstDayInitialized = false;
 
     public int currentDay = 1;
     public final Map<String, String> dailyHashes = new HashMap<>();
@@ -65,6 +74,67 @@ public class SignalManager extends SavedData {
         setDirty();
     }
 
+    // Task Generation
+    public void generateDailyTask() {
+        Random rand = new Random();
+        currentTask.requiredHashes.clear();
+        isTaskCompletedToday = false;
+
+        int hashCount = 3;
+
+        if (currentDay <= 5) {
+            currentTask.requiredSignalLevel = 0; currentTask.requiredSignalAmount = 1; hashCount = 1;
+        } else if (currentDay <= 10) {
+            currentTask.requiredSignalLevel = 0; currentTask.requiredSignalAmount = 3; hashCount = 2;
+        } else if (currentDay <= 15) {
+            currentTask.requiredSignalLevel = 1; currentTask.requiredSignalAmount = 1; // +2lvl0
+        } else if (currentDay <= 20) {
+            currentTask.requiredSignalLevel = 1; currentTask.requiredSignalAmount = 2;
+        } else if (currentDay <= 25) {
+            currentTask.requiredSignalLevel = 1; currentTask.requiredSignalAmount = 3;
+        } else if (currentDay <= 30) {
+            currentTask.requiredSignalLevel = 2; currentTask.requiredSignalAmount = 1;
+        } else if (currentDay <= 35) {
+            currentTask.requiredSignalLevel = 2; currentTask.requiredSignalAmount = 2;
+        } else if (currentDay <= 40) {
+            currentTask.requiredSignalLevel = 2; currentTask.requiredSignalAmount = 3;
+        } else if (currentDay <= 45) {
+            currentTask.requiredSignalLevel = 3; currentTask.requiredSignalAmount = 1;
+        } else if (currentDay <= 50) {
+            currentTask.requiredSignalLevel = 3; currentTask.requiredSignalAmount = 2;
+        } else {
+            currentTask.requiredSignalLevel = 3; currentTask.requiredSignalAmount = 3;
+        }
+
+        List<String> availableSatellites = new ArrayList<>(Arrays.asList(SATELLITES));
+        for (int i = 0; i < hashCount; i++) {
+            if (availableSatellites.isEmpty()) break;
+            int idx = rand.nextInt(availableSatellites.size());
+            currentTask.requiredHashes.add(availableSatellites.get(idx));
+            availableSatellites.remove(idx);
+        }
+
+        sendDailyTaskEmail();
+        setDirty();
+    }
+
+    private void sendDailyTaskEmail() {
+        StringBuilder text = new StringBuilder("There is a task for today:\nYou need to bring us these signals:\n");
+        text.append(currentTask.requiredSignalAmount).append(" signals of ").append(currentTask.requiredSignalLevel).append(" level\n\n");
+        text.append("And check this satellite and make report:\n");
+
+        for (String sat : currentTask.requiredHashes) {
+            text.append(sat).append("\n");
+        }
+
+        globalPlayerData.broadcastEmail("Dr. Bao", "Daily Task", text.toString());
+        // sound
+        net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.send(
+                net.minecraftforge.network.PacketDistributor.ALL.noArg(),
+                new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.EmailNotificationPacket()
+        );
+    }
+
     public void advanceDay() {
         currentDay++;
         generateDailyHashes();
@@ -76,6 +146,62 @@ public class SignalManager extends SavedData {
         }
 
         setDirty();
+    }
+
+    // counting for task
+    public int checkDailyTask(ItemStack driveBox, ItemStack paperSheet) {
+        if (isTaskCompletedToday) return 0;
+
+        int foundValidSignals = 0;
+        int totalDisks = 0; // count drives in the box
+
+        if (driveBox != null && driveBox.getItem() == VoicesOfTheMines.DRIVE_BOX_ITEM.get() && driveBox.hasTag() && driveBox.getTag().contains("Inventory")) {
+            ItemStackHandler handler = new ItemStackHandler(6);
+            handler.deserializeNBT(driveBox.getTag().getCompound("Inventory"));
+
+            for (int i = 0; i < handler.getSlots(); i++) {
+                ItemStack disk = handler.getStackInSlot(i);
+                if (!disk.isEmpty() && disk.hasTag()) {
+                    totalDisks++;
+                    if (disk.getTag().getInt("SignalLevel") == currentTask.requiredSignalLevel) {
+                        foundValidSignals++;
+                    }
+                }
+            }
+        }
+        if (foundValidSignals < currentTask.requiredSignalAmount) return 0;
+
+        boolean hashesValid = true;
+        if (currentTask.requiredHashes.size() > 0) {
+            if (paperSheet == null || paperSheet.getItem() != VoicesOfTheMines.PAPER_SHEET.get() || !paperSheet.hasTag()) {
+                return 0;
+            }
+
+            CompoundTag tag = paperSheet.getTag();
+            if (!tag.getBoolean("Written") || !tag.contains("Lines")) return 0;
+
+            ListTag lines = tag.getList("Lines", 8);
+            String fullPaperText = "";
+            for (int i = 0; i < lines.size(); i++) {
+                fullPaperText += lines.getString(i).toUpperCase() + " ";
+            }
+
+            for (String sat : currentTask.requiredHashes) {
+                String requiredHash = dailyHashes.get(sat).toUpperCase();
+                if (!fullPaperText.contains(requiredHash)) {
+                    hashesValid = false;
+                    break;
+                }
+            }
+        }
+
+        if (!hashesValid) return 0;
+
+        isTaskCompletedToday = true;
+        setDirty();
+
+        if (foundValidSignals == currentTask.requiredSignalAmount && totalDisks == currentTask.requiredSignalAmount) return 1;
+        else return 2;
     }
 
     public void degradeRandomCalibration(long gameTime, long recentlyFixedProtectionTicks) {
@@ -207,6 +333,13 @@ public class SignalManager extends SavedData {
     public void finishCheck(String id) { for (VotvSignal s : activeSignals) if (s.id.equals(id)) { s.isChecked = true; setDirty(); break; } }
 
     public void tick() {
+        // send email of first task
+        if (!isFirstDayInitialized && globalPlayerData.hasAnyPlayers()) {
+            generateDailyTask();
+            isFirstDayInitialized = true;
+            setDirty();
+        }
+
         tickCounter++;
         if (tickCounter >= 1000) { // Change the signal update frequency here! 1000 FOR TESTS (EVERY 1 MINUTE)
             tickCounter = 0;
@@ -244,6 +377,7 @@ public class SignalManager extends SavedData {
 
         tag.putInt("CurrentDay", currentDay);
         tag.putBoolean("BadSun", isBadSunActive);
+        tag.putBoolean("FirstDayInit", isFirstDayInitialized);
         CompoundTag hashTag = new CompoundTag();
         for (Map.Entry<String, String> e : dailyHashes.entrySet()) hashTag.putString(e.getKey(), e.getValue());
         tag.put("DailyHashes", hashTag);
@@ -255,6 +389,13 @@ public class SignalManager extends SavedData {
         CompoundTag srvTag = new CompoundTag();
         for (Map.Entry<String, BlockPos> e : placedServers.entrySet()) srvTag.putLong(e.getKey(), e.getValue().asLong());
         tag.put("PlacedServers", srvTag);
+
+        tag.putBoolean("TaskCompleted", isTaskCompletedToday);
+        tag.putInt("ReqLevel", currentTask.requiredSignalLevel);
+        tag.putInt("ReqAmount", currentTask.requiredSignalAmount);
+        ListTag hashesList = new ListTag();
+        for (String h : currentTask.requiredHashes) hashesList.add(StringTag.valueOf(h));
+        tag.put("ReqHashes", hashesList);
 
         return tag;
     }
@@ -274,6 +415,7 @@ public class SignalManager extends SavedData {
 
         if (tag.contains("CurrentDay")) manager.currentDay = tag.getInt("CurrentDay");
         if (tag.contains("BadSun")) manager.isBadSunActive = tag.getBoolean("BadSun");
+        if (tag.contains("FirstDayInit")) manager.isFirstDayInitialized = tag.getBoolean("FirstDayInit");
         if (tag.contains("DailyHashes")) {
             CompoundTag ht = tag.getCompound("DailyHashes");
             for (String k : ht.getAllKeys()) manager.dailyHashes.put(k, ht.getString(k));
@@ -286,6 +428,16 @@ public class SignalManager extends SavedData {
             CompoundTag st = tag.getCompound("PlacedServers");
             for (String k : st.getAllKeys()) manager.placedServers.put(k, BlockPos.of(st.getLong(k)));
         }
+
+        if (tag.contains("TaskCompleted")) manager.isTaskCompletedToday = tag.getBoolean("TaskCompleted");
+        if (tag.contains("ReqLevel")) manager.currentTask.requiredSignalLevel = tag.getInt("ReqLevel");
+        if (tag.contains("ReqAmount")) manager.currentTask.requiredSignalAmount = tag.getInt("ReqAmount");
+        if (tag.contains("ReqHashes")) {
+            manager.currentTask.requiredHashes.clear();
+            ListTag hashesList = tag.getList("ReqHashes", 8);
+            for (int i = 0; i < hashesList.size(); i++) manager.currentTask.requiredHashes.add(hashesList.getString(i));
+        }
+
         return manager;
     }
 }

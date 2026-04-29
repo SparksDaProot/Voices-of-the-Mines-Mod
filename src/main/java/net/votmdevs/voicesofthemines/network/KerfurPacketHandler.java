@@ -19,6 +19,7 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class KerfurPacketHandler {
@@ -32,6 +33,8 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, RequestReportDataPacket.class, RequestReportDataPacket::encode, RequestReportDataPacket::decode, RequestReportDataPacket::handle);
+        INSTANCE.registerMessage(id++, SyncReportDataPacket.class, SyncReportDataPacket::encode, SyncReportDataPacket::decode, SyncReportDataPacket::handle);
         INSTANCE.registerMessage(id++, SavePaperSheetPacket.class, SavePaperSheetPacket::encode, SavePaperSheetPacket::decode, SavePaperSheetPacket::handle);
         INSTANCE.registerMessage(id++, EjectDrivePacket.class, EjectDrivePacket::encode, EjectDrivePacket::decode, EjectDrivePacket::handle);
         INSTANCE.registerMessage(id++, SyncEventStatePacket.class, SyncEventStatePacket::encode, SyncEventStatePacket::decode, SyncEventStatePacket::handle);
@@ -1161,6 +1164,46 @@ public class KerfurPacketHandler {
                         stack.getOrCreateTag().put("Lines", msg.tag.getList("Lines", 8));
                         stack.getOrCreateTag().putByteArray("Pixels", msg.tag.getByteArray("Pixels"));
                     }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    public static class RequestReportDataPacket {
+        public RequestReportDataPacket() {}
+        public static void encode(RequestReportDataPacket msg, FriendlyByteBuf buffer) {}
+        public static RequestReportDataPacket decode(FriendlyByteBuf buffer) { return new RequestReportDataPacket(); }
+        public static void handle(RequestReportDataPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel());
+                    List<String> requiredSats = manager.currentTask.requiredHashes;
+
+                    KerfurPacketHandler.INSTANCE.sendTo(new SyncReportDataPacket(requiredSats), player.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public static class SyncReportDataPacket {
+        private final java.util.List<String> satellites;
+        public SyncReportDataPacket(java.util.List<String> satellites) { this.satellites = satellites; }
+        public static void encode(SyncReportDataPacket msg, FriendlyByteBuf buffer) {
+            buffer.writeInt(msg.satellites.size());
+            for (String s : msg.satellites) buffer.writeUtf(s);
+        }
+        public static SyncReportDataPacket decode(FriendlyByteBuf buffer) {
+            int size = buffer.readInt();
+            java.util.List<String> list = new java.util.ArrayList<>();
+            for (int i = 0; i < size; i++) list.add(buffer.readUtf());
+            return new SyncReportDataPacket(list);
+        }
+        public static void handle(SyncReportDataPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                if (net.minecraft.client.Minecraft.getInstance().screen instanceof net.votmdevs.voicesofthemines.client.gui.PaperSheetScreen screen) {
+                    screen.fillReportData(msg.satellites);
                 }
             });
             ctx.get().setPacketHandled(true);

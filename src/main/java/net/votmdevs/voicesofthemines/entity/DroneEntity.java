@@ -110,28 +110,102 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
                     boolean soldAnything = false;
                     StringBuilder receipt = new StringBuilder("The package has been successfully delivered.\n\nSelling list:\n");
 
+                    net.minecraft.server.level.ServerLevel serverLevel = (net.minecraft.server.level.ServerLevel) this.level();
+                    net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(serverLevel);
+
+                    net.minecraft.world.item.ItemStack dailyBox = null;
+                    net.minecraft.world.item.ItemStack dailyPaper = null;
+
                     for (int i = 0; i < this.inventory.getContainerSize(); i++) {
                         net.minecraft.world.item.ItemStack stack = this.inventory.getItem(i);
                         if (!stack.isEmpty()) {
+                            if (dailyBox == null && stack.getItem() == VoicesOfTheMines.DRIVE_BOX_ITEM.get()) dailyBox = stack;
+                            if (dailyPaper == null && stack.getItem() == VoicesOfTheMines.PAPER_SHEET.get()) dailyPaper = stack;
+                        }
+                    }
+
+                    // daily tasks check
+                    String baoMessage = "";
+                    boolean taskAttempted = false;
+
+                    if (!manager.isTaskCompletedToday && dailyBox != null) {
+                        taskAttempted = true;
+                        int taskResult = manager.checkDailyTask(dailyBox, dailyPaper);
+
+                        // drives
+                        int boxBasePrice = getSellPrice(dailyBox);
+                        earnedPoints += boxBasePrice;
+                        soldAnything = true;
+
+                        if (taskResult == 1) {
+                            // perfect
+                            int signalBonus = manager.currentTask.requiredSignalAmount * 15;
+                            int hashBonus = manager.currentTask.requiredHashes.size() * 20;
+                            earnedPoints += signalBonus + hashBonus;
+
+                            baoMessage = "Package received - Good job Dr.Steve!\n\nPayment breakdown:\n";
+                            baoMessage += "+ " + boxBasePrice + " base value for drives\n";
+                            baoMessage += "+ " + signalBonus + " task bonus for signals\n";
+                            baoMessage += "+ " + hashBonus + " task bonus for hashes\n";
+
+                        } else if (taskResult == 2) {
+                            // more than needed
+                            int hashBonus = manager.currentTask.requiredHashes.size() * 20;
+                            earnedPoints += hashBonus;
+
+                            baoMessage = "Package received - We got more than we needed - good job, but no bonus for you, because now I have more work to do...\n\nPayment breakdown:\n";
+                            baoMessage += "+ " + boxBasePrice + " base value for drives\n";
+                            baoMessage += "+ 0 task bonus for signals (Too many disks!)\n";
+                            baoMessage += "+ " + hashBonus + " task bonus for hashes\n";
+
+                        } else {
+                            // failed
+                            baoMessage = "Package received - You have failed the report Dr.Steve. Try harder next time.\n\nPayment breakdown:\n";
+                            baoMessage += "+ " + boxBasePrice + " base value for drives\n";
+                        }
+
+                        // remove box
+                        for (int i = 0; i < this.inventory.getContainerSize(); i++) {
+                            if (this.inventory.getItem(i) == dailyBox) {
+                                this.inventory.setItem(i, net.minecraft.world.item.ItemStack.EMPTY);
+                                break;
+                            }
+                        }
+                    }
+
+                    // def selling
+                    for (int i = 0; i < this.inventory.getContainerSize(); i++) {
+                        net.minecraft.world.item.ItemStack stack = this.inventory.getItem(i);
+                        if (!stack.isEmpty() && stack.getItem() != VoicesOfTheMines.PAPER_SHEET.get()) {
                             int price = getSellPrice(stack);
                             if (price > 0) {
                                 int itemTotal = price * stack.getCount();
                                 earnedPoints += itemTotal;
                                 soldAnything = true;
-                                // X | N |: for A points
                                 receipt.append("- ").append(stack.getCount()).append(" | ").append(stack.getHoverName().getString()).append(" |: for ").append(itemTotal).append(" points\n");
                             }
                         }
                     }
 
-                    if (soldAnything) {
-                        net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get((net.minecraft.server.level.ServerLevel) this.level());
+                    // tasks
+                    if (taskAttempted) {
                         manager.getGlobalPlayerData().addPoints(this.ownerId, earnedPoints);
 
-                        receipt.append("\n").append(earnedPoints).append(" points in total has been sent to your account balance.");
-                        manager.getGlobalPlayerData().addEmail(this.ownerId, "Auto", "Package received", receipt.toString());
-
+                        baoMessage += "\nPoints " + earnedPoints + " in total has been sent to your account balance.";
+                        manager.getGlobalPlayerData().addEmail(this.ownerId, "Dr. Bao", "Daily Task Information", baoMessage);
                         manager.setDirty();
+
+                        net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.send(
+                                net.minecraftforge.network.PacketDistributor.ALL.noArg(),
+                                new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.EmailNotificationPacket()
+                        );
+                    }
+                    else if (soldAnything) {
+                        manager.getGlobalPlayerData().addPoints(this.ownerId, earnedPoints);
+                        receipt.append("\nPoints ").append(earnedPoints).append(" in total has been sent to your account balance.");
+                        manager.getGlobalPlayerData().addEmail(this.ownerId, "Auto", "Package received", receipt.toString());
+                        manager.setDirty();
+
                         net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.send(
                                 net.minecraftforge.network.PacketDistributor.ALL.noArg(),
                                 new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.EmailNotificationPacket()

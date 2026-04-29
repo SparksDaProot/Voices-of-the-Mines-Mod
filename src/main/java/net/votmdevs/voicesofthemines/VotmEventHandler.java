@@ -37,7 +37,7 @@ public class VotmEventHandler {
         }
     }
 
-    // === ЛОГИКА ПЛОХОГО СОЛНЦА (Урон и Мясо) ===
+    // badsun
     @SubscribeEvent
     public static void onLivingTick(net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent event) {
         net.minecraft.world.entity.LivingEntity entity = event.getEntity();
@@ -84,22 +84,38 @@ public class VotmEventHandler {
         }
     }
 
-    // === КОМАНДА /votmevent badsun ===
+    // /votmevent
     @SubscribeEvent
     public static void onCommandsRegister(net.minecraftforge.event.RegisterCommandsEvent event) {
         event.getDispatcher().register(net.minecraft.commands.Commands.literal("votmevent")
-                .requires(s -> s.hasPermission(2)) // Доступно только админам/в одиночной игре с читами
+                .requires(s -> s.hasPermission(2))
                 .then(net.minecraft.commands.Commands.literal("badsun")
                         .executes(context -> {
                             ServerLevel level = context.getSource().getLevel();
                             net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(level);
 
-                            // Переключаем статус
+
                             manager.isBadSunActive = !manager.isBadSunActive;
                             manager.setDirty();
 
-                            // Сообщаем в чат
                             context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Bad Sun event is now: " + manager.isBadSunActive), true);
+                            return 1;
+                        })
+                )
+        );
+        // DEBUG COMMAND FOR TESTS DAILY TASKS - CHOOSE DIFFICULTY
+        event.getDispatcher().register(net.minecraft.commands.Commands.literal("reportdif")
+                .requires(s -> s.hasPermission(2))
+                .then(net.minecraft.commands.Commands.argument("day", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1))
+                        .executes(context -> {
+                            ServerLevel level = context.getSource().getLevel();
+                            net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(level);
+
+                            int newDay = com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(context, "day");
+                            manager.currentDay = newDay;
+                            manager.generateDailyTask();
+
+                            context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Set current day to " + newDay + ". Check your email for new tasks!"), true);
                             return 1;
                         })
                 )
