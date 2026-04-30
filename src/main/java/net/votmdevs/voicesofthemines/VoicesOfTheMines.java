@@ -1,6 +1,12 @@
 package net.votmdevs.voicesofthemines;
 
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.votmdevs.voicesofthemines.block.*;
 import net.votmdevs.voicesofthemines.client.*;
 import net.votmdevs.voicesofthemines.effect.RadiationEffect;
@@ -331,6 +337,68 @@ public class VoicesOfTheMines {
                     .build(ResourceLocation.fromNamespaceAndPath(MODID, "mannequin_stand").toString()));
 
 
+    // DECORATIVE BLOCKS
+
+    public static final RegistryObject<Block> KITCHEN_TILE = BLOCKS.register("kitchen_tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> CARPET_BROWN_FLOOR = BLOCKS.register("carpet_brown_floor", () -> new Block(BlockBehaviour.Properties.of().strength(0.5f).sound(SoundType.WOOL)));
+    public static final RegistryObject<Block> CARPET_FLOOR = BLOCKS.register("carpet_floor", () -> new Block(BlockBehaviour.Properties.of().strength(0.5f).sound(SoundType.WOOL)));
+    public static final RegistryObject<Block> WALL_LINES = BLOCKS.register("wall_lines", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f)));
+    public static final RegistryObject<Block> WALL = BLOCKS.register("wall", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f)));
+    public static final RegistryObject<Block> WALL_DOWN = BLOCKS.register("wall_down", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f)));
+    public static final RegistryObject<Block> GREYWALL_UP = BLOCKS.register("greywall_up", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.DEEPSLATE)));
+    public static final RegistryObject<Block> GREYWALL_DOWN = BLOCKS.register("greywall_down", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.DEEPSLATE)));
+    public static final RegistryObject<Block> GARAGE_YELLOW = BLOCKS.register("garage_yellow", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.DEEPSLATE_BRICKS)));
+    public static final RegistryObject<Block> GARAGE_RED = BLOCKS.register("garage_red", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.DEEPSLATE_BRICKS)));
+    public static final RegistryObject<Block> GARAGE_BRICKS = BLOCKS.register("garage_bricks", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.DEEPSLATE_BRICKS)));
+    public static final RegistryObject<Block> OUTSIDE_FLOOR = BLOCKS.register("outside_floor", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> METAL_TILE = BLOCKS.register("metal_tile", () -> new Block(BlockBehaviour.Properties.of().strength(2.0f).sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> TILE = BLOCKS.register("tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> BATHROOM_TILE = BLOCKS.register("bathroom_tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> UP_TILE = BLOCKS.register("up_tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f)));
+
+    public static final RegistryObject<Block> SIGN = BLOCKS.register("sign",
+            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.MOSS)));
+    public static final RegistryObject<Block> SMOKE_SIGN = BLOCKS.register("smoke_sign",
+            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.MOSS)));
+
+    public static final RegistryObject<Block> MINI_VENT = BLOCKS.register("mini_vent", () -> new net.votmdevs.voicesofthemines.block.DecorativeHorizontalBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> EXIT = BLOCKS.register("exit",
+            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().lightLevel(s -> 10)));
+
+    public static final RegistryObject<Block> ROOM_SIGN_SIGNALS = BLOCKS.register("room_sign_signals",
+            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.BAMBOO_WOOD)));
+
+    public static final RegistryObject<Block> ROOM_SIGN_KITCHEN = BLOCKS.register("room_sign_kitchen",
+                () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.BAMBOO_WOOD)));
+
+    public static final RegistryObject<Block> ROOM_SIGN_GARAGE = BLOCKS.register("room_sign_garage",
+                () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.BAMBOO_WOOD)));
+
+
+    public static final RegistryObject<Item> KITCHEN_TILE_ITEM = ITEMS.register("kitchen_tile", () -> new net.minecraft.world.item.BlockItem(KITCHEN_TILE.get(), new Item.Properties()));
+    public static final RegistryObject<Item> SIGN_ITEM = ITEMS.register("sign", () -> new net.minecraft.world.item.BlockItem(SIGN.get(), new Item.Properties()));
+    public static final RegistryObject<Item> CARPET_BROWN_FLOOR_ITEM = ITEMS.register("carpet_brown_floor", () -> new net.minecraft.world.item.BlockItem(CARPET_BROWN_FLOOR.get(), new Item.Properties()));
+    public static final RegistryObject<Item> CARPET_FLOOR_ITEM = ITEMS.register("carpet_floor", () -> new net.minecraft.world.item.BlockItem(CARPET_FLOOR.get(), new Item.Properties()));
+    public static final RegistryObject<Item> WALL_LINES_ITEM = ITEMS.register("wall_lines", () -> new net.minecraft.world.item.BlockItem(WALL_LINES.get(), new Item.Properties()));
+    public static final RegistryObject<Item> WALL_ITEM = ITEMS.register("wall", () -> new net.minecraft.world.item.BlockItem(WALL.get(), new Item.Properties()));
+    public static final RegistryObject<Item> WALL_DOWN_ITEM = ITEMS.register("wall_down", () -> new net.minecraft.world.item.BlockItem(WALL_DOWN.get(), new Item.Properties()));
+    public static final RegistryObject<Item> GREYWALL_UP_ITEM = ITEMS.register("greywall_up", () -> new net.minecraft.world.item.BlockItem(GREYWALL_UP.get(), new Item.Properties()));
+    public static final RegistryObject<Item> GREYWALL_DOWN_ITEM = ITEMS.register("greywall_down", () -> new net.minecraft.world.item.BlockItem(GREYWALL_DOWN.get(), new Item.Properties()));
+    public static final RegistryObject<Item> GARAGE_YELLOW_ITEM = ITEMS.register("garage_yellow", () -> new net.minecraft.world.item.BlockItem(GARAGE_YELLOW.get(), new Item.Properties()));
+    public static final RegistryObject<Item> GARAGE_RED_ITEM = ITEMS.register("garage_red", () -> new net.minecraft.world.item.BlockItem(GARAGE_RED.get(), new Item.Properties()));
+    public static final RegistryObject<Item> GARAGE_BRICKS_ITEM = ITEMS.register("garage_bricks", () -> new net.minecraft.world.item.BlockItem(GARAGE_BRICKS.get(), new Item.Properties()));
+    public static final RegistryObject<Item> OUTSIDE_FLOOR_ITEM = ITEMS.register("outside_floor", () -> new net.minecraft.world.item.BlockItem(OUTSIDE_FLOOR.get(), new Item.Properties()));
+    public static final RegistryObject<Item> METAL_TILE_ITEM = ITEMS.register("metal_tile", () -> new net.minecraft.world.item.BlockItem(METAL_TILE.get(), new Item.Properties()));
+    public static final RegistryObject<Item> TILE_ITEM = ITEMS.register("tile", () -> new net.minecraft.world.item.BlockItem(TILE.get(), new Item.Properties()));
+    public static final RegistryObject<Item> BATHROOM_TILE_ITEM = ITEMS.register("bathroom_tile", () -> new net.minecraft.world.item.BlockItem(BATHROOM_TILE.get(), new Item.Properties()));
+    public static final RegistryObject<Item> UP_TILE_ITEM = ITEMS.register("up_tile", () -> new net.minecraft.world.item.BlockItem(UP_TILE.get(), new Item.Properties()));
+    public static final RegistryObject<Item> SMOKE_SIGN_ITEM = ITEMS.register("smoke_sign", () -> new net.minecraft.world.item.BlockItem(SMOKE_SIGN.get(), new Item.Properties()));
+    public static final RegistryObject<Item> MINI_VENT_ITEM = ITEMS.register("mini_vent", () -> new net.minecraft.world.item.BlockItem(MINI_VENT.get(), new Item.Properties()));
+    public static final RegistryObject<Item> EXIT_ITEM = ITEMS.register("exit", () -> new net.minecraft.world.item.BlockItem(EXIT.get(), new Item.Properties()));
+    public static final RegistryObject<Item> ROOM_SIGN_SIGNALS_ITEM = ITEMS.register("room_sign_signals", () -> new net.minecraft.world.item.BlockItem(ROOM_SIGN_SIGNALS.get(), new Item.Properties()));
+    public static final RegistryObject<Item> ROOM_SIGN_KITCHEN_ITEM = ITEMS.register("room_sign_kitchen", () -> new net.minecraft.world.item.BlockItem(ROOM_SIGN_KITCHEN.get(), new Item.Properties()));
+    public static final RegistryObject<Item> ROOM_SIGN_GARAGE_ITEM = ITEMS.register("room_sign_garage", () -> new net.minecraft.world.item.BlockItem(ROOM_SIGN_GARAGE.get(), new Item.Properties()));
+
 
     public static final RegistryObject<EntityType<AtvEntity>> ATV = ENTITY_TYPES.register("atv",
             () -> EntityType.Builder.of(AtvEntity::new, MobCategory.MISC)
@@ -638,6 +706,31 @@ public class VoicesOfTheMines {
             event.accept(HAZARD_BOOTS);
         }
 
+        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
+            event.accept(BATHROOM_TILE_ITEM);
+            event.accept(CARPET_FLOOR_ITEM);
+            event.accept(CARPET_BROWN_FLOOR_ITEM);
+            event.accept(EXIT_ITEM);
+            event.accept(GARAGE_BRICKS_ITEM);
+            event.accept(GARAGE_RED_ITEM);
+            event.accept(GARAGE_YELLOW_ITEM);
+            event.accept(GREYWALL_UP_ITEM);
+            event.accept(GREYWALL_DOWN_ITEM);
+            event.accept(KITCHEN_TILE_ITEM);
+            event.accept(TILE_ITEM);
+            event.accept(METAL_TILE_ITEM);
+            event.accept(MINI_VENT_ITEM);
+            event.accept(ROOM_SIGN_SIGNALS_ITEM);
+            event.accept(ROOM_SIGN_GARAGE_ITEM);
+            event.accept(ROOM_SIGN_KITCHEN_ITEM);
+            event.accept(SIGN_ITEM);
+            event.accept(SMOKE_SIGN_ITEM);
+            event.accept(UP_TILE_ITEM);
+            event.accept(WALL_ITEM);
+            event.accept(WALL_DOWN_ITEM);
+            event.accept(WALL_LINES_ITEM);
+        }
+
         if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
             event.accept(BANANA);
             event.accept(BURGER);
@@ -801,7 +894,7 @@ public class VoicesOfTheMines {
             net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
             if (mc.player == null || mc.level == null) return;
 
-            // breaking bad easter egg
+            // breaking bad EASTER egg
             boolean holdingShard = mc.player.getMainHandItem().getItem() == net.minecraft.world.item.Items.AMETHYST_SHARD;
 
             if (holdingShard) {

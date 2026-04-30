@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "voicesofthemines:block/mini_vent" },
+    "facing=east":  { "model": "voicesofthemines:block/mini_vent", "y": 90 },
+    "facing=south": { "model": "voicesofthemines:block/mini_vent", "y": 180 },
+    "facing=west":  { "model": "voicesofthemines:block/mini_vent", "y": 270 }
+  }
+}

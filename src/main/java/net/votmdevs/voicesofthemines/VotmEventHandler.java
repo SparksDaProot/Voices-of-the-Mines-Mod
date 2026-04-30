@@ -89,11 +89,12 @@ public class VotmEventHandler {
     public static void onCommandsRegister(net.minecraftforge.event.RegisterCommandsEvent event) {
         event.getDispatcher().register(net.minecraft.commands.Commands.literal("votmevent")
                 .requires(s -> s.hasPermission(2))
+
+                // 1. Команда badsun
                 .then(net.minecraft.commands.Commands.literal("badsun")
                         .executes(context -> {
                             ServerLevel level = context.getSource().getLevel();
                             net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(level);
-
 
                             manager.isBadSunActive = !manager.isBadSunActive;
                             manager.setDirty();
@@ -102,8 +103,92 @@ public class VotmEventHandler {
                             return 1;
                         })
                 )
+
+                // /votmevent spsig <signal> - for tests
+                .then(net.minecraft.commands.Commands.literal("spsig")
+                        .then(net.minecraft.commands.Commands.argument("signal_name", com.mojang.brigadier.arguments.StringArgumentType.word())
+                                .executes(context -> {
+                                    ServerLevel level = context.getSource().getLevel();
+                                    Player player = context.getSource().getPlayerOrException();
+                                    String signalType = com.mojang.brigadier.arguments.StringArgumentType.getString(context, "signal_name");
+
+                                    net.votmdevs.voicesofthemines.entity.DriveEntity drive = VoicesOfTheMines.DRIVE.get().create(level);
+                                    if (drive != null) {
+                                        String fakeId = java.util.UUID.randomUUID().toString();
+
+                                        drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID, fakeId);
+                                        drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_TYPE, signalType);
+                                        drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL, 0);
+
+                                        net.minecraft.world.phys.Vec3 look = player.getLookAngle();
+                                        drive.moveTo(player.getX() + look.x, player.getY() + 1.0, player.getZ() + look.z, 0, 0);
+                                        level.addFreshEntity(drive);
+
+                                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("§aSpawned Level 0 Drive with signal: " + signalType), true);
+                                    }
+                                    return 1;
+                                })
+                                .then(net.minecraft.commands.Commands.argument("level", com.mojang.brigadier.arguments.IntegerArgumentType.integer(0, 3))
+                                        .executes(context -> {
+                                            ServerLevel level = context.getSource().getLevel();
+                                            Player player = context.getSource().getPlayerOrException();
+                                            String signalType = com.mojang.brigadier.arguments.StringArgumentType.getString(context, "signal_name");
+                                            int sigLvl = com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(context, "level");
+
+                                            net.votmdevs.voicesofthemines.entity.DriveEntity drive = VoicesOfTheMines.DRIVE.get().create(level);
+                                            if (drive != null) {
+                                                String fakeId = java.util.UUID.randomUUID().toString();
+
+                                                drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID, fakeId);
+                                                drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_TYPE, signalType);
+                                                drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL, sigLvl);
+
+                                                net.minecraft.world.phys.Vec3 look = player.getLookAngle();
+                                                drive.moveTo(player.getX() + look.x, player.getY() + 1.0, player.getZ() + look.z, 0, 0);
+                                                level.addFreshEntity(drive);
+
+                                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("§aSpawned Level " + sigLvl + " Drive with signal: " + signalType), true);
+                                            }
+                                            return 1;
+                                        })
+                                )
+                        )
+                )
+                // /votmevent addpoints
+                .then(net.minecraft.commands.Commands.literal("addpoints")
+                        .then(net.minecraft.commands.Commands.argument("amount", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1))
+                                .executes(context -> {
+                                    ServerLevel level = context.getSource().getLevel();
+                                    net.minecraft.server.level.ServerPlayer player = context.getSource().getPlayerOrException();
+                                    int amount = com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(context, "amount");
+
+                                    net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(level);
+                                    net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
+
+                                    pd.addPoints(player.getUUID(), amount);
+                                    manager.setDirty();
+
+                                    net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
+                                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncComputerDataPacket(
+                                                    pd.getPoints(player.getUUID()),
+                                                    pd.getCursorSpeedLvl(),
+                                                    pd.getPingCooldownLvl(),
+                                                    pd.getProcessingSpeedLvl(),
+                                                    pd.getProcessingLevelLvl(),
+                                                    pd.getEmails(player.getUUID()),
+                                                    pd.customMarket
+                                            ),
+                                            player.connection.connection,
+                                            net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
+                                    );
+
+                                    context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("§aAdded " + amount + " points to your account!"), true);
+                                    return 1;
+                                })
+                        )
+                )
         );
-        // DEBUG COMMAND FOR TESTS DAILY TASKS - CHOOSE DIFFICULTY
+        // DEBUG COMMAND FOR TESTS DAILY TASKS - CHOOSE DIFFICULTY /repordif
         event.getDispatcher().register(net.minecraft.commands.Commands.literal("reportdif")
                 .requires(s -> s.hasPermission(2))
                 .then(net.minecraft.commands.Commands.argument("day", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1))

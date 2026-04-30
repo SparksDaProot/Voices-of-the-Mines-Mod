@@ -92,25 +92,7 @@ public class TerminalProcessingScreen extends Screen {
         guiGraphics.fill(topWinX, botWinY, topWinX + botLeftW, botWinY + botWinH, 0xFF000000);
 
         if (HAS_ACTIVE_SIGNAL) {
-            String displayName = "UNKNOWN";
-            String t = CURRENT_SIGNAL_TYPE;
-
-            if (t.equals("mars") || t.equals("venus") || t.equals("earth") || t.equals("mercury") ||
-                    t.equals("enceladus") || t.equals("ceres") || t.equals("dione") || t.equals("bennu") ||
-                    t.equals("makemake") || t.equals("rhea") || t.equals("iris") || t.equals("amazur") ||
-                    t.equals("vion") || t.equals("subplanet") || t.equals("europa") || t.equals("moon") ||
-                    t.equals("jupiter") || t.equals("uranus") || t.equals("neptune") || t.equals("saturn") ||
-                    t.equals("hilero") || t.equals("votv_earth") || t.equals("fard") || t.equals("ironlung")) {
-                displayName = "planet_" + t;
-            } else if (t.equals("retroplanet")) {
-                displayName = "planet_retro_planet";
-            } else if (t.startsWith("exogen")) {
-                displayName = "unind_object";
-            } else if (t.startsWith("siggen") || t.startsWith("siggenus") || t.equals("faces") || t.equals("hairy")) {
-                displayName = "unidentified_planet";
-            } else if (!t.isEmpty()) {
-                displayName = "generic planet";
-            }
+            String displayName = TerminalCalibrateScreen.getDisplayName(CURRENT_SIGNAL_TYPE);
 
             guiGraphics.drawString(this.font, "DATA:", topWinX + 10, botWinY + 20, 0xFFAA00, false);
             guiGraphics.drawString(this.font, displayName, topWinX + 50, botWinY + 20, 0xFFFFFF, false);
@@ -124,7 +106,6 @@ public class TerminalProcessingScreen extends Screen {
             String targetLvlStr = isMax ? "[ LOCKED ]" : "[ " + (CURRENT_SIGNAL_LEVEL + 1) + " ]";
             guiGraphics.drawString(this.font, targetLvlStr, topWinX + 90, botWinY + 60, 0xFFFFFF, false);
 
-// Отрисовка кнопок START и EJECT
             int btnX = topWinX + 50;
             int btnY = botWinY + 100;
 
@@ -133,9 +114,7 @@ public class TerminalProcessingScreen extends Screen {
 
             if (!isProcessing) {
                 int ejectX = btnX + 110;
-                // ИСПРАВЛЕНИЕ: Квадратная красная кнопка (ширина и высота 20)
                 guiGraphics.fill(ejectX, btnY, ejectX + 20, btnY + 20, 0xFFFF3333);
-                // Добавим черную рамку для красоты
                 guiGraphics.fill(ejectX + 1, btnY + 1, ejectX + 19, btnY + 19, 0xFFFF5555);
             }
 

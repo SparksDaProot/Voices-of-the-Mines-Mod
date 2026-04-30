@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "voicesofthemines:block/room_sign_garage" },
+    "facing=east":  { "model": "voicesofthemines:block/room_sign_garage", "y": 90 },
+    "facing=south": { "model": "voicesofthemines:block/room_sign_garage", "y": 180 },
+    "facing=west":  { "model": "voicesofthemines:block/room_sign_garage", "y": 270 }
+  }
+}

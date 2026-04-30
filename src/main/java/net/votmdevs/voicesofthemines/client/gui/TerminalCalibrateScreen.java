@@ -11,7 +11,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TerminalCalibrateScreen extends Screen {
@@ -210,36 +212,40 @@ public class TerminalCalibrateScreen extends Screen {
                     t.equals("makemake") || t.equals("rhea") || t.equals("iris") || t.equals("amazur") ||
                     t.equals("vion") || t.equals("subplanet") || t.equals("europa") || t.equals("moon") ||
                     t.equals("jupiter") || t.equals("uranus") || t.equals("neptune") || t.equals("saturn") ||
-                    t.equals("hilero") || t.equals("votv_earth") || t.equals("fard") || t.equals("ironlung")) {
+                    t.equals("hilero") || t.equals("votv_earth") || t.equals("fard") || t.equals("ironlung") ||
+                    t.equals("asteroid") || t.equals("pizzabreather") || t.equals("blackhole0") || t.equals("io")) {
 
                 targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + t + "_sheet.png");
                 isAnimatedSheet = true;
-                if (data.loadingProgress >= 100f) objectNameText = "planet_" + t;
+            }
+            else if (t.equals("tamalan") || t.equals("tamalanflag")) {
+                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/tamalan_sheet.png");
+                isAnimatedSheet = true;
             }
             else if (t.equals("retroplanet")) {
                 targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/retro_planet_sheet.png");
                 isAnimatedSheet = true;
-                if (data.loadingProgress >= 100f) objectNameText = "planet_retro_planet";
             }
             else if (t.equals("enceladus") || t.equals("ceres") || t.equals("dione") || t.equals("bennu")) {
                 targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/grey_sheet.png");
                 isAnimatedSheet = true;
-                if (data.loadingProgress >= 100f) objectNameText = "planet_" + t;
             }
-            else if (t.startsWith("siggen") || t.startsWith("exogen") || t.startsWith("siggenus") || t.equals("hairy")) {
+            else if (t.equals("evil") || t.equals("neutron0") || t.equals("white_dwarf")) {
+                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + t + "_callibrate.png");
+                isAnimatedSheet = false;
+            }
+            else if (t.startsWith("siggen") || t.startsWith("exogen") || t.startsWith("siggenus") || t.equals("hairy") ||
+                    t.equals("funeral") || t.equals("mettus") || t.equals("monty") || t.equals("nev") || t.equals("niko") || t.equals("roz0") || t.equals("sat1")) {
                 targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/genstars" + randomStarType + ".png");
-                if (data.loadingProgress >= 100f) {
-                    if (t.startsWith("exogen")) objectNameText = "unind_object";
-                    else objectNameText = "unidentified_planet";
-                }
+                isAnimatedSheet = false;
             }
             else if (t.equals("faces")) {
                 targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/faces_im.png");
-                if (data.loadingProgress >= 100f) objectNameText = "unidentified_planet";
+                isAnimatedSheet = false;
             }
             else {
                 targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/generic_signal_image.png");
-                if (data.loadingProgress >= 100f) objectNameText = "generic planet";
+                isAnimatedSheet = false;
             }
 
             if (isAnimatedSheet) {
@@ -271,6 +277,24 @@ public class TerminalCalibrateScreen extends Screen {
         guiGraphics.drawString(this.font, String.format("%.1f%%", data.loadingProgress), imgX + 55, dataY + 30, 0xFFFF55, false);
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+    }
+
+    public static String getDisplayName(String t) {
+        if (t.equals("moon") || t.equals("europa")) return "satellite";
+        if (t.equals("neutron0") || t.equals("white_dwarf")) return "star";
+        if (t.equals("blackhole0")) return "blackhole";
+
+        List<String> unind = Arrays.asList("asteroid", "evil", "funeral", "mettus", "monty", "nev", "niko", "pizzabreather", "roz0", "sat1", "exogen1", "exogen2");
+        if (unind.contains(t)) return "unind_object";
+
+        if (t.equals("tamalan") || t.equals("tamalanflag") || t.equals("io")) return "planet_" + t.replace("planet_", "");
+        if (t.equals("retroplanet")) return "planet_retro_planet";
+        if (t.startsWith("siggen") || t.startsWith("siggenus") || t.equals("faces") || t.equals("hairy")) return "unidentified_planet";
+
+        List<String> standardPlanets = Arrays.asList("mars", "venus", "earth", "mercury", "makemake", "rhea", "iris", "amazur", "vion", "subplanet", "jupiter", "uranus", "neptune", "saturn", "hilero", "votv_earth", "fard", "ironlung", "enceladus", "ceres", "dione", "bennu");
+        if (standardPlanets.contains(t)) return "planet_" + t;
+
+        return "generic planet";
     }
 
     @Override

@@ -83,6 +83,32 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> SIGNAL_SIGGENUS7 = registerSoundEvent("signal_siggenus7");
     public static final RegistryObject<SoundEvent> SIGNAL_SIGGENUS8 = registerSoundEvent("signal_siggenus8");
 
+    // NEW SIGNALS
+    //ASTEROIDs
+    public static final RegistryObject<SoundEvent> SIGNAL_ASTEROID1 = registerSoundEvent("signal_asteroid1");
+    public static final RegistryObject<SoundEvent> SIGNAL_ASTEROID2 = registerSoundEvent("signal_asteroid2");
+    public static final RegistryObject<SoundEvent> SIGNAL_ASTEROID3 = registerSoundEvent("signal_asteroid3");
+    public static final RegistryObject<SoundEvent> SIGNAL_ASTEROID4 = registerSoundEvent("signal_asteroid4");
+    public static final RegistryObject<SoundEvent> SIGNAL_ASTEROID5 = registerSoundEvent("signal_asteroid5");
+    public static final RegistryObject<SoundEvent> SIGNAL_ASTEROID6 = registerSoundEvent("signal_asteroid6");
+    public static final RegistryObject<SoundEvent> SIGNAL_ASTEROID7 = registerSoundEvent("signal_asteroid7");
+
+    public static final RegistryObject<SoundEvent> SIGNAL_BLACKHOLE0 = registerSoundEvent("signal_blackhole0");
+    public static final RegistryObject<SoundEvent> SIGNAL_EVIL = registerSoundEvent("signal_evil");
+    public static final RegistryObject<SoundEvent> SIGNAL_FUNERAL = registerSoundEvent("signal_funeral");
+    public static final RegistryObject<SoundEvent> SIGNAL_METTUS = registerSoundEvent("signal_mettus");
+    public static final RegistryObject<SoundEvent> SIGNAL_MONTY = registerSoundEvent("signal_monty");
+    public static final RegistryObject<SoundEvent> SIGNAL_NEUTRON0 = registerSoundEvent("signal_neutron0");
+    public static final RegistryObject<SoundEvent> SIGNAL_NEV = registerSoundEvent("signal_nev");
+    public static final RegistryObject<SoundEvent> SIGNAL_NIKO = registerSoundEvent("signal_niko");
+    public static final RegistryObject<SoundEvent> SIGNAL_PIZZABREATHER = registerSoundEvent("signal_pizzabreather");
+    public static final RegistryObject<SoundEvent> SIGNAL_PLANET_IO = registerSoundEvent("signal_planet_io");
+    public static final RegistryObject<SoundEvent> SIGNAL_ROZ0 = registerSoundEvent("signal_roz0");
+    public static final RegistryObject<SoundEvent> SIGNAL_SAT1 = registerSoundEvent("signal_sat1");
+    public static final RegistryObject<SoundEvent> SIGNAL_TAMALAN = registerSoundEvent("signal_tamalan");
+    public static final RegistryObject<SoundEvent> SIGNAL_TAMALANFLAG = registerSoundEvent("signal_tamalanflag");
+    public static final RegistryObject<SoundEvent> SIGNAL_WHITEDWARF = registerSoundEvent("signal_whitedwarf");
+
     public static final RegistryObject<SoundEvent> SIGNAL_PLANET_MAKEMAKE = registerSoundEvent("signal_planet_makemake");
     public static final RegistryObject<SoundEvent> SIGNAL_PLANET_RHEA = registerSoundEvent("signal_planet_rhea");
     public static final RegistryObject<SoundEvent> SIGNAL_IRIS = registerSoundEvent("signal_iris");
