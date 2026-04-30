@@ -22,7 +22,7 @@ public class SendEmailScreen extends Screen {
         fromBox = new EditBox(this.font, centerX - 90, centerY - 30, 180, 15, Component.literal("From"));
         topicBox = new EditBox(this.font, centerX - 90, centerY, 180, 15, Component.literal("Topic"));
         textBox = new EditBox(this.font, centerX - 90, centerY + 30, 180, 15, Component.literal("Message"));
-        textBox.setMaxLength(500); // Сообщение может быть длинным
+        textBox.setMaxLength(500);
 
         this.addRenderableWidget(toBox);
         this.addRenderableWidget(fromBox);
@@ -70,7 +70,7 @@ public class SendEmailScreen extends Screen {
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(
                         new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SendEmailPacket(to, fromBox.getValue(), topicBox.getValue(), textBox.getValue())
                 );
-                this.minecraft.setScreen(null); // Закрываем
+                this.minecraft.setScreen(null);
             }
             return true;
         }

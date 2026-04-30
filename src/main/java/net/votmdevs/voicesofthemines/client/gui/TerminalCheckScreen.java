@@ -138,7 +138,6 @@ public class TerminalCheckScreen extends Screen {
         guiGraphics.fill(rightX - 1, topLeftY - 1, rightX + 128 + 1, topLeftY + 128 + 1, 0xFFFFFFFF);
         guiGraphics.fill(rightX, topLeftY, rightX + 128, topLeftY + 128, 0xFF000000);
 
-        // === НОВОЕ: КНОПКА EJECT ===
         if (!isPlaying) {
             int ejectX = finishBtnX + 70;
             guiGraphics.fill(ejectX, btnY, ejectX + 20, btnY + 20, 0xFFFF3333);

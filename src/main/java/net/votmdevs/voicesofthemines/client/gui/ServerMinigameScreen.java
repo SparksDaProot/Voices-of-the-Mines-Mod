@@ -80,7 +80,6 @@ public class ServerMinigameScreen extends Screen {
             int rowY = y + 35 + (i * 18);
             boolean isActiveRow = (i == currentRow);
 
-            // Окно самого примера
             guiGraphics.fill(x + 10, rowY, x + 110, rowY + 15, 0xFFFFFF00);
             guiGraphics.fill(x + 11, rowY + 1, x + 109, rowY + 14, 0xFF000000);
 
