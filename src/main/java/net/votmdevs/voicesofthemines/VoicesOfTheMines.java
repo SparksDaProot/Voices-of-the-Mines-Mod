@@ -257,6 +257,11 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Item> TRASH_BAG = ITEMS.register("trash_bag", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> TRASH_ROLL = ITEMS.register("trash_roll", () -> new Item(new Item.Properties().defaultDurability(10)));
 
+
+    public static final RegistryObject<Item> FUEL_CAN_ITEM = ITEMS.register("fuel_can", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> DRIVE_ITEM = ITEMS.register("drive", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> WASH_SPONGE_ITEM = ITEMS.register("wash_sponge", () -> new Item(new Item.Properties()));
+
     public static final RegistryObject<Block> POSTER = BLOCKS.register("poster",
             () -> new net.votmdevs.voicesofthemines.block.PosterBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).instabreak().noCollission().noOcclusion()));
 
@@ -623,9 +628,8 @@ public class VoicesOfTheMines {
 
     // drone
 
-
     public static final RegistryObject<Block> DRONE_TARGET = BLOCKS.register("target_drone_block",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion().noCollission()));
+            () -> new FlatBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion()));
 
     public static final RegistryObject<Item> DRONE_TARGET_ITEM = ITEMS.register("target_drone_block",
             () -> new BlockItem(DRONE_TARGET.get(), new Item.Properties()));

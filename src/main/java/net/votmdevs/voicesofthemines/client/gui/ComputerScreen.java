@@ -97,9 +97,13 @@ public class ComputerScreen extends Screen {
 
         // what player can buy
         if (allItems.isEmpty()) {
-            allItems.add(new StoreItem("hazard_suit", "Hazard Suit", new ItemStack(VoicesOfTheMines.HAZARD_HELMET.get()), 300, 1));
+            allItems.add(new StoreItem("hazard_helmet", "Hazard Helmet", new ItemStack(VoicesOfTheMines.HAZARD_HELMET.get()), 75, 4));
+            allItems.add(new StoreItem("hazard_chestplate", "Hazard Chestplate", new ItemStack(VoicesOfTheMines.HAZARD_CHESTPLATE.get()), 75, 4));
+            allItems.add(new StoreItem("hazard_leggings", "Hazard Leggings", new ItemStack(VoicesOfTheMines.HAZARD_LEGGINGS.get()), 75, 4));
+            allItems.add(new StoreItem("hazard_boots", "Hazard Boots", new ItemStack(VoicesOfTheMines.HAZARD_BOOTS.get()), 75, 4));
             allItems.add(new StoreItem("hook", "Hook", new ItemStack(VoicesOfTheMines.HOOK_ITEM.get()), 50, 1));
             allItems.add(new StoreItem("trash_roll", "Trash bag roll", new ItemStack(VoicesOfTheMines.TRASH_ROLL.get()), 16, 1));
+            allItems.add(new StoreItem("trash_bag", "Trash bag", new ItemStack(VoicesOfTheMines.TRASH_BAG.get()), 4, 1));
             allItems.add(new StoreItem("glasses", "Glasses", new ItemStack(VoicesOfTheMines.ACCESSORY_GLASSES.get()), 10, 1));
             allItems.add(new StoreItem("jacket", "Jacket", new ItemStack(VoicesOfTheMines.ACCESSORY_JACKET.get()), 10, 1));
             allItems.add(new StoreItem("keypad", "Keypad", new ItemStack(VoicesOfTheMines.KEYPAD_ITEM.get()), 30, 1));
@@ -108,6 +112,14 @@ public class ComputerScreen extends Screen {
             allItems.add(new StoreItem("toblerone", "Toblerone", new ItemStack(VoicesOfTheMines.TOBLERONE.get()), 10, 1));
             allItems.add(new StoreItem("cheese", "Cheese", new ItemStack(VoicesOfTheMines.CHEESE.get()), 5, 1));
             allItems.add(new StoreItem("burger", "Burger", new ItemStack(VoicesOfTheMines.BURGER.get()), 5, 1));
+            allItems.add(new StoreItem("disk_blue", "Blue disk", new ItemStack(VoicesOfTheMines.DISK_BLUE.get()), 10, 1));
+            allItems.add(new StoreItem("drive_box", "Drive box", new ItemStack(VoicesOfTheMines.DRIVE_BOX_ITEM.get()), 5, 1));
+            allItems.add(new StoreItem("paper_sheet", "Paper sheet", new ItemStack(VoicesOfTheMines.PAPER_SHEET.get()), 3, 1));
+            allItems.add(new StoreItem("electronic_waste", "Electronic waste", new ItemStack(VoicesOfTheMines.ELECTRONIC_WASTE.get()), 2, 1));
+            allItems.add(new StoreItem("recycled_rubber", "Recycled rubber", new ItemStack(VoicesOfTheMines.RECYCLED_RUBBER.get()), 2, 1));
+            allItems.add(new StoreItem("metal_scrap", "Metal scrap", new ItemStack(VoicesOfTheMines.METAL_SCRAP.get()), 2, 1));
+            allItems.add(new StoreItem("recycled_plastic", "Recycled plastic", new ItemStack(VoicesOfTheMines.RECYCLED_PLASTIC.get()), 2, 1));
+            allItems.add(new StoreItem("candle_handle", "Candle Handle", new ItemStack(VoicesOfTheMines.CANDLE_HANDLE_ITEM.get()), 10, 1));
             allItems.add(new StoreItem("painter_black", "Painter Black", new ItemStack(VoicesOfTheMines.PAINTER_BLACK.get()), 50, 1));
             allItems.add(new StoreItem("painter_blue", "Painter Blue", new ItemStack(VoicesOfTheMines.PAINTER_BLUE.get()), 50, 1));
             allItems.add(new StoreItem("painter_red", "Painter Red", new ItemStack(VoicesOfTheMines.PAINTER_RED.get()), 50, 1));
@@ -115,6 +127,9 @@ public class ComputerScreen extends Screen {
             allItems.add(new StoreItem("painter_pink", "Painter Pink", new ItemStack(VoicesOfTheMines.PAINTER_PINK.get()), 50, 1));
             allItems.add(new StoreItem("painter_white", "Painter White", new ItemStack(VoicesOfTheMines.PAINTER_WHITE.get()), 50, 1));
             allItems.add(new StoreItem("painter_yellow", "Painter Yellow", new ItemStack(VoicesOfTheMines.PAINTER_YELLOW.get()), 50, 1));
+            allItems.add(new StoreItem("fuel_can", "Fuel Can", new ItemStack(VoicesOfTheMines.FUEL_CAN_ITEM.get()), 25, 1));
+            allItems.add(new StoreItem("drive", "Drive", new ItemStack(VoicesOfTheMines.DRIVE_ITEM.get()), 2, 1));
+            allItems.add(new StoreItem("wash_sponge", "Sponge", new ItemStack(VoicesOfTheMines.WASH_SPONGE_ITEM.get()), 5, 1));
         }
         updateSearch();
     }
@@ -274,14 +289,12 @@ public class ComputerScreen extends Screen {
             int leftX = startX + 10; int leftY = startY + 35; int leftW = 120; int leftH = 195;
             int rightX = startX + 140; int rightY = startY + 35; int rightW = 250; int rightH = 195;
 
-            // === ИСПРАВЛЕНИЕ РЕНДЕРА: Сначала рисуем фоны! ===
             guiGraphics.fill(leftX - 1, leftY - 1, leftX + leftW + 1, leftY + leftH + 1, 0xFFFFFFFF);
             guiGraphics.fill(leftX, leftY, leftX + leftW, leftY + leftH, 0xFF000000);
 
             guiGraphics.fill(rightX - 1, rightY - 1, rightX + rightW + 1, rightY + rightH + 1, 0xFFFFFFFF);
             guiGraphics.fill(rightX, rightY, rightX + rightW, rightY + rightH, 0xFF000000);
 
-            // Кнопка SEND (теперь рисуется ПОВЕРХ фона)
             int sendX = rightX + rightW - 40; int sendY = rightY + 5;
             boolean hoverSend = mouseX >= sendX && mouseX <= sendX + 35 && mouseY >= sendY && mouseY <= sendY + 12;
             guiGraphics.fill(sendX - 1, sendY - 1, sendX + 36, sendY + 13, hoverSend ? 0xFFFFAA00 : 0xFF553300);

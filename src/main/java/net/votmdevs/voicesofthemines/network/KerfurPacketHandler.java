@@ -771,11 +771,20 @@ public class KerfurPacketHandler {
             ctx.get().setPacketHandled(true);
         }
 
+
         private static net.minecraft.world.item.Item getItemById(String id) {
             switch(id) {
-                case "hazard_suit": return VoicesOfTheMines.HAZARD_HELMET.get();
+                case "hazard_helmet": return VoicesOfTheMines.HAZARD_HELMET.get();
+                case "hazard_chestplate": return VoicesOfTheMines.HAZARD_CHESTPLATE.get();
+                case "hazard_leggings": return VoicesOfTheMines.HAZARD_LEGGINGS.get();
+                case "hazard_boots": return VoicesOfTheMines.HAZARD_BOOTS.get();
+                case "electronic_waste": return VoicesOfTheMines.ELECTRONIC_WASTE.get();
+                case "recycled_rubber": return VoicesOfTheMines.RECYCLED_RUBBER.get();
+                case "metal_scrap": return VoicesOfTheMines.METAL_SCRAP.get();
+                case "recycled_plastic": return VoicesOfTheMines.RECYCLED_PLASTIC.get();
                 case "hook": return VoicesOfTheMines.HOOK_ITEM.get();
                 case "trash_roll": return VoicesOfTheMines.TRASH_ROLL.get();
+                case "trash_bag": return VoicesOfTheMines.TRASH_BAG.get();
                 case "glasses": return VoicesOfTheMines.ACCESSORY_GLASSES.get();
                 case "jacket": return VoicesOfTheMines.ACCESSORY_JACKET.get();
                 case "keypad": return VoicesOfTheMines.KEYPAD_ITEM.get();
@@ -784,6 +793,10 @@ public class KerfurPacketHandler {
                 case "toblerone": return VoicesOfTheMines.TOBLERONE.get();
                 case "cheese": return VoicesOfTheMines.CHEESE.get();
                 case "burger": return VoicesOfTheMines.BURGER.get();
+                case "disk_blue": return VoicesOfTheMines.DISK_BLUE.get();
+                case "drive_box": return VoicesOfTheMines.DRIVE_BOX_ITEM.get();
+                case "paper_sheet": return VoicesOfTheMines.PAPER_SHEET.get();
+                case "candle_handle": return VoicesOfTheMines.CANDLE_HANDLE_ITEM.get();
                 case "painter_black": return VoicesOfTheMines.PAINTER_BLACK.get();
                 case "painter_blue": return VoicesOfTheMines.PAINTER_BLUE.get();
                 case "painter_red": return VoicesOfTheMines.PAINTER_RED.get();
@@ -791,10 +804,14 @@ public class KerfurPacketHandler {
                 case "painter_pink": return VoicesOfTheMines.PAINTER_PINK.get();
                 case "painter_white": return VoicesOfTheMines.PAINTER_WHITE.get();
                 case "painter_yellow": return VoicesOfTheMines.PAINTER_YELLOW.get();
+                case "fuel_can": return VoicesOfTheMines.FUEL_CAN_ITEM.get();
+                case "drive": return VoicesOfTheMines.DRIVE_ITEM.get();
+                case "wash_sponge": return VoicesOfTheMines.WASH_SPONGE_ITEM.get();
                 default: return null;
             }
         }
     }
+
 
     public static class ReadEmailPacket {
         private final int index;

@@ -90,6 +90,37 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
                 break;
 
             case 2: // WAIT
+                // === НОВОЕ: Спавн Entity при приземлении ===
+                if (waitTimer == 0) {
+                    for (int i = 0; i < this.inventory.getContainerSize(); i++) {
+                        net.minecraft.world.item.ItemStack stack = this.inventory.getItem(i);
+                        if (!stack.isEmpty()) {
+                            net.minecraft.world.item.Item item = stack.getItem();
+                            boolean isEntityItem = false;
+                            EntityType<?> typeToSpawn = null;
+
+                            if (item == VoicesOfTheMines.FUEL_CAN_ITEM.get()) { typeToSpawn = VoicesOfTheMines.FUEL_CAN.get(); isEntityItem = true; }
+                            else if (item == VoicesOfTheMines.DRIVE_ITEM.get()) { typeToSpawn = VoicesOfTheMines.DRIVE.get(); isEntityItem = true; }
+                            else if (item == VoicesOfTheMines.WASH_SPONGE_ITEM.get()) { typeToSpawn = VoicesOfTheMines.WASH_SPONGE.get(); isEntityItem = true; }
+
+                            if (isEntityItem && typeToSpawn != null) {
+                                for(int j = 0; j < stack.getCount(); j++) {
+                                    net.minecraft.world.entity.Entity spawned = typeToSpawn.create(this.level());
+                                    if (spawned != null) {
+                                        // Разбрасываем предметы немного в стороны, чтобы они не застряли друг в друге
+                                        double offsetX = (this.random.nextDouble() - 0.5) * 1.5;
+                                        double offsetZ = (this.random.nextDouble() - 0.5) * 1.5;
+                                        spawned.moveTo(this.getX() + offsetX, this.getY() - 0.5, this.getZ() + offsetZ, this.random.nextFloat() * 360F, 0);
+                                        this.level().addFreshEntity(spawned);
+                                    }
+                                }
+                                // Удаляем предмет из инвентаря дрона, так как мы его заспавнили
+                                this.inventory.setItem(i, net.minecraft.world.item.ItemStack.EMPTY);
+                            }
+                        }
+                    }
+                }
+
                 this.setDeltaMovement(0, 0, 0);
                 waitTimer++;
                 if (waitTimer > 1000) this.entityData.set(STATE, 3);
@@ -286,15 +317,13 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
             }
             return totalBoxPrice; // summ
         }
-
-        // other items to sell
-        if (item == VoicesOfTheMines.HAZARD_HELMET.get() ||
-                item == VoicesOfTheMines.HAZARD_CHESTPLATE.get() ||
-                item == VoicesOfTheMines.HAZARD_LEGGINGS.get() ||
-                item == VoicesOfTheMines.HAZARD_BOOTS.get()) return 150;
-
+        if (item == VoicesOfTheMines.HAZARD_BOOTS.get()) return 30;
+        if (item == VoicesOfTheMines.HAZARD_HELMET.get()) return 30;
+        if (item == VoicesOfTheMines.HAZARD_CHESTPLATE.get()) return 30;
+        if (item == VoicesOfTheMines.HAZARD_LEGGINGS.get()) return 30;
         if (item == VoicesOfTheMines.HOOK_ITEM.get()) return 25;
         if (item == VoicesOfTheMines.TRASH_ROLL.get()) return 5;
+        if (item == VoicesOfTheMines.TRASH_BAG.get()) return 2;
         if (item == VoicesOfTheMines.ACCESSORY_GLASSES.get()) return 1;
         if (item == VoicesOfTheMines.ACCESSORY_JACKET.get()) return 1;
         if (item == VoicesOfTheMines.KEYPAD_ITEM.get()) return 10;
@@ -304,6 +333,17 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
         if (item == VoicesOfTheMines.TOBLERONE.get()) return 2;
         if (item == VoicesOfTheMines.CHEESE.get()) return 2;
         if (item == VoicesOfTheMines.BURGER.get()) return 2;
+        if (item == VoicesOfTheMines.DISK_BLUE.get()) return 6;
+        if (item == VoicesOfTheMines.DRIVE_BOX_ITEM.get()) return 1;
+        if (item == VoicesOfTheMines.PAPER_SHEET.get()) return 1;
+        if (item == VoicesOfTheMines.CANDLE_HANDLE_ITEM.get()) return 5;
+        if (item == VoicesOfTheMines.RECYCLED_PLASTIC.get()) return 1;
+        if (item == VoicesOfTheMines.RECYCLED_RUBBER.get()) return 1;
+        if (item == VoicesOfTheMines.METAL_SCRAP.get()) return 1;
+        if (item == VoicesOfTheMines.ELECTRONIC_WASTE.get()) return 1;
+        if (item == VoicesOfTheMines.FUEL_CAN_ITEM.get()) return 13;
+        if (item == VoicesOfTheMines.DRIVE_ITEM.get()) return 1;
+        if (item == VoicesOfTheMines.WASH_SPONGE_ITEM.get()) return 2;
 
         if (item == VoicesOfTheMines.PAINTER_BLACK.get() ||
                 item == VoicesOfTheMines.PAINTER_BLUE.get() ||
