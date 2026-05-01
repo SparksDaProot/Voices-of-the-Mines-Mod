@@ -262,8 +262,8 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Item> FUEL_CAN_ITEM = ITEMS.register("fuel_can", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> DRIVE_ITEM = ITEMS.register("drive", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> WASH_SPONGE_ITEM = ITEMS.register("wash_sponge", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> METAL_DETECTOR_ITEM = ITEMS.register("metal_detector", () -> new Item(new Item.Properties().stacksTo(1)));
-
+    public static final RegistryObject<Item> METAL_DETECTOR_ITEM = ITEMS.register("metal_detector",
+            () -> new net.votmdevs.voicesofthemines.item.MetalDetectorItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Block> POSTER = BLOCKS.register("poster",
             () -> new net.votmdevs.voicesofthemines.block.PosterBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).instabreak().noCollission().noOcclusion()));
@@ -849,23 +849,6 @@ public class VoicesOfTheMines {
                                 return stack.hasTag() && stack.getTag().getBoolean("Active") ? 1.0F : 0.0F;
                             });
                 });
-                net.minecraft.client.renderer.item.ItemProperties.register(VoicesOfTheMines.METAL_DETECTOR_ITEM.get(), ResourceLocation.fromNamespaceAndPath(VoicesOfTheMines.MODID, "distance"),
-                        (stack, level, entity, seed) -> {
-                            if (entity == null || level == null) return 0.0F;
-
-                            double closestDist = Double.MAX_VALUE;
-                            for (net.minecraft.world.entity.Entity e : level.getEntitiesOfClass(net.votmdevs.voicesofthemines.entity.TreasureSpotEntity.class, entity.getBoundingBox().inflate(20.0D))) {
-                                double d = e.distanceToSqr(entity);
-                                if (d < closestDist) {
-                                    closestDist = d;
-                                }
-                            }
-
-                            if (closestDist <= 5.0 * 5.0) return 3.0F; // here
-                            if (closestDist <= 10.0 * 10.0) return 2.0F; // close
-                            if (closestDist <= 20.0 * 20.0) return 1.0F; // probably close
-                            return 0.0F; // default
-                        });
             }
 
 
