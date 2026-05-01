@@ -163,6 +163,18 @@
 
   "lightswitch": { "sounds": [ "voicesofthemines:lightswitch" ] },
   "connect": { "sounds": [ "voicesofthemines:connect" ] },
+  "evil_scream": { "sounds": [ "voicesofthemines:evil_scream" ] },
+
+  "splat1": { "sounds": [ "voicesofthemines:splat1" ] },
+  "splat2": { "sounds": [ "voicesofthemines:splat2" ] },
+  "splat3": { "sounds": [ "voicesofthemines:splat3" ] },
+
+  "sponge1": { "sounds": [ "voicesofthemines:sponge1" ] },
+  "sponge2": { "sounds": [ "voicesofthemines:sponge2" ] },
+  "sponge3": { "sounds": [ "voicesofthemines:sponge3" ] },
+
+  "water_splash": { "sounds": [ "voicesofthemines:water_splash" ] },
+  "alarm": { "sounds": [ "voicesofthemines:alarm" ] },
 
   "raw1": { "sounds": [ "voicesofthemines:raw1" ] },
   "raw2": { "sounds": [ "voicesofthemines:raw2" ] },
@@ -263,6 +275,8 @@
   "signal_tamalan": { "sounds": [ "voicesofthemines:signal_tamalan" ] },
   "signal_tamalanflag": { "sounds": [ "voicesofthemines:signal_tamalanflag" ] },
   "signal_whitedwarf": { "sounds": [ "voicesofthemines:signal_whitedwarf" ] },
+  "signal_tulpar": { "sounds": [ "voicesofthemines:signal_tulpar" ] },
+  "signal_hatefulstar": { "sounds": [ "voicesofthemines:signal_hatefulstar" ] },
 
   "drive_in": { "sounds": [ "voicesofthemines:drive_in" ] },
   "impact_drive_0001": { "sounds": [ "voicesofthemines:impact_drive_0001" ] },

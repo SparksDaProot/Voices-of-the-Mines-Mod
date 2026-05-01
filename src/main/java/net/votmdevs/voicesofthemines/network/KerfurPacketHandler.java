@@ -33,6 +33,7 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, TriggerEvilDeathPacket.class, TriggerEvilDeathPacket::encode, TriggerEvilDeathPacket::decode, TriggerEvilDeathPacket::handle);
         INSTANCE.registerMessage(id++, RequestReportDataPacket.class, RequestReportDataPacket::encode, RequestReportDataPacket::decode, RequestReportDataPacket::handle);
         INSTANCE.registerMessage(id++, SyncReportDataPacket.class, SyncReportDataPacket::encode, SyncReportDataPacket::decode, SyncReportDataPacket::handle);
         INSTANCE.registerMessage(id++, SavePaperSheetPacket.class, SavePaperSheetPacket::encode, SavePaperSheetPacket::decode, SavePaperSheetPacket::handle);
@@ -117,6 +118,8 @@ public class KerfurPacketHandler {
                             if (!maxwell.isHeld()) maxwell.setHeldBy(player.getUUID());
                         } else if (e instanceof net.votmdevs.voicesofthemines.entity.DriveEntity drive) {
                             if (!drive.isHeld()) drive.setHeldBy(player.getUUID());
+                        } else if (e instanceof net.votmdevs.voicesofthemines.entity.WashSpongeEntity sponge) {
+                            if (!sponge.isHeld()) sponge.setHeldBy(player.getUUID());
                         } else if (e instanceof net.votmdevs.voicesofthemines.entity.FuelCanEntity fuelCan) {
                             if (!fuelCan.isHeld()) fuelCan.setHeldBy(player.getUUID());
                         } else if (e instanceof net.votmdevs.voicesofthemines.entity.AtvEntity atv) {
@@ -128,6 +131,9 @@ public class KerfurPacketHandler {
                             }
                         }
                     } else {
+                        for (Entity e : player.level().getEntitiesOfClass(net.votmdevs.voicesofthemines.entity.WashSpongeEntity.class, player.getBoundingBox().inflate(10.0D))) {
+                            if (e instanceof net.votmdevs.voicesofthemines.entity.WashSpongeEntity sponge && player.getUUID().equals(sponge.getHeldBy().orElse(null))) sponge.setHeldBy(null);
+                        }
                         for (Entity e : player.level().getEntitiesOfClass(FleshEntity.class, player.getBoundingBox().inflate(10.0D))) {
                             if (e instanceof FleshEntity flesh && player.getUUID().equals(flesh.getHeldBy().orElse(null))) flesh.setHeldBy(null);
                         }
@@ -1204,6 +1210,20 @@ public class KerfurPacketHandler {
             ctx.get().enqueueWork(() -> {
                 if (net.minecraft.client.Minecraft.getInstance().screen instanceof net.votmdevs.voicesofthemines.client.gui.PaperSheetScreen screen) {
                     screen.fillReportData(msg.satellites);
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    public static class TriggerEvilDeathPacket {
+        public TriggerEvilDeathPacket() {}
+        public static void encode(TriggerEvilDeathPacket msg, FriendlyByteBuf buffer) {}
+        public static TriggerEvilDeathPacket decode(FriendlyByteBuf buffer) { return new TriggerEvilDeathPacket(); }
+        public static void handle(TriggerEvilDeathPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    player.kill();
                 }
             });
             ctx.get().setPacketHandled(true);

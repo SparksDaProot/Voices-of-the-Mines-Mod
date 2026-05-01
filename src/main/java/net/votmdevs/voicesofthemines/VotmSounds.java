@@ -24,6 +24,19 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> CONCRETE_SCRAPE = registerSoundEvent("concrete_scrape");
     public static final RegistryObject<SoundEvent> PC_STARTUP = registerSoundEvent("pcstartup");
     public static final RegistryObject<SoundEvent> PC_WORKING_LOOP = registerSoundEvent("computerworking_loop");
+    public static final RegistryObject<SoundEvent> EVIL_SCREAM = registerSoundEvent("evil_scream");
+// <CLEANING> sounds
+    public static final RegistryObject<SoundEvent> WATER_SPLASH = registerSoundEvent("water_splash");
+    public static final RegistryObject<SoundEvent> SPLAT1 = registerSoundEvent("splat1");
+    public static final RegistryObject<SoundEvent> SPLAT2 = registerSoundEvent("splat2");
+    public static final RegistryObject<SoundEvent> SPLAT3 = registerSoundEvent("splat3");
+    public static final RegistryObject<SoundEvent> SPONGE1 = registerSoundEvent("sponge1");
+    public static final RegistryObject<SoundEvent> SPONGE2 = registerSoundEvent("sponge2");
+    public static final RegistryObject<SoundEvent> SPONGE3 = registerSoundEvent("sponge3");
+
+    public static final RegistryObject<SoundEvent> ALARM = registerSoundEvent("alarm");
+
+
 
     public static final RegistryObject<SoundEvent> LIGHTSWITCH = registerSoundEvent("lightswitch");
     public static final RegistryObject<SoundEvent> CONNECT = registerSoundEvent("connect");
@@ -108,6 +121,9 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> SIGNAL_TAMALAN = registerSoundEvent("signal_tamalan");
     public static final RegistryObject<SoundEvent> SIGNAL_TAMALANFLAG = registerSoundEvent("signal_tamalanflag");
     public static final RegistryObject<SoundEvent> SIGNAL_WHITEDWARF = registerSoundEvent("signal_whitedwarf");
+
+    public static final RegistryObject<SoundEvent> SIGNAL_TULPAR = registerSoundEvent("signal_tulpar");
+    public static final RegistryObject<SoundEvent> SIGNAL_HATEFULSTAR = registerSoundEvent("signal_hatefulstar");
 
     public static final RegistryObject<SoundEvent> SIGNAL_PLANET_MAKEMAKE = registerSoundEvent("signal_planet_makemake");
     public static final RegistryObject<SoundEvent> SIGNAL_PLANET_RHEA = registerSoundEvent("signal_planet_rhea");

@@ -14,6 +14,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.votmdevs.voicesofthemines.entity.TrashSplashEntity;
 
 import java.util.List;
 
@@ -205,6 +206,46 @@ public class VotmEventHandler {
                         })
                 )
         );
+    }
+// TRASH BAG - trash splash
+    @SubscribeEvent
+    public static void onRightClickBlock(net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() == VoicesOfTheMines.TRASH_BAG.get()) {
+            BlockPos pos = event.getPos();
+            net.minecraft.core.Direction face = event.getFace();
+            if (face != null) {
+                TrashSplashEntity splash = VoicesOfTheMines.TRASH_SPLASH.get().create(event.getLevel());
+                if (splash != null) {
+                    splash.moveTo(
+                            pos.getX() + 0.5 + face.getStepX() * 0.51,
+                            pos.getY() + 0.5 + face.getStepY() * 0.51,
+                            pos.getZ() + 0.5 + face.getStepZ() * 0.51,
+                            0, 0
+                    );
+
+                    float yaw = 0, pitch = 0;
+                    switch (face) {
+                        case UP: pitch = 0; break;
+                        case DOWN: pitch = 180; break;
+                        case NORTH: pitch = -90; yaw = 180; break;
+                        case SOUTH: pitch = -90; yaw = 0; break;
+                        case WEST: pitch = -90; yaw = 90; break;
+                        case EAST: pitch = -90; yaw = -90; break;
+                    }
+
+                    splash.setLockedRotationAndFace(yaw, pitch, face);
+                    event.getLevel().addFreshEntity(splash);
+
+                    net.minecraft.sounds.SoundEvent[] splatSounds = {
+                            net.votmdevs.voicesofthemines.VotmSounds.SPLAT1.get(),
+                            net.votmdevs.voicesofthemines.VotmSounds.SPLAT2.get(),
+                            net.votmdevs.voicesofthemines.VotmSounds.SPLAT3.get()
+                    };
+                    net.minecraft.sounds.SoundEvent selectedSplat = splatSounds[event.getLevel().random.nextInt(splatSounds.length)];
+                    event.getLevel().playSound(null, pos, selectedSplat, net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 0.8F + event.getLevel().random.nextFloat() * 0.4F);
+                }
+            }
+        }
     }
 
     @SubscribeEvent

@@ -201,6 +201,9 @@ public class TerminalCalibrateScreen extends Screen {
         String objectNameText = "no";
 
         if (HAS_ACTIVE_SIGNAL) {
+            if (data.loadingProgress >= 100f) {
+                objectNameText = getDisplayName(CURRENT_SIGNAL_TYPE);
+            }
             float alphaSignal = data.loadingProgress / 100f;
             RenderSystem.setShaderColor(1f, 1f, 1f, alphaSignal);
 
@@ -230,7 +233,7 @@ public class TerminalCalibrateScreen extends Screen {
                 targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/grey_sheet.png");
                 isAnimatedSheet = true;
             }
-            else if (t.equals("evil") || t.equals("neutron0") || t.equals("white_dwarf")) {
+            else if (t.equals("evil") || t.equals("neutron0") || t.equals("hatefulstar") || t.equals("tulpar") || t.equals("white_dwarf")) {
                 targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + t + "_callibrate.png");
                 isAnimatedSheet = false;
             }
@@ -281,10 +284,10 @@ public class TerminalCalibrateScreen extends Screen {
 
     public static String getDisplayName(String t) {
         if (t.equals("moon") || t.equals("europa")) return "satellite";
-        if (t.equals("neutron0") || t.equals("white_dwarf")) return "star";
+        if (t.equals("neutron0") || t.equals("hatefulstar") || t.equals("white_dwarf")) return "star";
         if (t.equals("blackhole0")) return "blackhole";
 
-        List<String> unind = Arrays.asList("asteroid", "evil", "funeral", "mettus", "monty", "nev", "niko", "pizzabreather", "roz0", "sat1", "exogen1", "exogen2");
+        List<String> unind = Arrays.asList("asteroid", "evil", "funeral", "mettus", "monty", "nev", "niko", "pizzabreather", "roz0", "sat1", "exogen1", "exogen2", "tulpar");
         if (unind.contains(t)) return "unind_object";
 
         if (t.equals("tamalan") || t.equals("tamalanflag") || t.equals("io")) return "planet_" + t.replace("planet_", "");

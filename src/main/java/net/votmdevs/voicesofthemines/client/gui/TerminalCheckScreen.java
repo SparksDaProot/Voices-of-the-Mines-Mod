@@ -153,7 +153,7 @@ public class TerminalCheckScreen extends Screen {
                 RenderSystem.enableScissor((int)(rightX * scale), (int)(this.height * scale) - (int)((topLeftY + scissorHeight) * scale), (int)(128 * scale), (int)(scissorHeight * scale));
 
                 ResourceLocation imageToDraw = selectedImage;
-                List<String> uniqueChecks = Arrays.asList("funeral", "evil", "pizzabreather", "roz0", "sat1", "tamalanflag", "mettus", "monty");
+                List<String> uniqueChecks = Arrays.asList("funeral", "evil", "pizzabreather", "roz0", "sat1", "tamalanflag", "mettus", "monty", "tulpar", "hatefulstar");
 
                 if (uniqueChecks.contains(CURRENT_SIGNAL_TYPE)) {
                     imageToDraw = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + CURRENT_SIGNAL_TYPE + "_check.png");
@@ -197,8 +197,12 @@ public class TerminalCheckScreen extends Screen {
                 text = "....the end is near....";
             } else if (CURRENT_SIGNAL_TYPE.equals("pizzabreather")) {
                 text = "process it\ncompletely...";
+            } else if (CURRENT_SIGNAL_TYPE.equals("hatefulstar")) {
+                text = "1548_EX\n[REDACTED]";
+            } else if (CURRENT_SIGNAL_TYPE.equals("tulpar")) {
+                text = ". . . .\n.\n. - . .\n. - - .";
             } else if (CURRENT_SIGNAL_TYPE.equals("funeral")) {
-                text = "...i am here...";
+                text = "...here..i..am...";
             }
 
             guiGraphics.drawWordWrap(this.font, Component.literal(text), rightX + 5, textWinY + 5, 150, 0x55FF55);
@@ -230,6 +234,8 @@ public class TerminalCheckScreen extends Screen {
             case "tamalan": return VotmSounds.SIGNAL_TAMALAN.get();
             case "tamalanflag": return VotmSounds.SIGNAL_TAMALANFLAG.get();
             case "white_dwarf": return VotmSounds.SIGNAL_WHITEDWARF.get();
+            case "tulpar": return VotmSounds.SIGNAL_TULPAR.get();
+            case "hatefulstar": return VotmSounds.SIGNAL_HATEFULSTAR.get();
 
             case "venus": return VotmSounds.SIGNAL_PLANET_VENUS.get();
             case "enceladus": return VotmSounds.SIGNAL_PLANET_ENCELADUS.get();
@@ -325,6 +331,11 @@ public class TerminalCheckScreen extends Screen {
                 currentSound = SimpleSoundInstance.forUI(selectedSnd, 1.0f, 1.0f);
                 Minecraft.getInstance().getSoundManager().play(currentSound);
                 isPlaying = true;
+                if (CURRENT_SIGNAL_TYPE.equals("evil")) {
+                    net.votmdevs.voicesofthemines.client.ClientInputHandler.evilEventTimer = 100; // EVIL EVENT TIMER <-
+                } else if (CURRENT_SIGNAL_TYPE.equals("funeral")) {
+                    net.votmdevs.voicesofthemines.client.ClientInputHandler.funeralEventTimer = 1000; // FUNERAL EVENT TIMER <-
+                }
             }
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
             return true;

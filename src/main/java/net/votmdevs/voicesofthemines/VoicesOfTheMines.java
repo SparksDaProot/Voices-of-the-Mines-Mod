@@ -515,6 +515,7 @@ public class VoicesOfTheMines {
                     .sized(1.0f, 0.1f)
                     .build(ResourceLocation.fromNamespaceAndPath(MODID, "blood_splash").toString()));
 
+
     public static final RegistryObject<Block> BOOK_RECIPE = BLOCKS.register("book_kerfur_recipe",
             () -> new net.votmdevs.voicesofthemines.block.BookRecipeBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).instabreak().noOcclusion()));
 
@@ -608,6 +609,17 @@ public class VoicesOfTheMines {
             () -> EntityType.Builder.<SeatEntity>of(SeatEntity::new, MobCategory.MISC)
                     .sized(0.01f, 0.01f)
                     .build("seat"));
+
+
+    public static final RegistryObject<EntityType<TrashSplashEntity>> TRASH_SPLASH = ENTITY_TYPES.register("trash_splash",
+            () -> EntityType.Builder.of(TrashSplashEntity::new, MobCategory.MISC)
+                    .sized(1.0f, 0.1f)
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "trash_splash").toString()));
+
+    public static final RegistryObject<EntityType<WashSpongeEntity>> WASH_SPONGE = ENTITY_TYPES.register("wash_sponge",
+            () -> EntityType.Builder.of(WashSpongeEntity::new, MobCategory.MISC)
+                    .sized(0.4f, 0.4f)
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "wash_sponge").toString()));
 
     // drone
 
@@ -793,6 +805,8 @@ public class VoicesOfTheMines {
             event.put(KERFUR.get(), KerfurEntity.createAttributes().build());
             event.put(FLESH.get(), FleshEntity.createAttributes().build());
             event.put(BLOOD_SPLASH.get(), BloodSplashEntity.createAttributes().build());
+            event.put(TRASH_SPLASH.get(), TrashSplashEntity.createAttributes().build());
+            event.put(WASH_SPONGE.get(), WashSpongeEntity.createAttributes().build());
             event.put(OMEGA_KERFUR.get(), OmegaKerfurEntity.createAttributes().build());
             event.put(COCKROACH.get(), CockroachEntity.createAttributes().build());
             event.put(GARBAGE.get(), GarbageEntity.createAttributes().build());
@@ -842,6 +856,8 @@ public class VoicesOfTheMines {
                 event.registerBlockEntityRenderer(POSTER_BLOCK_ENTITY.get(), PosterRenderer::new);
                 event.registerEntityRenderer(GARBAGE.get(), net.votmdevs.voicesofthemines.client.GarbageRenderer::new);
                 event.registerEntityRenderer(BLOOD_SPLASH.get(), BloodSplashRenderer::new);
+                event.registerEntityRenderer(TRASH_SPLASH.get(), TrashSplashRenderer::new);
+                event.registerEntityRenderer(WASH_SPONGE.get(), WashSpongeRenderer::new);
                 event.registerEntityRenderer(MAXWELL.get(), MaxwellRenderer::new);
                 event.registerBlockEntityRenderer(KEYPAD_BLOCK_ENTITY.get(), KeypadRenderer::new);
                 event.registerEntityRenderer(HOOK_ENTITY.get(), HookRenderer::new);

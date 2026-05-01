@@ -1,8 +1,10 @@
 package net.votmdevs.voicesofthemines.client;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.VotmSounds;
+import net.votmdevs.voicesofthemines.client.gui.GmodNotificationManager;
 import net.votmdevs.voicesofthemines.entity.FleshEntity;
 import net.votmdevs.voicesofthemines.entity.GarbageEntity;
 import net.votmdevs.voicesofthemines.entity.MaxwellEntity;
@@ -33,6 +35,13 @@ public class ClientInputHandler {
     private static net.minecraft.client.resources.sounds.SoundInstance atvSoundInstance = null;
     private static String currentAtvSoundState = "none"; // none, idle, drive_start, drive_loop
     private static int atvSoundTimer = 0;
+
+    public static int evilEventTimer = -1;
+    public static int funeralEventTimer = -1;
+    public static int evilFlashTicks = 0;
+    public static int evilDeathTimer = -1;
+    public static int evilChatStage = 0;
+    public static int evilChatTimer = -1;
 
     private static DroneLoopSound droneSoundInstance = null;
 
@@ -86,6 +95,59 @@ public class ClientInputHandler {
         if (event.phase != TickEvent.Phase.END) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
+
+// === ИВЕНТ EVIL ===
+        if (evilEventTimer > 0) {
+            evilEventTimer--;
+            if (evilEventTimer == 0) {
+                // Таймер вышел! Красный экран и крик
+                evilFlashTicks = 15; // Сделаем 0.75 сек, чтобы экран оставался красным во время анимации смерти
+                evilDeathTimer = 10; // А вот убьет ровно через 0.5 сек!
+                mc.player.playSound(VotmSounds.EVIL_SCREAM.get(), 1.0F, 1.0F);
+            }
+        }
+        // Таймер задержки перед самой смертью
+        if (evilDeathTimer > 0) {
+            evilDeathTimer--;
+            if (evilDeathTimer == 0) {
+                // Убиваем игрока
+                KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.TriggerEvilDeathPacket());
+
+                // Запускаем стадию вывода чата
+                evilChatStage = 1;
+                evilChatTimer = 15; // 0.75 сек до первого сообщения
+            }
+        }
+
+        // Поэтапный вывод текста в чат после смерти
+        if (evilChatTimer > 0) {
+            evilChatTimer--;
+            if (evilChatTimer == 0) {
+                if (evilChatStage == 1) {
+                    mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal(">START").withStyle(ChatFormatting.AQUA), false);
+                    evilChatStage++; evilChatTimer = 20; // 1 сек
+                } else if (evilChatStage == 2) {
+                    mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal(">OBJECT: ELIMINATED").withStyle(ChatFormatting.AQUA), false);
+                    evilChatStage++; evilChatTimer = 20;
+                } else if (evilChatStage == 3) {
+                    mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal(">PLANET: EARTH").withStyle(ChatFormatting.AQUA), false);
+                    evilChatStage++; evilChatTimer = 20;
+                } else if (evilChatStage == 4) {
+                    mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal(">STATUS: DETECTED").withStyle(ChatFormatting.AQUA), false);
+                    evilChatStage = 0;
+                }
+            }
+        }
+
+        if (evilFlashTicks > 0) evilFlashTicks--;
+
+        // === ИВЕНТ FUNERAL ===
+        if (funeralEventTimer > 0) {
+            funeralEventTimer--;
+            if (funeralEventTimer == 0) {
+                GmodNotificationManager.addNotification("don't turn around...");
+            }
+        }
 
         net.votmdevs.voicesofthemines.entity.AtvEntity activeAtv = null;
         if (mc.player.getVehicle() instanceof net.votmdevs.voicesofthemines.entity.AtvEntity atv) {
@@ -211,6 +273,9 @@ public class ClientInputHandler {
             } else if (target instanceof GarbageEntity garbage && garbage.getGarbageLevel() < 5) {
                 currentlyHeldEntity = garbage;
                 KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(garbage.getId(), true));
+            } else if (target instanceof net.votmdevs.voicesofthemines.entity.WashSpongeEntity sponge) {
+                currentlyHeldEntity = sponge;
+                KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(sponge.getId(), true));
             } else if (target instanceof MaxwellEntity maxwell) {
                 if (!mc.player.isShiftKeyDown()) {
                     currentlyHeldEntity = maxwell;
@@ -299,6 +364,9 @@ public class ClientInputHandler {
             } else if (target instanceof net.votmdevs.voicesofthemines.entity.FuelCanEntity fuelCan) {
                 currentlyHeldEntity = fuelCan;
                 KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(fuelCan.getId(), true));
+            } else if (target instanceof net.votmdevs.voicesofthemines.entity.WashSpongeEntity sponge) {
+                currentlyHeldEntity = sponge;
+                KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(sponge.getId(), true));
             } else if (target instanceof net.votmdevs.voicesofthemines.entity.DriveEntity drive) {
                 currentlyHeldEntity = drive;
                 KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.GrabPacket(drive.getId(), true));
@@ -309,6 +377,7 @@ public class ClientInputHandler {
         } else if (!isPickKeyDown && wasPickKeyDown) {
             if (currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.AtvEntity ||
                     currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.FuelCanEntity ||
+                    currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.WashSpongeEntity ||
                     currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.DriveEntity ||
                     currentlyHeldEntity instanceof net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity) {
 
@@ -451,28 +520,60 @@ public class ClientInputHandler {
     public static void onRenderGui(RenderGuiOverlayEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
 
-        if (event.getOverlay() == net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.HOTBAR.type() && vignetteAlpha > 0) {
-            ResourceLocation VIGNETTE = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/damage_vignette.png");
-            com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
-            com.mojang.blaze3d.systems.RenderSystem.depthMask(false);
-            com.mojang.blaze3d.systems.RenderSystem.enableBlend();
-            com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
-            com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, vignetteAlpha);
+        int width = event.getWindow().getGuiScaledWidth();
+        int height = event.getWindow().getGuiScaledHeight();
 
-            int width = event.getWindow().getGuiScaledWidth();
-            int height = event.getWindow().getGuiScaledHeight();
-            event.getGuiGraphics().blit(VIGNETTE, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
+// Рендерим наши полноэкранные эффекты только один раз за кадр (привязываемся к HOTBAR)
+        if (event.getOverlay() == net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.HOTBAR.type()) {
 
-            com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
-            com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
-            com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+            // 1. Эффект урона (Vignette)
+            if (vignetteAlpha > 0) {
+                ResourceLocation VIGNETTE = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/damage_vignette.png");
+                com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(false);
+                com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+                com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, vignetteAlpha);
+
+                event.getGuiGraphics().blit(VIGNETTE, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
+
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
+                com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+            }
+
+            // 2. Оверлей для EVIL (Красный фильтр)
+            if (evilFlashTicks > 0) {
+                ResourceLocation EVIL_OVERLAY = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/evil_redoverlay.png");
+
+                event.getGuiGraphics().pose().pushPose();
+                // Поднимаем Z-индекс на 500, чтобы красный экран перекрыл хотбар, руку и весь мир
+                event.getGuiGraphics().pose().translate(0, 0, 500);
+
+                com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(false);
+                com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+                com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
+
+                // Ставим прозрачность 0.7 (70%), чтобы мир сквозь него проглядывал, как через фильтр
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.7F);
+
+                // Рисуем на весь экран (без отрицательного Z)
+                event.getGuiGraphics().blit(EVIL_OVERLAY, 0, 0, 0, 0.0F, 0.0F, width, height, width, height);
+
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
+                com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+
+                event.getGuiGraphics().pose().popPose();
+            }
         }
+
 
         if (event.getOverlay() == net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.CROSSHAIR.type()) {
             if (mc.crosshairPickEntity instanceof net.votmdevs.voicesofthemines.entity.AtvEntity atv && (mc.player == null || mc.player.getVehicle() != atv)) {
-                int width = event.getWindow().getGuiScaledWidth();
-                int height = event.getWindow().getGuiScaledHeight();
                 int boxWidth = 110;
                 int boxHeight = 55;
                 int x = width - boxWidth - 15;
@@ -493,8 +594,6 @@ public class ClientInputHandler {
             if (mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult blockHit) {
                 if (mc.level.getBlockState(blockHit.getBlockPos()).getBlock() == VoicesOfTheMines.DRONE_PANEL.get()) {
 
-                    int width = event.getWindow().getGuiScaledWidth();
-                    int height = event.getWindow().getGuiScaledHeight();
                     int boxWidth = 140;
                     int boxHeight = 55;
                     int x = width - boxWidth - 15;

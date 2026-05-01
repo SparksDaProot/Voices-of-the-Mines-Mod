@@ -348,8 +348,8 @@ public class SignalManager extends SavedData {
                 float tLine = (float) (Math.random() * 300); float tWave = (float) (Math.random() * 300);
 
                 String[] commons = {"mars", "venus", "enceladus", "ceres", "dione", "bennu", "mercury", "makemake", "rhea", "iris", "amazur", "vion", "subplanet", "europa", "moon", "jupiter", "uranus", "neptune", "saturn", "hilero", "asteroid", "mettus", "white_dwarf", "io", "tamalan"};
-                String[] rares = {"siggen1", "siggen2", "siggen3", "siggen4", "siggen5", "siggen6", "earth", "exogen1", "exogen2", "neutron0", "blackhole0", "monty", "sat1"};
-                String[] rarers = {"faces", "retroplanet", "votv_earth", "hairy", "roz0", "tamalanflag", "nev", "niko"};
+                String[] rares = {"siggen1", "siggen2", "siggen3", "siggen4", "siggen5", "siggen6", "earth", "exogen1", "exogen2", "neutron0", "blackhole0", "monty", "sat1", "hatefulstar"};
+                String[] rarers = {"faces", "retroplanet", "votv_earth", "hairy", "roz0", "tamalanflag", "nev", "niko", "tulpar"};
                 String[] veryRares = {"siggenus1", "siggenus2", "siggenus3", "siggenus4", "siggenus5", "siggenus6", "siggenus7", "siggenus8", "fard", "ironlung", "funeral", "evil", "pizzabreather"};
 
                 int roll = (int) (Math.random() * 100);

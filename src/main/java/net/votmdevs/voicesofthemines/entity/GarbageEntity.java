@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.VotmSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class GarbageEntity extends PathfinderMob implements GeoEntity {
+    private int dirtTimer = 0;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean wasCollidingLastTick = false;
 
@@ -56,6 +58,30 @@ public class GarbageEntity extends PathfinderMob implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
+
+        if (!this.level().isClientSide() && this.onGround() && !this.isHeld()) {
+            dirtTimer++;
+            if (dirtTimer >= 1000) { // 1 min timer
+                dirtTimer = 0;
+                // trash splash
+                java.util.List<TrashSplashEntity> splashes = this.level().getEntitiesOfClass(TrashSplashEntity.class, this.getBoundingBox().inflate(0.5D));
+                if (splashes.isEmpty()) {
+                    TrashSplashEntity splash = VoicesOfTheMines.TRASH_SPLASH.get().create(this.level());
+                    if (splash != null) {
+                        splash.moveTo(this.getX(), this.getY() + 0.05, this.getZ(), 0, 0);
+                        splash.setLockedRotationAndFace(0, 0, net.minecraft.core.Direction.UP);
+                        this.level().addFreshEntity(splash);
+                    }
+                } else {
+                    // trash splsh lvl
+                    TrashSplashEntity splash = splashes.get(0);
+                    if (splash.getSplashLevel() < 3) splash.setSplashLevel(splash.getSplashLevel() + 1);
+                }
+            }
+        } else {
+            dirtTimer = 0;
+        }
+
 
         if (!this.level().isClientSide()) {
             boolean isColliding = this.horizontalCollision || this.verticalCollision;
