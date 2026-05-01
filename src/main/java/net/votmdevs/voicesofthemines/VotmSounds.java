@@ -34,6 +34,8 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> SPONGE2 = registerSoundEvent("sponge2");
     public static final RegistryObject<SoundEvent> SPONGE3 = registerSoundEvent("sponge3");
 
+    public static final RegistryObject<SoundEvent> DETECTBEEP = registerSoundEvent("detectbeep");
+
     public static final RegistryObject<SoundEvent> ALARM = registerSoundEvent("alarm");
 
 

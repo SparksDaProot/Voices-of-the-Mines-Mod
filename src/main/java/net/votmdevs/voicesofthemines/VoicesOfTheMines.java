@@ -1,5 +1,6 @@
 package net.votmdevs.voicesofthemines;
 
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -261,6 +262,8 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Item> FUEL_CAN_ITEM = ITEMS.register("fuel_can", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> DRIVE_ITEM = ITEMS.register("drive", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> WASH_SPONGE_ITEM = ITEMS.register("wash_sponge", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> METAL_DETECTOR_ITEM = ITEMS.register("metal_detector", () -> new Item(new Item.Properties().stacksTo(1)));
+
 
     public static final RegistryObject<Block> POSTER = BLOCKS.register("poster",
             () -> new net.votmdevs.voicesofthemines.block.PosterBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).instabreak().noCollission().noOcclusion()));
@@ -626,6 +629,12 @@ public class VoicesOfTheMines {
                     .sized(0.4f, 0.4f)
                     .build(ResourceLocation.fromNamespaceAndPath(MODID, "wash_sponge").toString()));
 
+    public static final RegistryObject<EntityType<TreasureSpotEntity>> TREASURE_SPOT = ENTITY_TYPES.register("treasure_spot",
+            () -> EntityType.Builder.<TreasureSpotEntity>of(TreasureSpotEntity::new, MobCategory.MISC)
+                    .sized(0.1f, 0.1f)
+                    .clientTrackingRange(30)
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "treasure_spot").toString()));
+
     // drone
 
     public static final RegistryObject<Block> DRONE_TARGET = BLOCKS.register("target_drone_block",
@@ -745,6 +754,7 @@ public class VoicesOfTheMines {
             event.accept(WALL_ITEM);
             event.accept(WALL_DOWN_ITEM);
             event.accept(WALL_LINES_ITEM);
+            event.accept(OUTSIDE_FLOOR_ITEM);
         }
 
         if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
@@ -792,6 +802,7 @@ public class VoicesOfTheMines {
             event.accept(TRASH_ROLL);
             event.accept(HOOK_ITEM);
             event.accept(MARACAS);
+            event.accept(METAL_DETECTOR_ITEM);
         }
     }
 
@@ -804,6 +815,7 @@ public class VoicesOfTheMines {
         @SubscribeEvent
         public static void onAttributeCreate(EntityAttributeCreationEvent event) {
             event.put(MANNEQUIN.get(), MannequinEntity.createAttributes().build());
+            event.put(TREASURE_SPOT.get(), net.minecraft.world.entity.Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 1.0D).build());
             event.put(HOSTILE_MANNEQUIN.get(), HostileMannequinEntity.createAttributes().build());
             event.put(MANNEQUIN_STAND.get(), MannequinStandEntity.createAttributes().build());
             event.put(KERFUR.get(), KerfurEntity.createAttributes().build());
@@ -837,11 +849,29 @@ public class VoicesOfTheMines {
                                 return stack.hasTag() && stack.getTag().getBoolean("Active") ? 1.0F : 0.0F;
                             });
                 });
+                net.minecraft.client.renderer.item.ItemProperties.register(VoicesOfTheMines.METAL_DETECTOR_ITEM.get(), ResourceLocation.fromNamespaceAndPath(VoicesOfTheMines.MODID, "distance"),
+                        (stack, level, entity, seed) -> {
+                            if (entity == null || level == null) return 0.0F;
+
+                            double closestDist = Double.MAX_VALUE;
+                            for (net.minecraft.world.entity.Entity e : level.getEntitiesOfClass(net.votmdevs.voicesofthemines.entity.TreasureSpotEntity.class, entity.getBoundingBox().inflate(20.0D))) {
+                                double d = e.distanceToSqr(entity);
+                                if (d < closestDist) {
+                                    closestDist = d;
+                                }
+                            }
+
+                            if (closestDist <= 5.0 * 5.0) return 3.0F; // here
+                            if (closestDist <= 10.0 * 10.0) return 2.0F; // close
+                            if (closestDist <= 20.0 * 20.0) return 1.0F; // probably close
+                            return 0.0F; // default
+                        });
             }
 
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerEntityRenderer(TREASURE_SPOT.get(), net.minecraft.client.renderer.entity.NoopRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.UP_LAMP_BE.get(), net.votmdevs.voicesofthemines.client.UpLampRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.SWITCH_BE.get(), net.votmdevs.voicesofthemines.client.SwitchRenderer::new);
                 event.registerBlockEntityRenderer(CANDLE_HANDLE_BE.get(), CandleHandleRenderer::new);

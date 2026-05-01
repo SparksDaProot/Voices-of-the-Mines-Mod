@@ -1,6 +1,7 @@
 package net.votmdevs.voicesofthemines;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
 import net.votmdevs.voicesofthemines.entity.CockroachEntity;
 import net.votmdevs.voicesofthemines.entity.FleshEntity;
 import net.minecraft.server.level.ServerLevel;
@@ -15,6 +16,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.votmdevs.voicesofthemines.entity.TrashSplashEntity;
+import net.votmdevs.voicesofthemines.entity.TreasureSpotEntity;
 
 import java.util.List;
 
@@ -207,6 +209,84 @@ public class VotmEventHandler {
                 )
         );
     }
+
+    // Спавн кладов
+    @SubscribeEvent
+    public static void onPlayerTickDetector(TickEvent.PlayerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide() && event.player.tickCount % 40 == 0) {
+            Player player = event.player;
+            ServerLevel level = (ServerLevel) player.level();
+
+            if (player.getMainHandItem().getItem() == VoicesOfTheMines.METAL_DETECTOR_ITEM.get() ||
+                    player.getOffhandItem().getItem() == VoicesOfTheMines.METAL_DETECTOR_ITEM.get()) {
+
+                java.util.List<TreasureSpotEntity> spots = level.getEntitiesOfClass(
+                        TreasureSpotEntity.class,
+                        player.getBoundingBox().inflate(50.0D)
+                );
+
+                if (spots.size() < 2) {
+                    if (level.random.nextFloat() < 0.10f) { // 10% шанс каждые 2 секунды
+                        double angle = level.random.nextDouble() * Math.PI * 2;
+                        double dist = 15 + level.random.nextDouble() * 25;
+                        int targetX = (int) (player.getX() + Math.cos(angle) * dist);
+                        int targetZ = (int) (player.getZ() + Math.sin(angle) * dist);
+                        int targetY = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, targetX, targetZ) - 1;
+
+                        BlockPos spawnPos = new BlockPos(targetX, targetY, targetZ);
+
+                        if (level.getBlockState(spawnPos).getBlock() == Blocks.GRASS_BLOCK) {
+                            TreasureSpotEntity spot = VoicesOfTheMines.TREASURE_SPOT.get().create(level);
+                            if (spot != null) {
+                                spot.moveTo(targetX + 0.5, targetY + 1.0, targetZ + 0.5, 0, 0);
+
+                                float roll = level.random.nextFloat();
+                                String lootId = "minecraft:dirt";
+
+                                if (roll < 0.60f) {
+                                    String[] common = {"minecraft:dirt", "voicesofthemines:trash_bag", "voicesofthemines:burger", "voicesofthemines:taco", "voicesofthemines:cheese", "voicesofthemines:toblerone", "minecraft:coal", "minecraft:cobblestone", "minecraft:raw_iron", "minecraft:raw_gold", "voicesofthemines:paper_sheet"};
+                                    lootId = common[level.random.nextInt(common.length)];
+                                } else if (roll < 0.90f) {
+                                    String[] rare = {"voicesofthemines:disk_blue", "voicesofthemines:drive_box", "voicesofthemines:sign", "voicesofthemines:poster", "voicesofthemines:jacket", "voicesofthemines:glasses", "voicesofthemines:ribbon", "minecraft:diamond"};
+                                    lootId = rare[level.random.nextInt(rare.length)];
+                                } else {
+                                    String[] veryRare = {"voicesofthemines:candle_handle", "voicesofthemines:maracas", "voicesofthemines:radioactive_capsule", "voicesofthemines:kerfur_part"};
+                                    lootId = veryRare[level.random.nextInt(veryRare.length)];
+                                }
+
+                                spot.getEntityData().set(TreasureSpotEntity.LOOT_ID, lootId);
+                                spot.getEntityData().set(TreasureSpotEntity.LOOT_COUNT, 1);
+
+                                level.addFreshEntity(spot);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onDigTreasure(net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
+        if (!event.getLevel().isClientSide()) {
+            Player player = event.getEntity();
+            net.minecraft.world.item.ItemStack handItem = event.getItemStack();
+
+            if (handItem.getItem() == net.minecraft.world.item.Items.IRON_SHOVEL) {
+                BlockPos clickedPos = event.getPos();
+
+                net.minecraft.world.phys.AABB searchBox = new net.minecraft.world.phys.AABB(clickedPos).inflate(1.0D);
+                java.util.List<TreasureSpotEntity> spots = event.getLevel().getEntitiesOfClass(TreasureSpotEntity.class, searchBox);
+
+                if (!spots.isEmpty()) {
+                    spots.get(0).digUp();
+                    handItem.hurtAndBreak(5, player, (p) -> p.broadcastBreakEvent(event.getHand()));
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
 // TRASH BAG - trash splash
     @SubscribeEvent
     public static void onRightClickBlock(net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {

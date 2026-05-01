@@ -47,6 +47,7 @@ public class ClientInputHandler {
 
     public static int knockdownTicks = 0;
     public static float vignetteAlpha = 0.0f;
+    private static int detectorBeepTimer = 0;
 
     private static float lockedYaw = 0f;
     private static float lockedPitch = 0f;
@@ -96,30 +97,24 @@ public class ClientInputHandler {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
 
-// === ИВЕНТ EVIL ===
         if (evilEventTimer > 0) {
             evilEventTimer--;
             if (evilEventTimer == 0) {
-                // Таймер вышел! Красный экран и крик
-                evilFlashTicks = 15; // Сделаем 0.75 сек, чтобы экран оставался красным во время анимации смерти
-                evilDeathTimer = 10; // А вот убьет ровно через 0.5 сек!
+                evilFlashTicks = 15;
+                evilDeathTimer = 10;
                 mc.player.playSound(VotmSounds.EVIL_SCREAM.get(), 1.0F, 1.0F);
             }
         }
-        // Таймер задержки перед самой смертью
         if (evilDeathTimer > 0) {
             evilDeathTimer--;
             if (evilDeathTimer == 0) {
-                // Убиваем игрока
                 KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.TriggerEvilDeathPacket());
 
-                // Запускаем стадию вывода чата
                 evilChatStage = 1;
-                evilChatTimer = 15; // 0.75 сек до первого сообщения
+                evilChatTimer = 15;
             }
         }
 
-        // Поэтапный вывод текста в чат после смерти
         if (evilChatTimer > 0) {
             evilChatTimer--;
             if (evilChatTimer == 0) {
@@ -141,12 +136,45 @@ public class ClientInputHandler {
 
         if (evilFlashTicks > 0) evilFlashTicks--;
 
-        // === ИВЕНТ FUNERAL ===
         if (funeralEventTimer > 0) {
             funeralEventTimer--;
             if (funeralEventTimer == 0) {
                 GmodNotificationManager.addNotification("don't turn around...");
             }
+        }
+        // beep beep beep
+        boolean holdingDetector = mc.player.getMainHandItem().getItem() == VoicesOfTheMines.METAL_DETECTOR_ITEM.get() ||
+                mc.player.getOffhandItem().getItem() == VoicesOfTheMines.METAL_DETECTOR_ITEM.get();
+
+        if (holdingDetector) {
+            if (detectorBeepTimer > 0) {
+                detectorBeepTimer--;
+            } else {
+                double closestDist = Double.MAX_VALUE;
+                for (Entity e : mc.level.getEntitiesOfClass(net.votmdevs.voicesofthemines.entity.TreasureSpotEntity.class, mc.player.getBoundingBox().inflate(20.0D))) {
+                    double d = e.distanceToSqr(mc.player);
+                    if (d < closestDist) {
+                        closestDist = d;
+                    }
+                }
+
+                int interval;
+                if (closestDist <= 5.0 * 5.0) {
+                    interval = 4; // 0.2 sec
+                } else if (closestDist <= 10.0 * 10.0) {
+                    interval = 10; // 0.5 sec
+                } else if (closestDist <= 20.0 * 20.0) {
+                    interval = 20; // 1 sec
+                } else {
+                    interval = 40; // 2 sec
+                }
+
+                mc.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(VotmSounds.DETECTBEEP.get(), 1.0F, 0.5F));
+
+                detectorBeepTimer = interval;
+            }
+        } else {
+            detectorBeepTimer = 0;
         }
 
         net.votmdevs.voicesofthemines.entity.AtvEntity activeAtv = null;
