@@ -6,6 +6,7 @@ public enum PlushieType {
     BENJIKUS("benjikus", "plushie_benjikus", "beep_animation", "beep", "Silly alien :P", ChatFormatting.GREEN),
     BENJIKUS_COMMON("benjikuscommon", "plushie_benjikuscommon", "beep_animation", "beep", "Benj1kus", ChatFormatting.WHITE),
     PECORA("pecora", "plushie_pecora", "beep_animation", "beep", "Pecora", ChatFormatting.YELLOW),
+    SPARKSY("sparksy", "plushie_sparksy", "beep_animation", "beep", "Sparksy", ChatFormatting.BLUE),
     NIKO("niko", "plushie_niko", "beep_animation", "beep", "Da Noik", ChatFormatting.LIGHT_PURPLE),
     INVINCIBLE("invinc", "plushie_invincible", "beepinvinc_animation", "beepin", null, null),
     KEL("kel", "plushie_kel", "beep_animation", "beep", null, null);
