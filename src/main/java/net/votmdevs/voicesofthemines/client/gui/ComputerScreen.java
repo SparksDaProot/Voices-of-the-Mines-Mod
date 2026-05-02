@@ -130,6 +130,13 @@ public class ComputerScreen extends Screen {
             allItems.add(new StoreItem("fuel_can", "Fuel Can", new ItemStack(VoicesOfTheMines.FUEL_CAN_ITEM.get()), 25, 1));
             allItems.add(new StoreItem("drive", "Drive", new ItemStack(VoicesOfTheMines.DRIVE_ITEM.get()), 2, 1));
             allItems.add(new StoreItem("wash_sponge", "Sponge", new ItemStack(VoicesOfTheMines.WASH_SPONGE_ITEM.get()), 5, 1));
+            allItems.add(new StoreItem("plushie_benjikus", "Plush Alien", new ItemStack(VoicesOfTheMines.PLUSHIE_BENJIKUS_ITEM.get()), 50, 1));
+            allItems.add(new StoreItem("plushie_benjikuscommon", "Plush Benj1kus", new ItemStack(VoicesOfTheMines.PLUSHIE_BENJIKUS_COMMON_ITEM.get()), 50, 1));
+            allItems.add(new StoreItem("plushie_pecora", "Plush Pecora", new ItemStack(VoicesOfTheMines.PLUSHIE_PECORA_ITEM.get()), 50, 1));
+            allItems.add(new StoreItem("plushie_niko", "Plush Da Noik", new ItemStack(VoicesOfTheMines.PLUSHIE_NIKO_ITEM.get()), 50, 1));
+            allItems.add(new StoreItem("plushie_invincible", "Plush Mark", new ItemStack(VoicesOfTheMines.PLUSHIE_INVINCIBLE_ITEM.get()), 50, 1));
+            allItems.add(new StoreItem("plushie_kel", "Plush Dr.Kel", new ItemStack(VoicesOfTheMines.PLUSHIE_KEL_ITEM.get()), 50, 1));
+
         }
         updateSearch();
     }

@@ -1,0 +1,68 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "pinkwisp",
+					"pivot": [0, 17, -0.03333],
+					"cubes": [
+						{"origin": [-4, 13, -4], "size": [8, 8, 8], "uv": [0, 24]}
+					]
+				},
+				{
+					"name": "flares",
+					"parent": "pinkwisp",
+					"pivot": [0, 17, 0]
+				},
+				{
+					"name": "flare",
+					"parent": "flares",
+					"pivot": [0, 17, 0],
+					"cubes": [
+						{"origin": [-10, 7, 0], "size": [20, 20, 0], "uv": [24, 44]},
+						{"origin": [-10, 7, -0.1], "size": [20, 20, 0], "pivot": [0, 17, 0], "rotation": [-180, 0, 180], "uv": [24, 44]}
+					]
+				},
+				{
+					"name": "flare2",
+					"parent": "flares",
+					"pivot": [0, 17, 0],
+					"rotation": [0, 90, 0],
+					"cubes": [
+						{"origin": [-10, 7, 0], "size": [20, 20, 0], "uv": [24, 44]},
+						{"origin": [-10, 7, -0.2], "size": [20, 20, 0], "pivot": [0, 17, 0], "rotation": [-180, 0, 180], "uv": [24, 44]}
+					]
+				},
+				{
+					"name": "flare3",
+					"parent": "flares",
+					"pivot": [0, 17, 0],
+					"rotation": [-180, -45, 180],
+					"cubes": [
+						{"origin": [-10, 7, 0], "size": [20, 20, 0], "uv": [24, 44]},
+						{"origin": [-10, 7, -0.1], "size": [20, 20, 0], "pivot": [0, 17, 0], "rotation": [-180, 0, 180], "uv": [24, 44]}
+					]
+				},
+				{
+					"name": "flare4",
+					"parent": "flares",
+					"pivot": [0, 17, 0],
+					"rotation": [0, -45, 0],
+					"cubes": [
+						{"origin": [-10, 7, 0], "size": [20, 20, 0], "uv": [24, 44]},
+						{"origin": [-10, 7, -0.1], "size": [20, 20, 0], "pivot": [0, 17, 0], "rotation": [-180, 0, 180], "uv": [24, 44]}
+					]
+				}
+			]
+		}
+	]
+}

@@ -383,6 +383,24 @@ public class VotmEventHandler {
             }
         }
     }
+
+    @SubscribeEvent
+    public static void onPlayerWispTick(net.minecraftforge.event.TickEvent.PlayerTickEvent event) {
+        if (!event.player.level().isClientSide() && event.phase == net.minecraftforge.event.TickEvent.Phase.END) {
+            net.minecraft.nbt.CompoundTag data = event.player.getPersistentData();
+            if (data.contains("WispDoomTimer")) {
+                int timer = data.getInt("WispDoomTimer");
+                if (timer > 0) {
+                    data.putInt("WispDoomTimer", timer - 1);
+                    if (timer - 1 <= 0) {
+                        event.player.kill(); // /kill от лица системы
+                        data.remove("WispDoomTimer"); // Очищаем таймер
+                    }
+                }
+            }
+        }
+    }
+
     // Knockdown
     @SubscribeEvent
     public static void onPlayerDamage(net.minecraftforge.event.entity.living.LivingDamageEvent event) {

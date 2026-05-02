@@ -33,6 +33,7 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, PlushieInteractPacket.class, PlushieInteractPacket::encode, PlushieInteractPacket::decode, PlushieInteractPacket::handle);
         INSTANCE.registerMessage(id++, TriggerEvilDeathPacket.class, TriggerEvilDeathPacket::encode, TriggerEvilDeathPacket::decode, TriggerEvilDeathPacket::handle);
         INSTANCE.registerMessage(id++, RequestReportDataPacket.class, RequestReportDataPacket::encode, RequestReportDataPacket::decode, RequestReportDataPacket::handle);
         INSTANCE.registerMessage(id++, SyncReportDataPacket.class, SyncReportDataPacket::encode, SyncReportDataPacket::decode, SyncReportDataPacket::handle);
@@ -774,7 +775,12 @@ public class KerfurPacketHandler {
 
         private static net.minecraft.world.item.Item getItemById(String id) {
             switch(id) {
-                case "hazard_helmet": return VoicesOfTheMines.HAZARD_HELMET.get();
+                case "plushie_benjikus": return VoicesOfTheMines.PLUSHIE_BENJIKUS_ITEM.get();
+                case "plushie_pecora": return VoicesOfTheMines.PLUSHIE_PECORA_ITEM.get();
+                case "plushie_benjikuscommon": return VoicesOfTheMines.PLUSHIE_BENJIKUS_COMMON_ITEM.get();
+                case "plushie_niko": return VoicesOfTheMines.PLUSHIE_NIKO_ITEM.get();
+                case "plushie_invincible": return VoicesOfTheMines.PLUSHIE_INVINCIBLE_ITEM.get();
+                case "plushie_kel": return VoicesOfTheMines.PLUSHIE_KEL_ITEM.get();
                 case "hazard_chestplate": return VoicesOfTheMines.HAZARD_CHESTPLATE.get();
                 case "hazard_leggings": return VoicesOfTheMines.HAZARD_LEGGINGS.get();
                 case "hazard_boots": return VoicesOfTheMines.HAZARD_BOOTS.get();
@@ -1241,6 +1247,24 @@ public class KerfurPacketHandler {
                 ServerPlayer player = ctx.get().getSender();
                 if (player != null) {
                     player.kill();
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    public static class PlushieInteractPacket {
+        private final BlockPos pos;
+        public PlushieInteractPacket(BlockPos pos) { this.pos = pos; }
+        public static void encode(PlushieInteractPacket msg, FriendlyByteBuf buffer) { buffer.writeBlockPos(msg.pos); }
+        public static PlushieInteractPacket decode(FriendlyByteBuf buffer) { return new PlushieInteractPacket(buffer.readBlockPos()); }
+
+        public static void handle(PlushieInteractPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                if (net.minecraft.client.Minecraft.getInstance().level != null) {
+                    BlockEntity be = net.minecraft.client.Minecraft.getInstance().level.getBlockEntity(msg.pos);
+                    if (be instanceof net.votmdevs.voicesofthemines.block.PlushieBlockEntity plushie) {
+                        plushie.triggerBeepAnim();
+                    }
                 }
             });
             ctx.get().setPacketHandled(true);

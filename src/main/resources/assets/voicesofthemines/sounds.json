@@ -165,6 +165,19 @@
   "connect": { "sounds": [ "voicesofthemines:connect" ] },
   "evil_scream": { "sounds": [ "voicesofthemines:evil_scream" ] },
 
+  "geomoct_loop": { "sounds": [ "voicesofthemines:geomoct_loop" ] },
+  "octcharge": { "sounds": [ "voicesofthemines:octcharge" ] },
+  "octshoot": { "sounds": [ "voicesofthemines:octshoot" ] },
+
+  "yellow_idle": { "sounds": [ "voicesofthemines:yellow_idle" ] },
+  "pink_idle": { "sounds": [ "voicesofthemines:pink_idle" ] },
+  "plushbeep": { "sounds": [ "voicesofthemines:plushbeep" ] },
+
+  "wispblackscreen": { "sounds": [ "voicesofthemines:wispblackscreen" ] },
+  "blackwisp1": { "sounds": [ "voicesofthemines:blackwisp1" ] },
+  "blackwisp2": { "sounds": [ "voicesofthemines:blackwisp2" ] },
+  "blackwisp3": { "sounds": [ "voicesofthemines:blackwisp3" ] },
+
   "splat1": { "sounds": [ "voicesofthemines:splat1" ] },
   "splat2": { "sounds": [ "voicesofthemines:splat2" ] },
   "splat3": { "sounds": [ "voicesofthemines:splat3" ] },

@@ -1,0 +1,126 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"pinkwisp": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 1, 0],
+							"easing": "easeInSine"
+						},
+						"1.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"flare": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 360]
+						}
+					}
+				},
+				"flare2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [360, 0, 0]
+						}
+					}
+				},
+				"flare3": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [-360, 0, 0]
+						}
+					}
+				},
+				"flare4": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [360, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"disapp": {
+			"animation_length": 1.25,
+			"bones": {
+				"pinkwisp": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 2, 0],
+							"easing": "easeInBack"
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.5": {
+							"vector": [1, 1, 1],
+							"easing": "easeInBack"
+						},
+						"1.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInBack"
+						}
+					}
+				},
+				"flare": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"flare2": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"flare3": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"flare4": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"flares": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.5": {
+							"vector": [1.8, 1.8, 1.8],
+							"easing": "easeInBack"
+						}
+					}
+				}
+			}
+		}
+	}
+}

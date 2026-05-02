@@ -618,6 +618,59 @@ public class VoicesOfTheMines {
                     .sized(0.01f, 0.01f)
                     .build("seat"));
 
+    // new entities
+
+    public static final RegistryObject<EntityType<GeomOctahedronEntity>> GEOM_OCTAHEDRON = ENTITY_TYPES.register("geomoct",
+            () -> EntityType.Builder.of(GeomOctahedronEntity::new, MobCategory.CREATURE)
+                    .sized(1.2f, 1.2f)
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "geomoct").toString()));
+
+    public static final RegistryObject<Item> GEOM_OCTAHEDRON_SPAWN_EGG = ITEMS.register("geomoct_spawn_egg",
+            () -> new ForgeSpawnEggItem(GEOM_OCTAHEDRON, 0x333333, 0x00FF00, new Item.Properties()));
+
+
+    //WISPS
+
+    public static final RegistryObject<EntityType<BlackWispEntity>> BLACK_WISP = ENTITY_TYPES.register("blackwisp",
+            () -> EntityType.Builder.of(BlackWispEntity::new, MobCategory.MONSTER)
+                    .sized(1.0f, 1.0f)
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "blackwisp").toString()));
+
+    public static final RegistryObject<Item> BLACK_WISP_SPAWN_EGG = ITEMS.register("blackwisp_spawn_egg",
+            () -> new ForgeSpawnEggItem(BLACK_WISP, 0x000000, 0x111111, new Item.Properties()));
+
+    public static final RegistryObject<EntityType<PinkWispEntity>> PINK_WISP = ENTITY_TYPES.register("pinkwisp",
+            () -> EntityType.Builder.of(PinkWispEntity::new, MobCategory.MONSTER)
+                    .sized(1.0f, 1.0f)
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "pinkwisp").toString()));
+
+    public static final RegistryObject<Item> PINK_WISP_SPAWN_EGG = ITEMS.register("pinkwisp_spawn_egg",
+            () -> new ForgeSpawnEggItem(PINK_WISP, 0x000000, 0x111111, new Item.Properties()));
+
+    public static final RegistryObject<EntityType<YellowWispEntity>> YELLOW_WISP = ENTITY_TYPES.register("yellowwisp",
+            () -> EntityType.Builder.of(YellowWispEntity::new, MobCategory.MONSTER)
+                    .sized(1.0f, 1.0f)
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "yellowwisp").toString()));
+
+    public static final RegistryObject<Item> YELLOW_WISP_SPAWN_EGG = ITEMS.register("yellowwisp_spawn_egg",
+            () -> new ForgeSpawnEggItem(YELLOW_WISP, 0x000000, 0x111111, new Item.Properties()));
+
+    public static final RegistryObject<EntityType<GreenWispEntity>> GREEN_WISP = ENTITY_TYPES.register("greenwisp",
+            () -> EntityType.Builder.of(GreenWispEntity::new, MobCategory.MONSTER)
+                    .sized(1.0f, 1.0f)
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "greenwisp").toString()));
+
+    public static final RegistryObject<Item> GREEN_WISP_SPAWN_EGG = ITEMS.register("greenwisp_spawn_egg",
+            () -> new ForgeSpawnEggItem(GREEN_WISP, 0x000000, 0x111111, new Item.Properties()));
+
+    public static final RegistryObject<EntityType<BlueWispEntity>> BLUE_WISP = ENTITY_TYPES.register("bluewisp",
+            () -> EntityType.Builder.of(BlueWispEntity::new, MobCategory.MONSTER)
+                    .sized(1.0f, 1.0f)
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "bluewisp").toString()));
+
+    public static final RegistryObject<Item> BLUE_WISP_SPAWN_EGG = ITEMS.register("bluewisp_spawn_egg",
+            () -> new ForgeSpawnEggItem(BLUE_WISP, 0x000000, 0x111111, new Item.Properties()));
+
 
     public static final RegistryObject<EntityType<TrashSplashEntity>> TRASH_SPLASH = ENTITY_TYPES.register("trash_splash",
             () -> EntityType.Builder.of(TrashSplashEntity::new, MobCategory.MISC)
@@ -663,6 +716,55 @@ public class VoicesOfTheMines {
 
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.DronePanelBlockEntity>> DRONE_PANEL_BE = BLOCK_ENTITIES.register("drone_panel_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.DronePanelBlockEntity::new, DRONE_PANEL.get()).build(null));
+
+    //PLUSHIE
+
+    public static final RegistryObject<Block> PLUSHIE_BENJIKUS = BLOCKS.register("plushie_benjikus",
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.BENJIKUS));
+
+    public static final RegistryObject<Block> PLUSHIE_BENJIKUS_COMMON = BLOCKS.register("plushie_benjikuscommon",
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.BENJIKUS_COMMON));
+
+    public static final RegistryObject<Block> PLUSHIE_NIKO = BLOCKS.register("plushie_niko",
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.NIKO));
+
+    public static final RegistryObject<Block> PLUSHIE_INVINCIBLE = BLOCKS.register("plushie_invincible",
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.INVINCIBLE));
+
+    public static final RegistryObject<Block> PLUSHIE_KEL = BLOCKS.register("plushie_kel",
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.KEL));
+
+    public static final RegistryObject<Block> PLUSHIE_PECORA = BLOCKS.register("plushie_pecora",
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), PlushieType.PECORA));
+
+
+    public static final RegistryObject<Item> PLUSHIE_BENJIKUS_ITEM = ITEMS.register("plushie_benjikus",
+            () -> new net.votmdevs.voicesofthemines.item.PlushieItem(PLUSHIE_BENJIKUS.get(), new net.minecraft.world.item.Item.Properties(), net.votmdevs.voicesofthemines.block.PlushieType.BENJIKUS));
+
+    public static final RegistryObject<Item> PLUSHIE_BENJIKUS_COMMON_ITEM = ITEMS.register("plushie_benjikuscommon",
+            () -> new net.votmdevs.voicesofthemines.item.PlushieItem(PLUSHIE_BENJIKUS_COMMON.get(), new net.minecraft.world.item.Item.Properties(), PlushieType.BENJIKUS_COMMON));
+
+    public static final RegistryObject<Item> PLUSHIE_NIKO_ITEM = ITEMS.register("plushie_niko",
+            () -> new net.votmdevs.voicesofthemines.item.PlushieItem(PLUSHIE_NIKO.get(), new net.minecraft.world.item.Item.Properties(), PlushieType.NIKO));
+
+    public static final RegistryObject<Item> PLUSHIE_INVINCIBLE_ITEM = ITEMS.register("plushie_invincible",
+            () -> new net.votmdevs.voicesofthemines.item.PlushieItem(PLUSHIE_INVINCIBLE.get(), new net.minecraft.world.item.Item.Properties(), PlushieType.INVINCIBLE));
+
+    public static final RegistryObject<Item> PLUSHIE_KEL_ITEM = ITEMS.register("plushie_kel",
+            () -> new net.votmdevs.voicesofthemines.item.PlushieItem(PLUSHIE_KEL.get(), new net.minecraft.world.item.Item.Properties(), PlushieType.KEL));
+
+    public static final RegistryObject<Item> PLUSHIE_PECORA_ITEM = ITEMS.register("plushie_pecora",
+            () -> new net.votmdevs.voicesofthemines.item.PlushieItem(PLUSHIE_PECORA.get(), new net.minecraft.world.item.Item.Properties(), PlushieType.PECORA));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.PlushieBlockEntity>> PLUSHIE_BE = BLOCK_ENTITIES.register("plushie_be",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.PlushieBlockEntity::new,
+                    PLUSHIE_BENJIKUS.get(),
+                    PLUSHIE_BENJIKUS_COMMON.get(),
+                    PLUSHIE_NIKO.get(),
+                    PLUSHIE_INVINCIBLE.get(),
+                    PLUSHIE_KEL.get(),
+                    PLUSHIE_PECORA.get()
+            ).build(null));
 
     public static final RegistryObject<EntityType<KerfurEntity>> KERFUR = ENTITY_TYPES.register("kerfur",
             () -> EntityType.Builder.of(KerfurEntity::new, MobCategory.CREATURE)
@@ -814,6 +916,12 @@ public class VoicesOfTheMines {
     public static class CommonModEvents {
         @SubscribeEvent
         public static void onAttributeCreate(EntityAttributeCreationEvent event) {
+            event.put(GEOM_OCTAHEDRON.get(), GeomOctahedronEntity.createAttributes().build());
+            event.put(BLACK_WISP.get(), BlackWispEntity.createAttributes().build());
+            event.put(BLUE_WISP.get(), BlueWispEntity.createAttributes().build());
+            event.put(GREEN_WISP.get(), GreenWispEntity.createAttributes().build());
+            event.put(PINK_WISP.get(), PinkWispEntity.createAttributes().build());
+            event.put(YELLOW_WISP.get(), YellowWispEntity.createAttributes().build());
             event.put(MANNEQUIN.get(), MannequinEntity.createAttributes().build());
             event.put(TREASURE_SPOT.get(), net.minecraft.world.entity.Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 1.0D).build());
             event.put(HOSTILE_MANNEQUIN.get(), HostileMannequinEntity.createAttributes().build());
@@ -854,6 +962,13 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(VoicesOfTheMines.PLUSHIE_BE.get(), net.votmdevs.voicesofthemines.client.PlushieRenderer::new);
+                event.registerEntityRenderer(VoicesOfTheMines.BLUE_WISP.get(), net.votmdevs.voicesofthemines.client.BlueWispRenderer::new);
+                event.registerEntityRenderer(VoicesOfTheMines.GREEN_WISP.get(), net.votmdevs.voicesofthemines.client.GreenWispRenderer::new);
+                event.registerEntityRenderer(VoicesOfTheMines.YELLOW_WISP.get(), net.votmdevs.voicesofthemines.client.YellowWispRenderer::new);
+                event.registerEntityRenderer(VoicesOfTheMines.PINK_WISP.get(), net.votmdevs.voicesofthemines.client.PinkWispRenderer::new);
+                event.registerEntityRenderer(VoicesOfTheMines.BLACK_WISP.get(), net.votmdevs.voicesofthemines.client.BlackWispRenderer::new);
+                event.registerEntityRenderer(VoicesOfTheMines.GEOM_OCTAHEDRON.get(), net.votmdevs.voicesofthemines.client.GeomOctahedronRenderer::new);
                 event.registerEntityRenderer(TREASURE_SPOT.get(), net.minecraft.client.renderer.entity.NoopRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.UP_LAMP_BE.get(), net.votmdevs.voicesofthemines.client.UpLampRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.SWITCH_BE.get(), net.votmdevs.voicesofthemines.client.SwitchRenderer::new);
@@ -905,12 +1020,25 @@ public class VoicesOfTheMines {
                         }
                     }
                 });
+                event.registerAbove(net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.HELMET.id(), "wisp_overlay", (gui, guiGraphics, partialTick, width, height) -> {
+                    if (VoicesOfTheMines.ClientForgeEvents.wispBlackScreenTimer > 0) {
+                        ResourceLocation BLACK_OVERLAY = ResourceLocation.fromNamespaceAndPath(VoicesOfTheMines.MODID, "textures/gui/blackoverlay.png");
+                        com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
+                        com.mojang.blaze3d.systems.RenderSystem.depthMask(false);
+                        guiGraphics.blit(BLACK_OVERLAY, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
+                        com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
+                        com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
+                    }
+                });
             }
         }
     }
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
     public static class ClientForgeEvents {
+
+        public static int wispShakeTimer = 0;
+        public static int wispBlackScreenTimer = 0;
 
         // sounds
         private static net.minecraft.client.resources.sounds.SimpleSoundInstance breakingBadSound = null;
@@ -920,6 +1048,16 @@ public class VoicesOfTheMines {
         private static net.minecraft.client.resources.sounds.SimpleSoundInstance atvSoundInstance = null;
         private static String currentAtvSoundState = "none"; // "idle", "start", "loop"
         private static int atvSoundTimer = 0;
+
+        @SubscribeEvent
+        public static void onCameraSetup(net.minecraftforge.client.event.ViewportEvent.ComputeCameraAngles event) {
+            if (wispShakeTimer > 0) {
+                float shake = 0.8f; // Интенсивность тряски (чем больше, тем сильнее)
+                event.setPitch(event.getPitch() + (float)(Math.random() - 0.5) * shake);
+                event.setYaw(event.getYaw() + (float)(Math.random() - 0.5) * shake);
+                event.setRoll(event.getRoll() + (float)(Math.random() - 0.5) * shake);
+            }
+        }
 
         @SubscribeEvent
         public static void onClientTick(net.minecraftforge.event.TickEvent.ClientTickEvent event) {
@@ -941,6 +1079,10 @@ public class VoicesOfTheMines {
                     breakingBadSound = null;
                 }
             }
+
+            if (wispShakeTimer > 0) wispShakeTimer--;
+            if (wispBlackScreenTimer > 0) wispBlackScreenTimer--;
+
             // atv drive
             if (mc.player.getVehicle() instanceof net.votmdevs.voicesofthemines.entity.AtvEntity atv) {
                 if (atv.isEngineOn()) {

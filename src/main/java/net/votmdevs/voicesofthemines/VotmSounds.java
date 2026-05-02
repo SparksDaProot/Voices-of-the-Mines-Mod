@@ -38,6 +38,23 @@ public class VotmSounds {
 
     public static final RegistryObject<SoundEvent> ALARM = registerSoundEvent("alarm");
 
+// GEOMOCT
+
+    public static final RegistryObject<SoundEvent> GEOMOCT_LOOP = registerSoundEvent("geomoct_loop");
+    public static final RegistryObject<SoundEvent> OCTCHARGE = registerSoundEvent("octcharge");
+    public static final RegistryObject<SoundEvent> OCTSHOOT = registerSoundEvent("octshoot");
+
+    //WISPS
+    public static final RegistryObject<SoundEvent> BLACKWISP1 = registerSoundEvent("blackwisp1");
+    public static final RegistryObject<SoundEvent> BLACKWISP2 = registerSoundEvent("blackwisp2");
+    public static final RegistryObject<SoundEvent> BLACKWISP3 = registerSoundEvent("blackwisp3");
+    public static final RegistryObject<SoundEvent> WISPBLACKSCREEN = registerSoundEvent("wispblackscreen");
+
+    public static final RegistryObject<SoundEvent> YELLOW_IDLE = registerSoundEvent("yellow_idle");
+    public static final RegistryObject<SoundEvent> PINK_IDLE = registerSoundEvent("pink_idle");
+
+    public static final RegistryObject<SoundEvent> PLUSHBEEP = registerSoundEvent("plushbeep");
+
 
 
     public static final RegistryObject<SoundEvent> LIGHTSWITCH = registerSoundEvent("lightswitch");
