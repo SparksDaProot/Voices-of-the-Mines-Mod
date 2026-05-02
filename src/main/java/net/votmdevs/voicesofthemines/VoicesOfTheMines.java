@@ -740,6 +740,11 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Block> PLUSHIE_SPARKSY = BLOCKS.register("plushie_sparksy",
             () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), PlushieType.SPARKSY));
 
+    public static final RegistryObject<Block> PLUSHIE_LIBE = BLOCKS.register("plushie_libe",
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), PlushieType.LIBE));
+
+    //items plush
+
     public static final RegistryObject<Item> PLUSHIE_BENJIKUS_ITEM = ITEMS.register("plushie_benjikus",
             () -> new net.votmdevs.voicesofthemines.item.PlushieItem(PLUSHIE_BENJIKUS.get(), new net.minecraft.world.item.Item.Properties(), net.votmdevs.voicesofthemines.block.PlushieType.BENJIKUS));
 
@@ -761,6 +766,9 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Item> PLUSHIE_SPARKSY_ITEM = ITEMS.register("plushie_sparksy",
             () -> new net.votmdevs.voicesofthemines.item.PlushieItem(PLUSHIE_SPARKSY.get(), new net.minecraft.world.item.Item.Properties(), PlushieType.SPARKSY));
 
+    public static final RegistryObject<Item> PLUSHIE_LIBE_ITEM = ITEMS.register("plushie_libe",
+            () -> new net.votmdevs.voicesofthemines.item.PlushieItem(PLUSHIE_LIBE.get(), new net.minecraft.world.item.Item.Properties(), PlushieType.LIBE));
+
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.PlushieBlockEntity>> PLUSHIE_BE = BLOCK_ENTITIES.register("plushie_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.PlushieBlockEntity::new,
                     PLUSHIE_BENJIKUS.get(),
@@ -769,7 +777,8 @@ public class VoicesOfTheMines {
                     PLUSHIE_INVINCIBLE.get(),
                     PLUSHIE_KEL.get(),
                     PLUSHIE_PECORA.get(),
-                    PLUSHIE_SPARKSY.get()
+                    PLUSHIE_SPARKSY.get(),
+                    PLUSHIE_LIBE.get()
             ).build(null));
 
     public static final RegistryObject<EntityType<KerfurEntity>> KERFUR = ENTITY_TYPES.register("kerfur",

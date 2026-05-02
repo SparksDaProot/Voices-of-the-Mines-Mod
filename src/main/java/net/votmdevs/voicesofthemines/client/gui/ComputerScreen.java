@@ -135,6 +135,7 @@ public class ComputerScreen extends Screen {
             allItems.add(new StoreItem("plushie_pecora", "Plush Pecora", new ItemStack(VoicesOfTheMines.PLUSHIE_PECORA_ITEM.get()), 50, 1));
             allItems.add(new StoreItem("plushie_sparksy", "Plush Sparksy", new ItemStack(VoicesOfTheMines.PLUSHIE_PECORA_ITEM.get()), 50, 1));
             allItems.add(new StoreItem("plushie_niko", "Plush Da Noik", new ItemStack(VoicesOfTheMines.PLUSHIE_NIKO_ITEM.get()), 50, 1));
+            allItems.add(new StoreItem("plushie_libe", "Plush Libe", new ItemStack(VoicesOfTheMines.PLUSHIE_LIBE_ITEM.get()), 50, 1));
             allItems.add(new StoreItem("plushie_invincible", "Plush Mark", new ItemStack(VoicesOfTheMines.PLUSHIE_INVINCIBLE_ITEM.get()), 50, 1));
             allItems.add(new StoreItem("plushie_kel", "Plush Dr.Kel", new ItemStack(VoicesOfTheMines.PLUSHIE_KEL_ITEM.get()), 50, 1));
 

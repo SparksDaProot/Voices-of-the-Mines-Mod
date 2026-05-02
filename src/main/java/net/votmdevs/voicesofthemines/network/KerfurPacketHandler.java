@@ -775,6 +775,7 @@ public class KerfurPacketHandler {
 
         private static net.minecraft.world.item.Item getItemById(String id) {
             switch(id) {
+                case "plushie_libe": return VoicesOfTheMines.PLUSHIE_LIBE_ITEM.get();
                 case "plushie_sparksy": return VoicesOfTheMines.PLUSHIE_SPARKSY_ITEM.get();
                 case "plushie_benjikus": return VoicesOfTheMines.PLUSHIE_BENJIKUS_ITEM.get();
                 case "plushie_pecora": return VoicesOfTheMines.PLUSHIE_PECORA_ITEM.get();
