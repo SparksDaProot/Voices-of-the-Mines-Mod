@@ -51,7 +51,7 @@ public class YellowWispEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected net.minecraft.sounds.SoundEvent getAmbientSound() {
-        return VotmSounds.YELLOW_IDLE.get();
+        return VotmSounds.PINK_IDLE.get();
     }
 
     @Override
