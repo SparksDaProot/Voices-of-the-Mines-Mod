@@ -161,6 +161,8 @@
   "pcstartup": { "sounds": [ "voicesofthemines:pcstartup" ] },
   "computerworking_loop": { "sounds": [ "voicesofthemines:computerworking_loop" ] },
 
+  "deny": { "sounds": [ "voicesofthemines:deny" ] },
+
   "lightswitch": { "sounds": [ "voicesofthemines:lightswitch" ] },
   "connect": { "sounds": [ "voicesofthemines:connect" ] },
   "evil_scream": { "sounds": [ "voicesofthemines:evil_scream" ] },

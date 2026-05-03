@@ -46,7 +46,7 @@ public class VendingBlockEntity extends BlockEntity implements GeoBlockEntity {
         }
 
         if (availableItems.isEmpty()) {
-            this.level.playSound(null, this.worldPosition, VotmSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 0.5F);
+            this.level.playSound(null, this.worldPosition, VotmSounds.DENY.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 0.5F);
             return;
         }
 
@@ -70,7 +70,7 @@ public class VendingBlockEntity extends BlockEntity implements GeoBlockEntity {
                 sendAnimPacket("give");
             }
         } else {
-            this.level.playSound(null, this.worldPosition, VotmSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+            this.level.playSound(null, this.worldPosition, VotmSounds.DENY.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
         }
         if (isStockEmpty()) {
             summonRestocker();

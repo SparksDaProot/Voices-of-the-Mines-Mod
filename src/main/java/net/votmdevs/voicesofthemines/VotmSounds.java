@@ -17,6 +17,7 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> SHUTDOWN = registerSoundEvent("shutdown");
     public static final RegistryObject<SoundEvent> WALK = registerSoundEvent("walk");
     public static final RegistryObject<SoundEvent> WARNING = registerSoundEvent("warning");
+    public static final RegistryObject<SoundEvent> DENY = registerSoundEvent("deny");
     public static final RegistryObject<SoundEvent> CRAFT = registerSoundEvent("craft");
     public static final RegistryObject<SoundEvent> OPEN_STORAGE = registerSoundEvent("open_storage");
     public static final RegistryObject<SoundEvent> FLASHLIGHT = registerSoundEvent("flashlight");
