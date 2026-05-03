@@ -1,0 +1,101 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "vending",
+					"pivot": [-0.93333, 0.11667, 0.17667],
+					"cubes": [
+						{"origin": [-8, 0, -5], "size": [14, 2, 10], "uv": [0, 32]},
+						{"origin": [-9, 10, -6], "size": [16, 20, 12], "uv": [0, 0]},
+						{"origin": [-9, 2, -6], "size": [2, 8, 12], "uv": [32, 44]},
+						{"origin": [3, 2, -6], "size": [4, 8, 12], "uv": [0, 44]},
+						{"origin": [-7, 2, -6], "size": [10, 3, 3], "uv": [48, 32]},
+						{"origin": [-7, 2, 5], "size": [10, 8, 1], "uv": [56, 0]}
+					]
+				},
+				{
+					"name": "door",
+					"parent": "vending",
+					"pivot": [-2, 10, -5],
+					"cubes": [
+						{"origin": [-7, 5, -5], "size": [10, 5, 0], "uv": [48, 38]}
+					]
+				},
+				{
+					"name": "button",
+					"parent": "vending",
+					"pivot": [4.5, 21.5, -6.2],
+					"cubes": [
+						{"origin": [4, 21, -6.2], "size": [1, 1, 0], "uv": [56, 9]}
+					]
+				},
+				{
+					"name": "button4",
+					"parent": "vending",
+					"pivot": [4.5, 19.5, -6.2],
+					"cubes": [
+						{"origin": [4, 19, -6.2], "size": [1, 1, 0], "uv": [58, 9]}
+					]
+				},
+				{
+					"name": "button6",
+					"parent": "vending",
+					"pivot": [4.5, 17.5, -6.2],
+					"cubes": [
+						{"origin": [4, 17, -6.2], "size": [1, 1, 0], "uv": [58, 11]}
+					]
+				},
+				{
+					"name": "button8",
+					"parent": "vending",
+					"pivot": [4.5, 15.5, -6.2],
+					"cubes": [
+						{"origin": [4, 15, -6.2], "size": [1, 1, 0], "uv": [58, 12]}
+					]
+				},
+				{
+					"name": "button2",
+					"parent": "vending",
+					"pivot": [6, 21.5, -6.2],
+					"cubes": [
+						{"origin": [5.5, 21, -6.2], "size": [1, 1, 0], "uv": [56, 10]}
+					]
+				},
+				{
+					"name": "button3",
+					"parent": "vending",
+					"pivot": [6, 19.5, -6.2],
+					"cubes": [
+						{"origin": [5.5, 19, -6.2], "size": [1, 1, 0], "uv": [58, 10]}
+					]
+				},
+				{
+					"name": "button5",
+					"parent": "vending",
+					"pivot": [6, 17.5, -6.2],
+					"cubes": [
+						{"origin": [5.5, 17, -6.2], "size": [1, 1, 0], "uv": [56, 12]}
+					]
+				},
+				{
+					"name": "button7",
+					"parent": "vending",
+					"pivot": [6, 15.5, -6.2],
+					"cubes": [
+						{"origin": [5.5, 15, -6.2], "size": [1, 1, 0], "uv": [56, 11]}
+					]
+				}
+			]
+		}
+	]
+}

@@ -317,6 +317,9 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
             }
             return totalBoxPrice; // summ
         }
+        if (item == VoicesOfTheMines.RADIO_BLOCK_ITEM.get()) return 40;
+        if (item == VoicesOfTheMines.ALARM_ITEM .get()) return 30;
+        if (item == VoicesOfTheMines.VENDING_MACHINE_ITEM.get()) return 50;
         if (item == VoicesOfTheMines.PLUSHIE_LIBE_ITEM.get()) return 30;
         if (item == VoicesOfTheMines.PLUSHIE_SPARKSY_ITEM.get()) return 30;
         if (item == VoicesOfTheMines.PLUSHIE_KEL_ITEM.get()) return 30;

@@ -33,6 +33,9 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, RadioActionPacket.class, RadioActionPacket::encode, RadioActionPacket::decode, RadioActionPacket::handle);
+        INSTANCE.registerMessage(id++, RadioSyncPacket.class, RadioSyncPacket::encode, RadioSyncPacket::decode, RadioSyncPacket::handle);
+        INSTANCE.registerMessage(id++, VendingAnimPacket.class, VendingAnimPacket::encode, VendingAnimPacket::decode, VendingAnimPacket::handle);
         INSTANCE.registerMessage(id++, PlushieInteractPacket.class, PlushieInteractPacket::encode, PlushieInteractPacket::decode, PlushieInteractPacket::handle);
         INSTANCE.registerMessage(id++, TriggerEvilDeathPacket.class, TriggerEvilDeathPacket::encode, TriggerEvilDeathPacket::decode, TriggerEvilDeathPacket::handle);
         INSTANCE.registerMessage(id++, RequestReportDataPacket.class, RequestReportDataPacket::encode, RequestReportDataPacket::decode, RequestReportDataPacket::handle);
@@ -775,6 +778,9 @@ public class KerfurPacketHandler {
 
         private static net.minecraft.world.item.Item getItemById(String id) {
             switch(id) {
+                case "alarm": return VoicesOfTheMines.ALARM_ITEM.get();
+                case "radio_block": return VoicesOfTheMines.RADIO_BLOCK_ITEM.get();
+                case "vending": return VoicesOfTheMines.VENDING_MACHINE_ITEM.get();
                 case "plushie_libe": return VoicesOfTheMines.PLUSHIE_LIBE_ITEM.get();
                 case "plushie_sparksy": return VoicesOfTheMines.PLUSHIE_SPARKSY_ITEM.get();
                 case "plushie_benjikus": return VoicesOfTheMines.PLUSHIE_BENJIKUS_ITEM.get();
@@ -1268,6 +1274,86 @@ public class KerfurPacketHandler {
                         plushie.triggerBeepAnim();
                     }
                 }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    public static class VendingAnimPacket {
+        private final BlockPos pos;
+        private final String animName;
+
+        public VendingAnimPacket(BlockPos pos, String animName) { this.pos = pos; this.animName = animName; }
+        public static void encode(VendingAnimPacket msg, FriendlyByteBuf buffer) { buffer.writeBlockPos(msg.pos); buffer.writeUtf(msg.animName); }
+        public static VendingAnimPacket decode(FriendlyByteBuf buffer) { return new VendingAnimPacket(buffer.readBlockPos(), buffer.readUtf()); }
+
+        public static void handle(VendingAnimPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                if (net.minecraft.client.Minecraft.getInstance().level != null) {
+                    net.minecraft.world.level.block.entity.BlockEntity be = net.minecraft.client.Minecraft.getInstance().level.getBlockEntity(msg.pos);
+                    if (be instanceof net.votmdevs.voicesofthemines.block.VendingBlockEntity vending) {
+                        vending.triggerAnim("controller", msg.animName);
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    // Клиент -> Сервер (Игрок кликнул или покрутил колесико)
+    public static class RadioActionPacket {
+        private final BlockPos pos;
+        private final int action; // 0 = Toggle, 1 = Set Track, 2 = Scroll Up, 3 = Scroll Down
+        private final String data;
+
+        public RadioActionPacket(BlockPos pos, int action, String data) { this.pos = pos; this.action = action; this.data = data; }
+        public static void encode(RadioActionPacket msg, FriendlyByteBuf buffer) { buffer.writeBlockPos(msg.pos); buffer.writeInt(msg.action); buffer.writeUtf(msg.data); }
+        public static RadioActionPacket decode(FriendlyByteBuf buffer) { return new RadioActionPacket(buffer.readBlockPos(), buffer.readInt(), buffer.readUtf()); }
+
+        public static void handle(RadioActionPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.minecraft.server.level.ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.minecraft.world.level.block.entity.BlockEntity be = player.level().getBlockEntity(msg.pos);
+                    if (be instanceof net.votmdevs.voicesofthemines.block.RadioBlockEntity radio) {
+                        if (msg.action == 0) {
+                            radio.isPlaying = !radio.isPlaying;
+                        } else if (msg.action == 1) {
+                            radio.currentTrack = msg.data;
+                            radio.isPlaying = true;
+                        } else if (msg.action == 2) {
+                            radio.volume = Math.min(1.0f, radio.volume + 0.1f);
+                        } else if (msg.action == 3) {
+                            radio.volume = Math.max(0.0f, radio.volume - 0.1f);
+                        }
+                        radio.setChanged();
+                        player.level().sendBlockUpdated(msg.pos, radio.getBlockState(), radio.getBlockState(), 3);
+
+                        // Рассылаем всем вокруг, чтобы они включили/выключили музыку
+                        KerfurPacketHandler.INSTANCE.send(
+                                net.minecraftforge.network.PacketDistributor.TRACKING_CHUNK.with(() -> player.level().getChunkAt(msg.pos)),
+                                new RadioSyncPacket(msg.pos, radio.isPlaying, radio.currentTrack, radio.volume)
+                        );
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    // RADIO SERVER-CLIENT
+    public static class RadioSyncPacket {
+        private final BlockPos pos;
+        private final boolean isPlaying;
+        private final String track;
+        private final float volume;
+
+        public RadioSyncPacket(BlockPos pos, boolean isPlaying, String track, float volume) { this.pos = pos; this.isPlaying = isPlaying; this.track = track; this.volume = volume; }
+        public static void encode(RadioSyncPacket msg, FriendlyByteBuf buffer) { buffer.writeBlockPos(msg.pos); buffer.writeBoolean(msg.isPlaying); buffer.writeUtf(msg.track); buffer.writeFloat(msg.volume); }
+        public static RadioSyncPacket decode(FriendlyByteBuf buffer) { return new RadioSyncPacket(buffer.readBlockPos(), buffer.readBoolean(), buffer.readUtf(), buffer.readFloat()); }
+
+        public static void handle(RadioSyncPacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.votmdevs.voicesofthemines.client.ClientRadioManager.handleSync(msg.pos, msg.isPlaying, msg.track, msg.volume);
             });
             ctx.get().setPacketHandled(true);
         }

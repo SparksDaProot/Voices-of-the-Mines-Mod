@@ -71,16 +71,34 @@ public class ClientInputHandler {
     }
 
     @SubscribeEvent
-    public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && mc.player.getMainHandItem().getItem() == VoicesOfTheMines.HOOK_ITEM.get()) {
+    public static void onMouseScroll(net.minecraftforge.client.event.InputEvent.MouseScrollingEvent event) {
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+        if (mc.player == null) return;
+
+        // HOOK
+        if (mc.player.getMainHandItem().getItem() == VoicesOfTheMines.HOOK_ITEM.get()) {
             double scroll = -event.getScrollDelta();
             if (scroll != 0) {
-                KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.HookPullPacket(scroll));
+                net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.HookPullPacket(scroll));
+                event.setCanceled(true);
+            }
+            return;
+        }
+
+        // RADIO
+        if (mc.player.isShiftKeyDown() && mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult blockHit) {
+            net.minecraft.core.BlockPos pos = blockHit.getBlockPos();
+            if (mc.level != null && mc.level.getBlockState(pos).getBlock() == VoicesOfTheMines.RADIO_BLOCK.get()) {
+                double delta = event.getScrollDelta();
+                int action = delta > 0 ? 2 : 3; //volume
+
+                net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.RadioActionPacket(pos, action, ""));
                 event.setCanceled(true);
             }
         }
     }
+
+
 
     @SubscribeEvent
     public static void onMouseClickHook(InputEvent.InteractionKeyMappingTriggered event) {

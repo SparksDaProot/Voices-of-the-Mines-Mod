@@ -1,0 +1,219 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"stuck": {
+			"animation_length": 0.75,
+			"bones": {
+				"door": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [-20, 0, 0],
+							"easing": "easeInElastic",
+							"easingArgs": [2]
+						},
+						"0.5": {
+							"vector": [15, 0, 0],
+							"easing": "easeInElastic",
+							"easingArgs": [2]
+						},
+						"0.75": {
+							"vector": [0, 0, 0],
+							"easing": "easeInElastic",
+							"easingArgs": [2]
+						}
+					}
+				},
+				"vending": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [0, 0, -5],
+							"easing": "easeOutBack",
+							"easingArgs": [2]
+						},
+						"0.5": {
+							"vector": [0, 0, 5],
+							"easing": "easeOutBack",
+							"easingArgs": [2]
+						},
+						"0.75": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutBack",
+							"easingArgs": [2]
+						}
+					}
+				}
+			}
+		},
+		"idle": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"button": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.25": {
+							"vector": [0.3, 0.3, 0.3],
+							"easing": "easeOutSine"
+						},
+						"0.5": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"button2": {
+					"scale": {
+						"0.0833": {
+							"vector": [1, 1, 1]
+						},
+						"0.3333": {
+							"vector": [0.3, 0.3, 0.3],
+							"easing": "easeOutSine"
+						},
+						"0.5833": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"button3": {
+					"scale": {
+						"0.1667": {
+							"vector": [1, 1, 1]
+						},
+						"0.4167": {
+							"vector": [0.3, 0.3, 0.3],
+							"easing": "easeOutSine"
+						},
+						"0.6667": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"button4": {
+					"scale": {
+						"0.125": {
+							"vector": [1, 1, 1]
+						},
+						"0.375": {
+							"vector": [0.3, 0.3, 0.3],
+							"easing": "easeOutSine"
+						},
+						"0.625": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"button5": {
+					"scale": {
+						"0.3333": {
+							"vector": [1, 1, 1]
+						},
+						"0.5833": {
+							"vector": [0.3, 0.3, 0.3],
+							"easing": "easeOutSine"
+						},
+						"0.8333": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"button6": {
+					"scale": {
+						"0.25": {
+							"vector": [1, 1, 1]
+						},
+						"0.5": {
+							"vector": [0.3, 0.3, 0.3],
+							"easing": "easeOutSine"
+						},
+						"0.75": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"button7": {
+					"scale": {
+						"0.5": {
+							"vector": [1, 1, 1]
+						},
+						"0.75": {
+							"vector": [0.3, 0.3, 0.3],
+							"easing": "easeOutSine"
+						},
+						"1.0": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"button8": {
+					"scale": {
+						"0.4167": {
+							"vector": [1, 1, 1]
+						},
+						"0.6667": {
+							"vector": [0.3, 0.3, 0.3],
+							"easing": "easeOutSine"
+						},
+						"0.9167": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutSine"
+						}
+					}
+				}
+			}
+		},
+		"give": {
+			"animation_length": 0.5,
+			"bones": {
+				"door": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [-72.5, 0, 0],
+							"easing": "easeOutBack",
+							"easingArgs": [2]
+						},
+						"0.5": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutBack",
+							"easingArgs": [2]
+						}
+					}
+				},
+				"vending": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [-2.5, 0, 0],
+							"easing": "easeInElastic",
+							"easingArgs": [2]
+						},
+						"0.5": {
+							"vector": [0, 0, 0],
+							"easing": "easeInElastic",
+							"easingArgs": [2]
+						}
+					}
+				}
+			}
+		}
+	}
+}

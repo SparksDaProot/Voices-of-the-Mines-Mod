@@ -61,6 +61,10 @@ public class VoicesOfTheMines {
     public static final String MODID = "voicesofthemines";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    public static final net.minecraftforge.registries.DeferredRegister<net.minecraft.core.particles.ParticleType<?>> PARTICLE_TYPES = net.minecraftforge.registries.DeferredRegister.create(net.minecraftforge.registries.ForgeRegistries.PARTICLE_TYPES, MODID);
+
+    public static final net.minecraftforge.registries.RegistryObject<net.minecraft.core.particles.SimpleParticleType> BLACK_SMOKE_PARTICLE = PARTICLE_TYPES.register("black_smoke", () -> new net.minecraft.core.particles.SimpleParticleType(true));
+
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
@@ -781,6 +785,63 @@ public class VoicesOfTheMines {
                     PLUSHIE_LIBE.get()
             ).build(null));
 
+//VENDING MACHINE
+    public static final RegistryObject<Block> VENDING_MACHINE = BLOCKS.register("vending",
+            () -> new net.votmdevs.voicesofthemines.block.VendingBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(2.0f).noOcclusion()));
+
+    public static final RegistryObject<Item> VENDING_MACHINE_ITEM = ITEMS.register("vending",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    VENDING_MACHINE.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/vending.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/vending.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/vending_animation.json") // Можно поставить "animations/empty.animation.json", если в инвентаре анимация не нужна
+            ));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.VendingBlockEntity>> VENDING_BE = BLOCK_ENTITIES.register("vending_be",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.VendingBlockEntity::new, VENDING_MACHINE.get()).build(null));
+
+
+    public static final RegistryObject<EntityType<RestockerEntity>> RESTOCKER = ENTITY_TYPES.register("restocker",
+            () -> EntityType.Builder.of(RestockerEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.0f)
+                    .build(ResourceLocation.fromNamespaceAndPath(MODID, "restocker").toString()));
+
+    //ALARM
+
+    public static final RegistryObject<Block> ALARM_BLOCK = BLOCKS.register("alarm",
+            () -> new net.votmdevs.voicesofthemines.block.AlarmBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+
+    public static final RegistryObject<Item> ALARM_ITEM = ITEMS.register("alarm",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    ALARM_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/alarm_item.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/alarm.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/alarm_animation.json")
+            ));
+
+    public static final RegistryObject<BlockEntityType<net.votmdevs.voicesofthemines.block.AlarmBlockEntity>> ALARM_BE = BLOCK_ENTITIES.register("alarm_be",
+            () -> BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.AlarmBlockEntity::new, ALARM_BLOCK.get()).build(null));
+
+    //RADIO
+
+    public static final RegistryObject<Block> RADIO_BLOCK = BLOCKS.register("radio_block",
+            () -> new net.votmdevs.voicesofthemines.block.RadioBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+
+    public static final RegistryObject<Item> RADIO_BLOCK_ITEM = ITEMS.register("radio_block",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    RADIO_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/radio.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/radio.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json") // Анимации в инвентаре нам не нужны
+            ));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.RadioBlockEntity>> RADIO_BE = BLOCK_ENTITIES.register("radio_be",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.RadioBlockEntity::new, RADIO_BLOCK.get()).build(null));
+
+
     public static final RegistryObject<EntityType<KerfurEntity>> KERFUR = ENTITY_TYPES.register("kerfur",
             () -> EntityType.Builder.of(KerfurEntity::new, MobCategory.CREATURE)
                     .sized(0.6f, 1.8f)
@@ -813,6 +874,7 @@ public class VoicesOfTheMines {
         ITEMS.register(modEventBus);
         BLOCKS.register(modEventBus);
         BLOCK_ENTITIES.register(modEventBus);
+        PARTICLE_TYPES.register(modEventBus);
         VotmSounds.SOUNDS.register(modEventBus);
         MENUS.register(modEventBus);
         EFFECTS.register(modEventBus);
@@ -929,6 +991,23 @@ public class VoicesOfTheMines {
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class CommonModEvents {
+
+        @SubscribeEvent
+        public static void registerSpawnPlacements(net.minecraftforge.event.entity.SpawnPlacementRegisterEvent event) {
+            event.register(GEOM_OCTAHEDRON.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
+            event.register(BLACK_WISP.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
+            event.register(BLUE_WISP.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
+            event.register(PINK_WISP.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
+            event.register(GREEN_WISP.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
+            event.register(YELLOW_WISP.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
+        }
+
+        public static boolean checkDarkSpawnRules(EntityType<? extends net.minecraft.world.entity.Mob> type, net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.entity.MobSpawnType spawnType, BlockPos pos, net.minecraft.util.RandomSource random) {
+            return level.getDifficulty() != net.minecraft.world.Difficulty.PEACEFUL &&
+                    net.minecraft.world.entity.monster.Monster.isDarkEnoughToSpawn(level, pos, random) &&
+                    net.minecraft.world.entity.Mob.checkMobSpawnRules(type, level, spawnType, pos, random);
+        }
+
         @SubscribeEvent
         public static void onAttributeCreate(EntityAttributeCreationEvent event) {
             event.put(GEOM_OCTAHEDRON.get(), GeomOctahedronEntity.createAttributes().build());
@@ -941,6 +1020,7 @@ public class VoicesOfTheMines {
             event.put(TREASURE_SPOT.get(), net.minecraft.world.entity.Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 1.0D).build());
             event.put(HOSTILE_MANNEQUIN.get(), HostileMannequinEntity.createAttributes().build());
             event.put(MANNEQUIN_STAND.get(), MannequinStandEntity.createAttributes().build());
+            event.put(RESTOCKER.get(), KerfurEntity.createAttributes().build());
             event.put(KERFUR.get(), KerfurEntity.createAttributes().build());
             event.put(FLESH.get(), FleshEntity.createAttributes().build());
             event.put(BLOOD_SPLASH.get(), BloodSplashEntity.createAttributes().build());
@@ -974,9 +1054,16 @@ public class VoicesOfTheMines {
                 });
             }
 
+            @SubscribeEvent
+            public static void registerParticleFactories(net.minecraftforge.client.event.RegisterParticleProvidersEvent event) {
+                event.registerSpriteSet(VoicesOfTheMines.BLACK_SMOKE_PARTICLE.get(), net.votmdevs.voicesofthemines.client.particle.BlackSmokeParticle.Provider::new);
+            }
+
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(VoicesOfTheMines.ALARM_BE.get(), net.votmdevs.voicesofthemines.client.AlarmRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.VENDING_BE.get(), net.votmdevs.voicesofthemines.client.VendingRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.PLUSHIE_BE.get(), net.votmdevs.voicesofthemines.client.PlushieRenderer::new);
                 event.registerEntityRenderer(VoicesOfTheMines.BLUE_WISP.get(), net.votmdevs.voicesofthemines.client.BlueWispRenderer::new);
                 event.registerEntityRenderer(VoicesOfTheMines.GREEN_WISP.get(), net.votmdevs.voicesofthemines.client.GreenWispRenderer::new);
@@ -995,6 +1082,7 @@ public class VoicesOfTheMines {
                 event.registerEntityRenderer(VoicesOfTheMines.SEAT_ENTITY.get(), SeatRenderer::new);
                 event.registerBlockEntityRenderer(SERVER_BE.get(), ServerRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.CHAIR_BE.get(), ChairRenderer::new);
+                event.registerEntityRenderer(RESTOCKER.get(), RestockerRenderer::new);
                 event.registerEntityRenderer(KERFUR.get(), KerfurRenderer::new);
                 event.registerEntityRenderer(FLESH.get(), FleshRenderer::new);
                 event.registerBlockEntityRenderer(CONSOLE_BE.get(), ConsoleRenderer::new);
@@ -1076,6 +1164,10 @@ public class VoicesOfTheMines {
 
         @SubscribeEvent
         public static void onClientTick(net.minecraftforge.event.TickEvent.ClientTickEvent event) {
+            if (event.phase == net.minecraftforge.event.TickEvent.Phase.END) {
+                net.votmdevs.voicesofthemines.client.ClientRadioManager.tick(net.minecraft.client.Minecraft.getInstance());
+            }
+
             if (event.phase != net.minecraftforge.event.TickEvent.Phase.END) return;
             net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
             if (mc.player == null || mc.level == null) return;

@@ -129,6 +129,9 @@ public class ComputerScreen extends Screen {
             allItems.add(new StoreItem("painter_yellow", "Painter Yellow", new ItemStack(VoicesOfTheMines.PAINTER_YELLOW.get()), 50, 1));
             allItems.add(new StoreItem("fuel_can", "Fuel Can", new ItemStack(VoicesOfTheMines.FUEL_CAN_ITEM.get()), 25, 1));
             allItems.add(new StoreItem("drive", "Drive", new ItemStack(VoicesOfTheMines.DRIVE_ITEM.get()), 2, 1));
+            allItems.add(new StoreItem("vending", "Vending Machine", new ItemStack(VoicesOfTheMines.VENDING_MACHINE_ITEM.get()), 120, 25));
+            allItems.add(new StoreItem("alarm", "Alarm system", new ItemStack(VoicesOfTheMines.ALARM_ITEM.get()), 80, 5));
+            allItems.add(new StoreItem("radio_block", "Radio", new ItemStack(VoicesOfTheMines.RADIO_BLOCK_ITEM.get()), 100, 5));
             allItems.add(new StoreItem("wash_sponge", "Sponge", new ItemStack(VoicesOfTheMines.WASH_SPONGE_ITEM.get()), 5, 1));
             allItems.add(new StoreItem("plushie_benjikus", "Plush Alien", new ItemStack(VoicesOfTheMines.PLUSHIE_BENJIKUS_ITEM.get()), 50, 1));
             allItems.add(new StoreItem("plushie_benjikuscommon", "Plush Benj1kus", new ItemStack(VoicesOfTheMines.PLUSHIE_BENJIKUS_COMMON_ITEM.get()), 50, 1));

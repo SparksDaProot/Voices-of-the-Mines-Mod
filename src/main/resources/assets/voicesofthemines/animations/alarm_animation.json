@@ -1,0 +1,32 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"off": {
+			"loop": true,
+			"bones": {
+				"alarmline": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"on": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"alarmline": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 360, 0],
+							"easing": "linear"
+						}
+					}
+				}
+			}
+		}
+	}
+}
