@@ -53,7 +53,7 @@ public class VendingBlockEntity extends BlockEntity implements GeoBlockEntity {
         SignalManager manager = SignalManager.get(player.serverLevel());
         PlayerData pd = manager.getGlobalPlayerData();
 
-        if (pd.spendPoints(player.getUUID(), 2)) {
+        if (pd.spendPoints(player.getUUID(), 10)) {
             manager.setDirty();
             KerfurPacketHandler.INSTANCE.sendTo(new KerfurPacketHandler.SyncComputerDataPacket(pd.getPoints(player.getUUID()), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl(), pd.getEmails(player.getUUID()), pd.customMarket), player.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
 
