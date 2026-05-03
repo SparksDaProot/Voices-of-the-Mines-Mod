@@ -86,7 +86,15 @@ public class VendingBlockEntity extends BlockEntity implements GeoBlockEntity {
             net.votmdevs.voicesofthemines.entity.RestockerEntity restocker = VoicesOfTheMines.RESTOCKER.get().create(serverLevel);
             if (restocker != null) {
                 float yRot = dir.getOpposite().toYRot();
+
                 restocker.moveTo(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, yRot, 0);
+
+                restocker.setYBodyRot(yRot);
+                restocker.setYHeadRot(yRot);
+                restocker.yRotO = yRot;
+                restocker.yBodyRotO = yRot;
+                restocker.yHeadRotO = yRot;
+
                 restocker.setTargetVending(this.worldPosition);
 
                 serverLevel.addFreshEntity(restocker);

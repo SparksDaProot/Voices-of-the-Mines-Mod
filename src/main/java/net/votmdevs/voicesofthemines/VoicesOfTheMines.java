@@ -1062,6 +1062,7 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(VoicesOfTheMines.RADIO_BE.get(), net.votmdevs.voicesofthemines.client.RadioRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.ALARM_BE.get(), net.votmdevs.voicesofthemines.client.AlarmRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.VENDING_BE.get(), net.votmdevs.voicesofthemines.client.VendingRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.PLUSHIE_BE.get(), net.votmdevs.voicesofthemines.client.PlushieRenderer::new);
