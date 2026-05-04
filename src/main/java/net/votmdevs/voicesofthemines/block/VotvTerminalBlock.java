@@ -191,41 +191,40 @@ public class VotvTerminalBlock extends BaseEntityBlock {
         return net.minecraft.world.InteractionResult.PASS;
     }
 // ROAR ATTACK!
-    @Override
-    public void attack(BlockState state, Level level, BlockPos pos, Player player) {
-        if (!level.isClientSide()) {
-            if (this == VoicesOfTheMines.TABLE.get()) {
-                player.hurt(level.damageSources().generic(), 5.0F);
+@Override
+public void attack(BlockState state, Level level, BlockPos pos, Player player) {
+    if (!level.isClientSide()) {
+        float damage = net.votmdevs.voicesofthemines.config.VotmConfig.getTerminalPunchDamage();
 
+        if (damage > 0) {
+            if (this == VoicesOfTheMines.TABLE.get()) {
+                player.hurt(level.damageSources().generic(), damage);
                 level.playSound(null, pos, VotmSounds.ROAR_PC.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
             }
 
             if (this == VoicesOfTheMines.TERMINAL_CHECK.get()) {
-                player.hurt(level.damageSources().generic(), 5.0F);
-
+                player.hurt(level.damageSources().generic(), damage);
                 level.playSound(null, pos, VotmSounds.ROAR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
             }
 
             if (this == VoicesOfTheMines.TERMINAL_FIND.get()) {
-                player.hurt(level.damageSources().generic(), 5.0F);
-
+                player.hurt(level.damageSources().generic(), damage);
                 level.playSound(null, pos, VotmSounds.ROAR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
             }
 
             if (this == VoicesOfTheMines.TERMINAL_CALIBRATE.get()) {
-                player.hurt(level.damageSources().generic(), 5.0F);
-
+                player.hurt(level.damageSources().generic(), damage);
                 level.playSound(null, pos, VotmSounds.ROAR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
             }
 
             if (this == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
-                player.hurt(level.damageSources().generic(), 5.0F);
-
+                player.hurt(level.damageSources().generic(), damage);
                 level.playSound(null, pos, VotmSounds.ROAR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
             }
         }
-        super.attack(state, level, pos, player);
     }
+    super.attack(state, level, pos, player);
+}
 
 
     // fake blocks for hitboxes

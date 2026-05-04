@@ -9,6 +9,7 @@ public class VotmConfig {
     public static final ForgeConfigSpec.DoubleValue SERVER_BREAK_INTERVAL_MINUTES;
     public static final ForgeConfigSpec.DoubleValue RECENTLY_FIXED_PROTECTION_MINUTES;
     public static final ForgeConfigSpec.BooleanValue DEBUG_SIGNAL_BREAKS;
+    public static final ForgeConfigSpec.DoubleValue TERMINAL_PUNCH_DAMAGE;
 
     private static final double TICKS_PER_MINUTE = 20.0D * 60.0D;
 
@@ -35,9 +36,17 @@ public class VotmConfig {
                 .comment("Logs break timer, degradation, and recently-fixed protection checks.")
                 .define("debugSignalBreaks", false);
 
+        TERMINAL_PUNCH_DAMAGE = builder
+                .comment("Damage dealt to players when they punch terminals, servers, or consoles.")
+                .defineInRange("terminalPunchDamage", 5.0D, 0.0D, 100.0D);
+
         builder.pop();
 
         SERVER_SPEC = builder.build();
+    }
+
+    public static float getTerminalPunchDamage() {
+        return TERMINAL_PUNCH_DAMAGE.get().floatValue();
     }
 
     public static long getServerBreakIntervalTicks() {
