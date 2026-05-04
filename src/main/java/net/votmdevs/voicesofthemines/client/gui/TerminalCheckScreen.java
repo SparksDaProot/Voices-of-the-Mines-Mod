@@ -36,7 +36,7 @@ public class TerminalCheckScreen extends Screen {
     public TerminalCheckScreen(BlockPos pos) {
         super(Component.literal("Terminal Check"));
         this.terminalPos = pos;
-
+// generic noises
         String[] images = {"np1", "np2", "np3", "np4", "np5", "np6", "np7", "np8", "np10", "np19"};
         String chosenImg = images[new Random().nextInt(images.length)];
         this.selectedImage = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + chosenImg + ".png");
@@ -127,22 +127,36 @@ public class TerminalCheckScreen extends Screen {
         }
 
         int btnY = startY + 210;
-        guiGraphics.fill(topLeftX, btnY, topLeftX + 60, btnY + 20, isPlaying ? 0xFFFF5555 : 0xFF55FF55);
-        guiGraphics.drawString(this.font, isPlaying ? "STOP" : "PLAY", topLeftX + 15, btnY + 6, 0xFF000000, false);
+        int eraseX = topLeftX - 15;
+        int playX = topLeftX + 10;
+        int finishBtnX = playX + 65;
+        int ejectX = finishBtnX + 65;
 
-        int finishBtnX = topLeftX + 70;
+        // BUTTONS
+        if (!isPlaying) {
+            //  Erase
+            guiGraphics.fill(eraseX, btnY, eraseX + 20, btnY + 20, 0xFF3333FF);
+            guiGraphics.fill(eraseX + 1, btnY + 1, eraseX + 19, btnY + 19, 0xFF5555FF);
+
+            // Eject
+            guiGraphics.fill(ejectX, btnY, ejectX + 20, btnY + 20, 0xFFFF3333);
+            guiGraphics.fill(ejectX + 1, btnY + 1, ejectX + 19, btnY + 19, 0xFFFF5555);
+        }
+
+        // PLAY / STOP
+        guiGraphics.fill(playX, btnY, playX + 60, btnY + 20, isPlaying ? 0xFFFF5555 : 0xFF55FF55);
+        guiGraphics.drawString(this.font, isPlaying ? "STOP" : "PLAY", playX + 15, btnY + 6, 0xFF000000, false);
+
+        // FINISH
         guiGraphics.fill(finishBtnX, btnY, finishBtnX + 60, btnY + 20, 0xFF5555FF);
         guiGraphics.drawString(this.font, "FINISH", finishBtnX + 15, btnY + 6, 0xFFFFFFFF, false);
 
+
+        // noise image panel
         int rightX = startX + 200;
         guiGraphics.fill(rightX - 1, topLeftY - 1, rightX + 128 + 1, topLeftY + 128 + 1, 0xFFFFFFFF);
         guiGraphics.fill(rightX, topLeftY, rightX + 128, topLeftY + 128, 0xFF000000);
 
-        if (!isPlaying) {
-            int ejectX = finishBtnX + 70;
-            guiGraphics.fill(ejectX, btnY, ejectX + 20, btnY + 20, 0xFFFF3333);
-            guiGraphics.fill(ejectX + 1, btnY + 1, ejectX + 19, btnY + 19, 0xFFFF5555);
-        }
 
         if (HAS_ACTIVE_SIGNAL) {
             if (arrivalTimer > 0) {
@@ -292,9 +306,19 @@ public class TerminalCheckScreen extends Screen {
         int startY = centerY - 120;
         int topLeftX = startX + 20;
         int btnY = startY + 210;
+        int eraseX = topLeftX - 15;
         int finishBtnX = topLeftX + 70;
         int ejectX = finishBtnX + 70;
+// erase
+        if (!isPlaying && mouseX >= eraseX && mouseX <= eraseX + 20 && mouseY >= btnY && mouseY <= btnY + 20) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
+            net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.EraseDrivePacket(terminalPos));
 
+            HAS_ACTIVE_SIGNAL = false;
+            this.minecraft.setScreen(null);
+            return true;
+        }
+// eject
         if (!isPlaying && mouseX >= ejectX && mouseX <= ejectX + 20 && mouseY >= btnY && mouseY <= btnY + 20) {
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(VotmSounds.BUTTON_CLICK.get(), 1.0F, 1.0F));
             net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.EjectDrivePacket(terminalPos));

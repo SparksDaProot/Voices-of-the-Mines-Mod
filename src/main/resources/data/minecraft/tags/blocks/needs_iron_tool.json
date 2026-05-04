@@ -1,7 +1,23 @@
 {
   "replace": false,
   "values": [
-    "kerfurpet:kerfur_workbench",
-    "kerfurpet:trash_bin"
+    "voicesofthemines:alarm",
+    "voicesofthemines:vending",
+    "voicesofthemines:console_block",
+    "voicesofthemines:kitchen_tile",
+    "voicesofthemines:outside_floor",
+    "voicesofthemines:metal_tile",
+    "voicesofthemines:tile",
+    "voicesofthemines:bathroom_tile",
+    "voicesofthemines:votv_door",
+    "voicesofthemines:terminal_calibrate",
+    "voicesofthemines:terminal_processing",
+    "voicesofthemines:table",
+    "voicesofthemines:terminal_check",
+    "voicesofthemines:terminal_find",
+    "voicesofthemines:wall_behind",
+    "voicesofthemines:drone_panel",
+    "voicesofthemines:kerfur_workbench",
+    "voicesofthemines:trash_bin"
   ]
 }

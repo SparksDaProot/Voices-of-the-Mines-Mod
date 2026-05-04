@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "voicesofthemines:keypad",
+    "voicesofthemines:wall",
+    "voicesofthemines:wall_down",
+    "voicesofthemines:wall_lines",
+    "voicesofthemines:greywall_up",
+    "voicesofthemines:greywall_down",
+    "voicesofthemines:garage_yellow",
+    "voicesofthemines:garage_red",
+    "voicesofthemines:garage_bricks",
+    "voicesofthemines:up_tile",
+    "voicesofthemines:mini_vent",
+    "voicesofthemines:up_lamp",
+    "voicesofthemines:server_block",
+    "voicesofthemines:computer_chair",
+    "voicesofthemines:radio_block",
+    "voicesofthemines:exit"
+  ]
+}

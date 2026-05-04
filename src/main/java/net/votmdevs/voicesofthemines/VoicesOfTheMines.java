@@ -130,7 +130,7 @@ public class VoicesOfTheMines {
 
     // WALL
     public static final RegistryObject<Block> WALL_BEHIND = BLOCKS.register("wall_behind",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion(),
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
                     Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 14.0D, 16.0D), // North (Теперь вытянут по оси X)
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 14.0D, 32.0D), // East (Теперь вытянут по оси Z)
                     Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 14.0D, 16.0D), // South
@@ -139,7 +139,7 @@ public class VoicesOfTheMines {
 
     // TERMINAL FIND
     public static final RegistryObject<Block> TERMINAL_FIND = BLOCKS.register("terminal_find",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion(),
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
                     Block.box(0.0D, 0.0D, -4.0D, 16.0D, 37.0D, 32.0D), // North
                     Block.box(-4.0D, 0.0D, 0.0D, 32.0D, 37.0D, 16.0D), // East
                     Block.box(0.0D, 0.0D, -4.0D, 16.0D, 37.0D, 32.0D), // South
@@ -148,7 +148,7 @@ public class VoicesOfTheMines {
 
     // TERMINAL CHECK
     public static final RegistryObject<Block> TERMINAL_CHECK = BLOCKS.register("terminal_check",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion(),
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
                     Block.box(0.0D, 0.0D, -4.0D, 16.0D, 37.0D, 32.0D), // North
                     Block.box(-4.0D, 0.0D, 0.0D, 32.0D, 37.0D, 16.0D), // East
                     Block.box(0.0D, 0.0D, -4.0D, 16.0D, 37.0D, 32.0D), // South
@@ -157,7 +157,7 @@ public class VoicesOfTheMines {
 
     // Table?
     public static final RegistryObject<Block> TABLE = BLOCKS.register("table",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion(),
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
                     Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 14.0D, 16.0D), // North (Теперь вытянут по оси X)
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 14.0D, 32.0D), // East (Теперь вытянут по оси Z)
                     Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 14.0D, 16.0D), // South
@@ -166,7 +166,7 @@ public class VoicesOfTheMines {
 
     // hitboxes
     public static final RegistryObject<Block> TERMINAL_PROCESSING = BLOCKS.register("terminal_processing",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion(),
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 37.0D, 32.0D), // North
                     Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 37.0D, 16.0D), // East
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 37.0D, 32.0D), // South
@@ -174,7 +174,7 @@ public class VoicesOfTheMines {
             ));
 
     public static final RegistryObject<Block> TERMINAL_CALIBRATE = BLOCKS.register("terminal_calibrate",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion(),
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 37.0D, 32.0D), // North
                     Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 37.0D, 16.0D), // East
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 37.0D, 32.0D), // South
@@ -273,7 +273,7 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.block.PosterBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).instabreak().noCollission().noOcclusion()));
 
     public static final RegistryObject<Block> KEYPAD = BLOCKS.register("keypad",
-            () -> new net.votmdevs.voicesofthemines.block.KeypadBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.KeypadBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> KEYPAD_ITEM = ITEMS.register("keypad_item",
             () -> new BlockItem(KEYPAD.get(), new Item.Properties()));
@@ -285,7 +285,7 @@ public class VoicesOfTheMines {
             () -> new BlockItem(KERFUR_WORKBENCH.get(), new Item.Properties()));
 
     public static final RegistryObject<Block> VOTV_DOOR = BLOCKS.register("votv_door",
-            () -> new net.votmdevs.voicesofthemines.block.VotvDoorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.VotvDoorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> VOTV_DOOR_ITEM = ITEMS.register("votv_door",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -351,40 +351,40 @@ public class VoicesOfTheMines {
 
     // DECORATIVE BLOCKS
 
-    public static final RegistryObject<Block> KITCHEN_TILE = BLOCKS.register("kitchen_tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> KITCHEN_TILE = BLOCKS.register("kitchen_tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops().sound(SoundType.NETHERITE_BLOCK)));
     public static final RegistryObject<Block> CARPET_BROWN_FLOOR = BLOCKS.register("carpet_brown_floor", () -> new Block(BlockBehaviour.Properties.of().strength(0.5f).sound(SoundType.WOOL)));
     public static final RegistryObject<Block> CARPET_FLOOR = BLOCKS.register("carpet_floor", () -> new Block(BlockBehaviour.Properties.of().strength(0.5f).sound(SoundType.WOOL)));
-    public static final RegistryObject<Block> WALL_LINES = BLOCKS.register("wall_lines", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f)));
-    public static final RegistryObject<Block> WALL = BLOCKS.register("wall", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f)));
-    public static final RegistryObject<Block> WALL_DOWN = BLOCKS.register("wall_down", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f)));
-    public static final RegistryObject<Block> GREYWALL_UP = BLOCKS.register("greywall_up", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.DEEPSLATE)));
-    public static final RegistryObject<Block> GREYWALL_DOWN = BLOCKS.register("greywall_down", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.DEEPSLATE)));
-    public static final RegistryObject<Block> GARAGE_YELLOW = BLOCKS.register("garage_yellow", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> GARAGE_RED = BLOCKS.register("garage_red", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> GARAGE_BRICKS = BLOCKS.register("garage_bricks", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.DEEPSLATE_BRICKS)));
-    public static final RegistryObject<Block> OUTSIDE_FLOOR = BLOCKS.register("outside_floor", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.NETHERITE_BLOCK)));
-    public static final RegistryObject<Block> METAL_TILE = BLOCKS.register("metal_tile", () -> new Block(BlockBehaviour.Properties.of().strength(2.0f).sound(SoundType.NETHERITE_BLOCK)));
-    public static final RegistryObject<Block> TILE = BLOCKS.register("tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.NETHERITE_BLOCK)));
-    public static final RegistryObject<Block> BATHROOM_TILE = BLOCKS.register("bathroom_tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).sound(SoundType.NETHERITE_BLOCK)));
-    public static final RegistryObject<Block> UP_TILE = BLOCKS.register("up_tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f)));
+    public static final RegistryObject<Block> WALL_LINES = BLOCKS.register("wall_lines", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> WALL = BLOCKS.register("wall", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> WALL_DOWN = BLOCKS.register("wall_down", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> GREYWALL_UP = BLOCKS.register("greywall_up", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE)));
+    public static final RegistryObject<Block> GREYWALL_DOWN = BLOCKS.register("greywall_down", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE)));
+    public static final RegistryObject<Block> GARAGE_YELLOW = BLOCKS.register("garage_yellow", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE_BRICKS)));
+    public static final RegistryObject<Block> GARAGE_RED = BLOCKS.register("garage_red", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE_BRICKS)));
+    public static final RegistryObject<Block> GARAGE_BRICKS = BLOCKS.register("garage_bricks", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE_BRICKS)));
+    public static final RegistryObject<Block> OUTSIDE_FLOOR = BLOCKS.register("outside_floor", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops().sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> METAL_TILE = BLOCKS.register("metal_tile", () -> new Block(BlockBehaviour.Properties.of().strength(2.0f).requiresCorrectToolForDrops().sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> TILE = BLOCKS.register("tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops().sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> BATHROOM_TILE = BLOCKS.register("bathroom_tile", () -> new Block(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops().sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> UP_TILE = BLOCKS.register("up_tile", () -> new Block(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(1.5f)));
 
     public static final RegistryObject<Block> SIGN = BLOCKS.register("sign",
-            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.MOSS)));
+            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).instabreak().noOcclusion().sound(SoundType.MOSS)));
     public static final RegistryObject<Block> SMOKE_SIGN = BLOCKS.register("smoke_sign",
-            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.MOSS)));
+            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).instabreak().noOcclusion().sound(SoundType.MOSS)));
 
-    public static final RegistryObject<Block> MINI_VENT = BLOCKS.register("mini_vent", () -> new net.votmdevs.voicesofthemines.block.DecorativeHorizontalBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.NETHERITE_BLOCK)));
+    public static final RegistryObject<Block> MINI_VENT = BLOCKS.register("mini_vent", () -> new net.votmdevs.voicesofthemines.block.DecorativeHorizontalBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(1.0f).noOcclusion().sound(SoundType.NETHERITE_BLOCK)));
     public static final RegistryObject<Block> EXIT = BLOCKS.register("exit",
-            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().lightLevel(s -> 10)));
+            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).requiresCorrectToolForDrops().noOcclusion().lightLevel(s -> 10)));
 
     public static final RegistryObject<Block> ROOM_SIGN_SIGNALS = BLOCKS.register("room_sign_signals",
-            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.BAMBOO_WOOD)));
+            () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).instabreak().noOcclusion().sound(SoundType.BAMBOO_WOOD)));
 
     public static final RegistryObject<Block> ROOM_SIGN_KITCHEN = BLOCKS.register("room_sign_kitchen",
-                () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.BAMBOO_WOOD)));
+                () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).instabreak().noOcclusion().sound(SoundType.BAMBOO_WOOD)));
 
     public static final RegistryObject<Block> ROOM_SIGN_GARAGE = BLOCKS.register("room_sign_garage",
-                () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.BAMBOO_WOOD)));
+                () -> new DecorativeHorizontalBlock.NoCollisionDecorativeBlock(BlockBehaviour.Properties.of().strength(1.0f).instabreak().noOcclusion().sound(SoundType.BAMBOO_WOOD)));
 
 
     public static final RegistryObject<Item> KITCHEN_TILE_ITEM = ITEMS.register("kitchen_tile", () -> new net.minecraft.world.item.BlockItem(KITCHEN_TILE.get(), new Item.Properties()));
@@ -487,21 +487,34 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Block> UP_LAMP = BLOCKS.register("up_lamp",
             () -> new net.votmdevs.voicesofthemines.block.UpLampBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.of()
                     .strength(1.0f)
-                    .noOcclusion() // Обязательно для кастомных моделей, чтобы не было рентгена соседних блоков
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()
                     .lightLevel(state -> state.getValue(net.votmdevs.voicesofthemines.block.UpLampBlock.LIT) ? 15 : 0))); // Лампа дает свет 15 при LIT=true
 
     public static final RegistryObject<Block> SWITCH_BLOCK = BLOCKS.register("switch",
             () -> new net.votmdevs.voicesofthemines.block.SwitchBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.of()
                     .strength(0.5f)
+                    .instabreak()
                     .noOcclusion()));
 
     // items
     public static final RegistryObject<Item> UP_LAMP_ITEM = ITEMS.register("up_lamp",
-            () -> new net.minecraft.world.item.BlockItem(UP_LAMP.get(), new Item.Properties()));
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    UP_LAMP.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/uplamp.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/uplamp.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/uplamp.animation.json")
+            ));
 
     public static final RegistryObject<Item> SWITCH_ITEM = ITEMS.register("switch",
-            () -> new net.minecraft.world.item.BlockItem(SWITCH_BLOCK.get(), new Item.Properties()));
-
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    SWITCH_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/switch.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/switch.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/switch_animation.json")
+            ));
     // entities
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.UpLampBlockEntity>> UP_LAMP_BE = BLOCK_ENTITIES.register("up_lamp",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.UpLampBlockEntity::new, UP_LAMP.get()).build(null));
@@ -573,7 +586,7 @@ public class VoicesOfTheMines {
             () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Block> SERVER_BLOCK = BLOCKS.register("server_block",
-            () -> new net.votmdevs.voicesofthemines.block.ServerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.ServerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> SERVER_BLOCK_ITEM = ITEMS.register("server_block",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -588,7 +601,7 @@ public class VoicesOfTheMines {
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ServerBlockEntity::new, SERVER_BLOCK.get()).build(null));
 
     public static final RegistryObject<Block> CONSOLE_BLOCK = BLOCKS.register("console_block",
-            () -> new net.votmdevs.voicesofthemines.block.ConsoleBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.ConsoleBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> CONSOLE_BLOCK_ITEM = ITEMS.register("console_block",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -603,7 +616,7 @@ public class VoicesOfTheMines {
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ConsoleBlockEntity::new, CONSOLE_BLOCK.get()).build(null));
 
     public static final RegistryObject<Block> COMPUTER_CHAIR = BLOCKS.register("computer_chair",
-            () -> new ChairBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+            () -> new ChairBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<BlockEntityType<ChairBlockEntity>> CHAIR_BE = BLOCK_ENTITIES.register("chair_be",
             () -> BlockEntityType.Builder.of(ChairBlockEntity::new, COMPUTER_CHAIR.get()).build(null));
@@ -695,13 +708,13 @@ public class VoicesOfTheMines {
     // drone
 
     public static final RegistryObject<Block> DRONE_TARGET = BLOCKS.register("target_drone_block",
-            () -> new FlatBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion()));
+            () -> new FlatBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).instabreak().noOcclusion()));
 
     public static final RegistryObject<Item> DRONE_TARGET_ITEM = ITEMS.register("target_drone_block",
             () -> new BlockItem(DRONE_TARGET.get(), new Item.Properties()));
 
     public static final RegistryObject<Block> DRONE_PANEL = BLOCKS.register("drone_panel",
-            () -> new net.votmdevs.voicesofthemines.block.DronePanelBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.DronePanelBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> DRONE_PANEL_ITEM = ITEMS.register("drone_panel",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -724,28 +737,28 @@ public class VoicesOfTheMines {
     //PLUSHIE
 
     public static final RegistryObject<Block> PLUSHIE_BENJIKUS = BLOCKS.register("plushie_benjikus",
-            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.BENJIKUS));
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.5f).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.BENJIKUS));
 
     public static final RegistryObject<Block> PLUSHIE_BENJIKUS_COMMON = BLOCKS.register("plushie_benjikuscommon",
-            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.BENJIKUS_COMMON));
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.5f).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.BENJIKUS_COMMON));
 
     public static final RegistryObject<Block> PLUSHIE_NIKO = BLOCKS.register("plushie_niko",
-            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.NIKO));
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.5f).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.NIKO));
 
     public static final RegistryObject<Block> PLUSHIE_INVINCIBLE = BLOCKS.register("plushie_invincible",
-            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.INVINCIBLE));
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.5f).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.INVINCIBLE));
 
     public static final RegistryObject<Block> PLUSHIE_KEL = BLOCKS.register("plushie_kel",
-            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.KEL));
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.5f).noOcclusion(), net.votmdevs.voicesofthemines.block.PlushieType.KEL));
 
     public static final RegistryObject<Block> PLUSHIE_PECORA = BLOCKS.register("plushie_pecora",
-            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), PlushieType.PECORA));
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.5f).noOcclusion(), PlushieType.PECORA));
 
     public static final RegistryObject<Block> PLUSHIE_SPARKSY = BLOCKS.register("plushie_sparksy",
-            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), PlushieType.SPARKSY));
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.5f).noOcclusion(), PlushieType.SPARKSY));
 
     public static final RegistryObject<Block> PLUSHIE_LIBE = BLOCKS.register("plushie_libe",
-            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(), PlushieType.LIBE));
+            () -> new net.votmdevs.voicesofthemines.block.PlushieBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.5f).noOcclusion(), PlushieType.LIBE));
 
     //items plush
 
@@ -787,7 +800,7 @@ public class VoicesOfTheMines {
 
 //VENDING MACHINE
     public static final RegistryObject<Block> VENDING_MACHINE = BLOCKS.register("vending",
-            () -> new net.votmdevs.voicesofthemines.block.VendingBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(2.0f).noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.VendingBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(2.0f).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> VENDING_MACHINE_ITEM = ITEMS.register("vending",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -810,7 +823,7 @@ public class VoicesOfTheMines {
     //ALARM
 
     public static final RegistryObject<Block> ALARM_BLOCK = BLOCKS.register("alarm",
-            () -> new net.votmdevs.voicesofthemines.block.AlarmBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.AlarmBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> ALARM_ITEM = ITEMS.register("alarm",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -827,7 +840,7 @@ public class VoicesOfTheMines {
     //RADIO
 
     public static final RegistryObject<Block> RADIO_BLOCK = BLOCKS.register("radio_block",
-            () -> new net.votmdevs.voicesofthemines.block.RadioBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.RadioBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> RADIO_BLOCK_ITEM = ITEMS.register("radio_block",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(

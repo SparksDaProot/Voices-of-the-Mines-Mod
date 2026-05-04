@@ -341,7 +341,7 @@ public class SignalManager extends SavedData {
         }
 
         tickCounter++;
-        if (tickCounter >= 1000) { // Change the signal update frequency here! 1000 FOR TESTS (EVERY 1 MINUTE)
+        if (tickCounter >= 1000) { // Change the signal update frequency here! 1000 FOR TESTS (EVERY 1 MINUTE) < -- - -  - -- - - - - - :P
             tickCounter = 0;
             if (getUncaughtSignals().size() < 15) {
                 float randX = (float) ((Math.random() - 0.5) * 10000); float randY = (float) ((Math.random() - 0.5) * 10000);

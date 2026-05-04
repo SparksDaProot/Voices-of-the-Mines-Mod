@@ -33,6 +33,7 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, EraseDrivePacket.class, EraseDrivePacket::encode, EraseDrivePacket::decode, EraseDrivePacket::handle);
         INSTANCE.registerMessage(id++, RadioActionPacket.class, RadioActionPacket::encode, RadioActionPacket::decode, RadioActionPacket::handle);
         INSTANCE.registerMessage(id++, RadioSyncPacket.class, RadioSyncPacket::encode, RadioSyncPacket::decode, RadioSyncPacket::handle);
         INSTANCE.registerMessage(id++, VendingAnimPacket.class, VendingAnimPacket::encode, VendingAnimPacket::decode, VendingAnimPacket::handle);
@@ -1299,7 +1300,6 @@ public class KerfurPacketHandler {
         }
     }
 
-    // Клиент -> Сервер (Игрок кликнул или покрутил колесико)
     public static class RadioActionPacket {
         private final BlockPos pos;
         private final int action; // 0 = Toggle, 1 = Set Track, 2 = Scroll Up, 3 = Scroll Down
@@ -1354,6 +1354,42 @@ public class KerfurPacketHandler {
         public static void handle(RadioSyncPacket msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
                 net.votmdevs.voicesofthemines.client.ClientRadioManager.handleSync(msg.pos, msg.isPlaying, msg.track, msg.volume);
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    // ERASE DRIVE
+
+    public static class EraseDrivePacket {
+        private final BlockPos pos;
+        public EraseDrivePacket(BlockPos pos) { this.pos = pos; }
+        public static void encode(EraseDrivePacket msg, FriendlyByteBuf buffer) { buffer.writeBlockPos(msg.pos); }
+        public static EraseDrivePacket decode(FriendlyByteBuf buffer) { return new EraseDrivePacket(buffer.readBlockPos()); }
+
+        public static void handle(EraseDrivePacket msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.minecraft.server.level.ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.minecraft.world.level.block.entity.BlockEntity be = player.level().getBlockEntity(msg.pos);
+                    if (be instanceof net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal && terminal.hasDrive()) {
+
+                        net.votmdevs.voicesofthemines.entity.DriveEntity drive = VoicesOfTheMines.DRIVE.get().create(player.serverLevel());
+                        if (drive != null) {
+                            drive.moveTo(msg.pos.getX() + 0.5, msg.pos.getY() + 1.2, msg.pos.getZ() + 0.5, 0, 0);
+                            drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID, "");
+                            drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_TYPE, "");
+                            drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL, 0);
+
+                            net.minecraft.world.phys.Vec3 throwVec = player.getEyePosition().subtract(drive.position()).normalize().scale(0.5D);
+                            drive.setDeltaMovement(throwVec.x, 0.3D, throwVec.z);
+
+                            player.level().addFreshEntity(drive);
+                            player.level().playSound(null, msg.pos, net.minecraft.sounds.SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 1.0F);
+                        }
+
+                        terminal.setDrive(false, "", "", 0);
+                    }
+                }
             });
             ctx.get().setPacketHandled(true);
         }

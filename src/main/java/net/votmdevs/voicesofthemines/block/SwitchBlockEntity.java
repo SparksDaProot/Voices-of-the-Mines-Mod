@@ -28,7 +28,6 @@ public class SwitchBlockEntity extends BlockEntity implements GeoBlockEntity {
     public void registerControllers(AnimatableManager.ControllerRegistrar registrar) {
         registrar.add(new AnimationController<>(this, "controller", 0, event -> {
             boolean isPowered = getBlockState().getValue(SwitchBlock.POWERED);
-            // play() проигрывает анимацию один раз без зацикливания!
             if (isPowered) {
                 return event.setAndContinue(RawAnimation.begin().thenPlay("on"));
             } else {
