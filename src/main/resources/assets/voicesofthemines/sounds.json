@@ -192,6 +192,9 @@
   "alarm": { "sounds": [ "voicesofthemines:alarm" ] },
   "detectbeep": { "sounds": [ "voicesofthemines:detectbeep" ] },
 
+  "roar": { "sounds": [ "voicesofthemines:roar" ] },
+  "roar_pc": { "sounds": [ "voicesofthemines:roar_pc" ] },
+
   "raw1": { "sounds": [ "voicesofthemines:raw1" ] },
   "raw2": { "sounds": [ "voicesofthemines:raw2" ] },
   "raw3": { "sounds": [ "voicesofthemines:raw3" ] },

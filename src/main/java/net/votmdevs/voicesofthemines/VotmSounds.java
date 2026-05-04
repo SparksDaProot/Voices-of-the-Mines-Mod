@@ -26,6 +26,9 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> PC_STARTUP = registerSoundEvent("pcstartup");
     public static final RegistryObject<SoundEvent> PC_WORKING_LOOP = registerSoundEvent("computerworking_loop");
     public static final RegistryObject<SoundEvent> EVIL_SCREAM = registerSoundEvent("evil_scream");
+
+    public static final RegistryObject<SoundEvent> ROAR = registerSoundEvent("roar");
+    public static final RegistryObject<SoundEvent> ROAR_PC = registerSoundEvent("roar_pc");
 // <CLEANING> sounds
     public static final RegistryObject<SoundEvent> WATER_SPLASH = registerSoundEvent("water_splash");
     public static final RegistryObject<SoundEvent> SPLAT1 = registerSoundEvent("splat1");

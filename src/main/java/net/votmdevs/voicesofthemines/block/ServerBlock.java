@@ -50,6 +50,13 @@ public class ServerBlock extends BaseEntityBlock {
     @Override
     public void attack(BlockState state, Level level, BlockPos pos, Player player) {
         if (!level.isClientSide() && !state.getValue(BROKEN)) {
+            // ROAR ATTACK
+            if (this == VoicesOfTheMines.SERVER_BLOCK.get()) {
+                player.hurt(level.damageSources().generic(), 5.0F);
+
+                level.playSound(null, pos, VotmSounds.ROAR_PC.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
+            }
+
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof ServerBlockEntity serverBe) {
                 serverBe.hitCount++;
