@@ -35,11 +35,48 @@ public class VotvTerminalBlock extends BaseEntityBlock {
         this.shapeWest = west;
     }
 
-    // server (java not server block)
     @Override
     public net.minecraft.world.InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, net.minecraft.world.InteractionHand hand, net.minecraft.world.phys.BlockHitResult hit) {
-        if (this == VoicesOfTheMines.TABLE.get() && !player.getItemInHand(hand).isEmpty()) {
-            if (player.getItemInHand(hand).getCount() > 50) {
+        BlockEntity be = level.getBlockEntity(pos);
+        net.minecraft.world.item.ItemStack stack = player.getItemInHand(hand);
+
+        // tr
+        if (stack.getItem() == net.minecraft.world.item.Items.REDSTONE) {
+            if (!level.isClientSide()) {
+                net.minecraft.nbt.CompoundTag tag = stack.getTag();
+                if (tag != null && tag.contains("SelectedMainTransformer")) {
+                    BlockPos mainPos = BlockPos.of(tag.getLong("SelectedMainTransformer"));
+                    BlockEntity mainBe = level.getBlockEntity(mainPos);
+                    if (mainBe instanceof TransformerBlockEntity mainTransformer && mainTransformer.isMain) {
+                        if (!mainTransformer.connectedDevices.contains(pos)) {
+                            mainTransformer.connectedDevices.add(pos);
+                            mainTransformer.setChanged();
+                            if (be instanceof IPowerableDevice device) {
+                                device.setPowered(mainTransformer.isActive);
+                            }
+                            player.displayClientMessage(net.minecraft.network.chat.Component.literal("§bTerminal linked to network!"), true);
+                            level.playSound(null, pos, VotmSounds.CONNECT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f);
+                            ((net.minecraft.server.level.ServerLevel) level).sendParticles(net.minecraft.core.particles.DustParticleOptions.REDSTONE, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 10, 0.2, 0.2, 0.2, 0.0);
+                        } else {
+                            player.displayClientMessage(net.minecraft.network.chat.Component.literal("§cDevice already linked!"), true);
+                        }
+                    }
+                }
+            }
+            return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
+        // power check
+        if (be instanceof IPowerableDevice device && !device.isPowered()) {
+            if (!level.isClientSide()) {
+                level.playSound(null, pos, VotmSounds.DENY.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
+            return net.minecraft.world.InteractionResult.SUCCESS;
+        }
+
+        // stop selling
+        if (this == VoicesOfTheMines.TABLE.get() && !stack.isEmpty()) {
+            if (stack.getCount() > 50) {
                 if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer sp) {
                     net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
                             new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.NotificationPacket("ERR: Max stack size for sale is 50!"),
@@ -50,14 +87,14 @@ public class VotvTerminalBlock extends BaseEntityBlock {
                 return net.minecraft.world.InteractionResult.SUCCESS;
             }
             if (level.isClientSide()) {
-                net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.SellItemScreen(player.getItemInHand(hand)));
+                net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.SellItemScreen(stack));
             }
             return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
         }
 
+        // terminals
         if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
             net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(serverPlayer.serverLevel());
-
             manager.getGlobalPlayerData().initPlayerIfNeeded(serverPlayer.getUUID(), serverPlayer.getScoreboardName());
 
             boolean isBaseBroken = false;
@@ -76,7 +113,6 @@ public class VotvTerminalBlock extends BaseEntityBlock {
                         serverPlayer.connection.connection,
                         net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
                 );
-
                 level.playSound(null, pos, VotmSounds.BUG_ALERT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 0.5F);
                 return net.minecraft.world.InteractionResult.SUCCESS;
             }
@@ -103,85 +139,49 @@ public class VotvTerminalBlock extends BaseEntityBlock {
                         serverPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
                 );
             }
-
             else if (this == VoicesOfTheMines.TABLE.get()) {
                 net.votmdevs.voicesofthemines.world.PlayerData pd = manager.getGlobalPlayerData();
-
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
                         new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncComputerDataPacket(
-                                pd.getPoints(serverPlayer.getUUID()),
-                                pd.getCursorSpeedLvl(),
-                                pd.getPingCooldownLvl(),
-                                pd.getProcessingSpeedLvl(),
-                                pd.getProcessingLevelLvl(),
-                                pd.getEmails(serverPlayer.getUUID()),
-                                pd.customMarket
-                        ),
-                        serverPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
+                                pd.getPoints(serverPlayer.getUUID()), pd.getCursorSpeedLvl(), pd.getPingCooldownLvl(), pd.getProcessingSpeedLvl(), pd.getProcessingLevelLvl(), pd.getEmails(serverPlayer.getUUID()), pd.customMarket
+                        ), serverPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
                 );
             }
-
             else if (this == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
-                net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal = (net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity) level.getBlockEntity(pos);
-                if (terminal != null && terminal.hasDrive()) {
-                    String sigType = terminal.getDriveSignalType();
-                    int sigLevel = terminal.getDriveSignalLevel();
+                if (be instanceof VotvTerminalBlockEntity terminal && terminal.hasDrive()) {
                     net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
-                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncProcessingTargetPacket(true, sigType, sigLevel),
+                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncProcessingTargetPacket(true, terminal.getDriveSignalType(), terminal.getDriveSignalLevel()),
                             serverPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
                     );
                 }
             }
-
             else if (this == VoicesOfTheMines.TERMINAL_CHECK.get()) {
-                net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal = (net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity) level.getBlockEntity(pos);
-
-                String sType = "";
-                boolean hasSig = false;
-
-                if (terminal != null && terminal.hasDrive()) {
-                    String driveSigId = terminal.getDriveSignalId();
-                    String driveSigType = terminal.getDriveSignalType();
-
-                    if (driveSigId != null && !driveSigId.isEmpty() && driveSigType != null && !driveSigType.isEmpty()) {
-                        hasSig = true;
-                        sType = driveSigType;
-                    } else {
+                if (be instanceof VotvTerminalBlockEntity terminal && terminal.hasDrive()) {
+                    String sType = terminal.getDriveSignalType();
+                    boolean hasSig = true;
+                    if (terminal.getDriveSignalId() == null || terminal.getDriveSignalId().isEmpty()) {
                         net.votmdevs.voicesofthemines.world.SignalManager.VotvSignal sig = manager.getCalibratedSignal();
                         if (sig != null) {
-                            hasSig = true;
                             sType = sig.type;
                             terminal.setDrive(true, sig.id, sig.type);
-                        }
+                        } else hasSig = false;
                     }
-                    int sigLevel = terminal.getDriveSignalLevel();
                     net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
-                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncCheckTargetPacket(hasSig, sType, sigLevel),
+                            new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncCheckTargetPacket(hasSig, sType, terminal.getDriveSignalLevel()),
                             serverPlayer.connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT
                     );
                 }
             }
         } else {
             // client
-            if (this == VoicesOfTheMines.TERMINAL_FIND.get()) {
-                net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalFindScreen(pos));
-            } else if (this == VoicesOfTheMines.TERMINAL_CALIBRATE.get()) {
-                net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalCalibrateScreen(pos));
-            }
-            else if (this == VoicesOfTheMines.TABLE.get()) {
-                net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.ComputerScreen(pos));
-            }
+            if (this == VoicesOfTheMines.TERMINAL_FIND.get()) net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalFindScreen(pos));
+            else if (this == VoicesOfTheMines.TERMINAL_CALIBRATE.get()) net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalCalibrateScreen(pos));
+            else if (this == VoicesOfTheMines.TABLE.get()) net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.ComputerScreen(pos));
             else if (this == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
-                net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal = (net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity) level.getBlockEntity(pos);
-                if (terminal != null && terminal.hasDrive()) {
-                    net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalProcessingScreen(pos));
-                }
+                if (be instanceof VotvTerminalBlockEntity terminal && terminal.hasDrive()) net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalProcessingScreen(pos));
             }
             else if (this == VoicesOfTheMines.TERMINAL_CHECK.get()) {
-                net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity terminal = (net.votmdevs.voicesofthemines.block.VotvTerminalBlockEntity) level.getBlockEntity(pos);
-                if (terminal != null && terminal.hasDrive()) {
-                    net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalCheckScreen(pos));
-                }
+                if (be instanceof VotvTerminalBlockEntity terminal && terminal.hasDrive()) net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TerminalCheckScreen(pos));
             }
         }
 
@@ -190,66 +190,33 @@ public class VotvTerminalBlock extends BaseEntityBlock {
         }
         return net.minecraft.world.InteractionResult.PASS;
     }
-// ROAR ATTACK!
-@Override
-public void attack(BlockState state, Level level, BlockPos pos, Player player) {
-    if (!level.isClientSide()) {
-        float damage = net.votmdevs.voicesofthemines.config.VotmConfig.getTerminalPunchDamage();
 
-        if (damage > 0) {
-            if (this == VoicesOfTheMines.TABLE.get()) {
-                player.hurt(level.damageSources().generic(), damage);
-                level.playSound(null, pos, VotmSounds.ROAR_PC.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
-            }
-
-            if (this == VoicesOfTheMines.TERMINAL_CHECK.get()) {
-                player.hurt(level.damageSources().generic(), damage);
-                level.playSound(null, pos, VotmSounds.ROAR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
-            }
-
-            if (this == VoicesOfTheMines.TERMINAL_FIND.get()) {
-                player.hurt(level.damageSources().generic(), damage);
-                level.playSound(null, pos, VotmSounds.ROAR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
-            }
-
-            if (this == VoicesOfTheMines.TERMINAL_CALIBRATE.get()) {
-                player.hurt(level.damageSources().generic(), damage);
-                level.playSound(null, pos, VotmSounds.ROAR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
-            }
-
-            if (this == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
-                player.hurt(level.damageSources().generic(), damage);
-                level.playSound(null, pos, VotmSounds.ROAR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
+    @Override
+    public void attack(BlockState state, Level level, BlockPos pos, Player player) {
+        if (!level.isClientSide()) {
+            float damage = net.votmdevs.voicesofthemines.config.VotmConfig.getTerminalPunchDamage();
+            if (damage > 0) {
+                if (this == VoicesOfTheMines.TABLE.get()) {
+                    player.hurt(level.damageSources().generic(), damage);
+                    level.playSound(null, pos, VotmSounds.ROAR_PC.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
+                }
+                if (this == VoicesOfTheMines.TERMINAL_CHECK.get() || this == VoicesOfTheMines.TERMINAL_FIND.get() || this == VoicesOfTheMines.TERMINAL_CALIBRATE.get() || this == VoicesOfTheMines.TERMINAL_PROCESSING.get()) {
+                    player.hurt(level.damageSources().generic(), damage);
+                    level.playSound(null, pos, VotmSounds.ROAR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
+                }
             }
         }
+        super.attack(state, level, pos, player);
     }
-    super.attack(state, level, pos, player);
-}
 
-
-    // fake blocks for hitboxes
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, level, pos, oldState, isMoving);
         if (!level.isClientSide() && isWideTerminal(this)) {
             Direction facing = state.getValue(FACING);
-
-            Direction side1 = facing;
-            Direction side2 = facing.getOpposite();
-
-            BlockPos pos1 = pos.relative(side1);
-            BlockPos pos1_1 = pos.relative(side1,2);
-            BlockPos pos2 = pos.relative(side2);
-
-            if (level.getBlockState(pos1).canBeReplaced()) {
-                level.setBlock(pos1, VoicesOfTheMines.PHANTOM_BLOCK.get().defaultBlockState(), 3);
-            }
-            if (level.getBlockState(pos1_1).canBeReplaced()) {
-                level.setBlock(pos1_1, VoicesOfTheMines.PHANTOM_BLOCK.get().defaultBlockState(), 3);
-            }
-            if (level.getBlockState(pos2).canBeReplaced()) {
-                level.setBlock(pos2, VoicesOfTheMines.PHANTOM_BLOCK.get().defaultBlockState(), 3);
-            }
+            if (level.getBlockState(pos.relative(facing)).canBeReplaced()) level.setBlock(pos.relative(facing), VoicesOfTheMines.PHANTOM_BLOCK.get().defaultBlockState(), 3);
+            if (level.getBlockState(pos.relative(facing,2)).canBeReplaced()) level.setBlock(pos.relative(facing,2), VoicesOfTheMines.PHANTOM_BLOCK.get().defaultBlockState(), 3);
+            if (level.getBlockState(pos.relative(facing.getOpposite())).canBeReplaced()) level.setBlock(pos.relative(facing.getOpposite()), VoicesOfTheMines.PHANTOM_BLOCK.get().defaultBlockState(), 3);
         }
     }
 
@@ -257,76 +224,42 @@ public void attack(BlockState state, Level level, BlockPos pos, Player player) {
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock()) && isWideTerminal(this)) {
             Direction facing = state.getValue(FACING);
-
-            Direction side1 = facing;
-            Direction side2 = facing.getOpposite();
-
-            BlockPos pos1 = pos.relative(side1);
-            BlockPos pos1_1 = pos.relative(side1,2);
-            BlockPos pos2 = pos.relative(side2);
-
-            if (level.getBlockState(pos1).is(VoicesOfTheMines.PHANTOM_BLOCK.get())) {
-                level.removeBlock(pos1, false);
-            }
-            if (level.getBlockState(pos1_1).is(VoicesOfTheMines.PHANTOM_BLOCK.get())) {
-                level.removeBlock(pos1_1, false);
-            }
-            if (level.getBlockState(pos2).is(VoicesOfTheMines.PHANTOM_BLOCK.get())) {
-                level.removeBlock(pos2, false);
-            }
+            if (level.getBlockState(pos.relative(facing)).is(VoicesOfTheMines.PHANTOM_BLOCK.get())) level.removeBlock(pos.relative(facing), false);
+            if (level.getBlockState(pos.relative(facing,2)).is(VoicesOfTheMines.PHANTOM_BLOCK.get())) level.removeBlock(pos.relative(facing,2), false);
+            if (level.getBlockState(pos.relative(facing.getOpposite())).is(VoicesOfTheMines.PHANTOM_BLOCK.get())) level.removeBlock(pos.relative(facing.getOpposite()), false);
         }
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    private boolean isWideTerminal(Block block) {
-        return block == VoicesOfTheMines.TERMINAL_CALIBRATE.get() ||
-                block == VoicesOfTheMines.TERMINAL_PROCESSING.get();
-    }
-
+    private boolean isWideTerminal(Block block) { return block == VoicesOfTheMines.TERMINAL_CALIBRATE.get() || block == VoicesOfTheMines.TERMINAL_PROCESSING.get(); }
 
     @Override
     public VoxelShape getShape(BlockState state, net.minecraft.world.level.BlockGetter level, BlockPos pos, CollisionContext context) {
-        switch (state.getValue(FACING)) {
-            case EAST: return shapeEast;
-            case SOUTH: return shapeSouth;
-            case WEST: return shapeWest;
-            case NORTH:
-            default: return shapeNorth;
-        }
+        return switch (state.getValue(FACING)) {
+            case EAST -> shapeEast;
+            case SOUTH -> shapeSouth;
+            case WEST -> shapeWest;
+            default -> shapeNorth;
+        };
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
-    }
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(FACING); }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         if (isWideTerminal(this)) {
             Direction facing = context.getHorizontalDirection().getOpposite();
-
-            Direction side1 = facing;
-            Direction side2 = facing.getOpposite();
-
-            BlockPos pos = context.getClickedPos();
-            Level level = context.getLevel();
-
-            if (!level.getBlockState(pos.relative(side1)).canBeReplaced() || !level.getBlockState(pos.relative(side2)).canBeReplaced()) {
-                return null;
-            }
+            if (!context.getLevel().getBlockState(context.getClickedPos().relative(facing)).canBeReplaced() || !context.getLevel().getBlockState(context.getClickedPos().relative(facing.getOpposite())).canBeReplaced()) return null;
         }
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
-    }
+    public RenderShape getRenderShape(BlockState state) { return RenderShape.ENTITYBLOCK_ANIMATED; }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new VotvTerminalBlockEntity(pos, state);
-    }
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new VotvTerminalBlockEntity(pos, state); }
 }

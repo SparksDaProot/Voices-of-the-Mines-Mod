@@ -333,6 +333,7 @@ public class KerfurPacketHandler {
                 ServerPlayer player = ctx.get().getSender();
                 if (player != null && player.getVehicle() instanceof net.votmdevs.voicesofthemines.entity.AtvEntity atv) {
                     atv.level().playSound(null, atv.blockPosition(), VotmSounds.ATV_CRASH.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
+                    atv.hurt(atv.damageSources().generic(), 15.0f);
                     player.stopRiding();
                     net.minecraft.world.phys.Vec3 look = atv.getLookAngle();
                     player.setDeltaMovement(-look.x * 0.8, 0.5, -look.z * 0.8);

@@ -13,7 +13,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class VotvTerminalBlockEntity extends BlockEntity implements GeoBlockEntity {
+public class VotvTerminalBlockEntity extends BlockEntity implements GeoBlockEntity, IPowerableDevice {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -23,8 +23,23 @@ public class VotvTerminalBlockEntity extends BlockEntity implements GeoBlockEnti
     private String driveSignalType = "";
     private int driveSignalLevel = 0;
 
+    // energy
+    private boolean isPowered = false;
+
     public VotvTerminalBlockEntity(BlockPos pos, BlockState state) {
         super(VoicesOfTheMines.TERMINAL_BE.get(), pos, state);
+    }
+
+    @Override
+    public boolean isPowered() { return isPowered; }
+
+    @Override
+    public void setPowered(boolean powered) {
+        this.isPowered = powered;
+        this.setChanged();
+        if (this.level != null) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        }
     }
 
     public boolean hasDrive() { return hasDrive; }
@@ -32,7 +47,6 @@ public class VotvTerminalBlockEntity extends BlockEntity implements GeoBlockEnti
     public String getDriveSignalType() { return driveSignalType; }
     public int getDriveSignalLevel() { return driveSignalLevel; }
 
-    // level
     public void setDrive(boolean hasDrive, String signalId, String signalType, int signalLevel) {
         this.hasDrive = hasDrive;
         this.driveSignalId = signalId;
@@ -55,6 +69,7 @@ public class VotvTerminalBlockEntity extends BlockEntity implements GeoBlockEnti
         this.driveSignalId = tag.getString("DriveSignalId");
         this.driveSignalType = tag.getString("DriveSignalType");
         this.driveSignalLevel = tag.getInt("DriveSignalLevel");
+        this.isPowered = tag.getBoolean("IsPowered");
     }
 
     @Override
@@ -64,6 +79,7 @@ public class VotvTerminalBlockEntity extends BlockEntity implements GeoBlockEnti
         tag.putString("DriveSignalId", this.driveSignalId);
         tag.putString("DriveSignalType", this.driveSignalType);
         tag.putInt("DriveSignalLevel", this.driveSignalLevel);
+        tag.putBoolean("IsPowered", this.isPowered);
     }
 
     @Override

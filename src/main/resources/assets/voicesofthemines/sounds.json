@@ -195,6 +195,11 @@
   "roar": { "sounds": [ "voicesofthemines:roar" ] },
   "roar_pc": { "sounds": [ "voicesofthemines:roar_pc" ] },
 
+  "baseturnoff": { "sounds": [ "voicesofthemines:baseturnoff" ] },
+  "transformerloop": { "sounds": [ "voicesofthemines:transformerloop" ] },
+  "turnon": { "sounds": [ "voicesofthemines:turnon" ] },
+  "turnoff": { "sounds": [ "voicesofthemines:turnoff" ] },
+
   "raw1": { "sounds": [ "voicesofthemines:raw1" ] },
   "raw2": { "sounds": [ "voicesofthemines:raw2" ] },
   "raw3": { "sounds": [ "voicesofthemines:raw3" ] },

@@ -116,7 +116,6 @@ public class AtvEntity extends PathfinderMob implements GeoEntity {
 
             if (this.horizontalCollision && Math.abs(speed) > 0.4f) {
                 this.triggerAnim("actions", "impact");
-                this.hurt(this.damageSources().generic(), 5.0f);
 
                 if (this.level().isClientSide() && rider == net.minecraft.client.Minecraft.getInstance().player) {
                     net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendToServer(new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.AtvCrashPacket());
@@ -204,6 +203,33 @@ public class AtvEntity extends PathfinderMob implements GeoEntity {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
+        net.minecraft.world.item.ItemStack stack = player.getItemInHand(hand);
+
+        // REPAIR
+        if (stack.getItem() == net.votmdevs.voicesofthemines.VoicesOfTheMines.TOOLBOX.get()) {
+            if (this.getHealth() < this.getMaxHealth()) {
+                if (!this.level().isClientSide) {
+                    this.setHealth(this.getMaxHealth()); // Восстанавливаем 100 ХП
+
+                    if (!player.isCreative()) {
+                        stack.shrink(1);
+                    }
+
+                    this.playSound(VotmSounds.CRAFT.get(), 1.0F, 1.0F);
+
+                    ((net.minecraft.server.level.ServerLevel) this.level()).sendParticles(net.minecraft.core.particles.ParticleTypes.HAPPY_VILLAGER,
+                            this.getX(), this.getY() + 0.5, this.getZ(), 7, 0.5, 0.3, 0.5, 0.0);
+                }
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            } else {
+                // IF FULL HP
+                if (this.level().isClientSide) {
+                    net.votmdevs.voicesofthemines.client.gui.GmodNotificationManager.addNotification("ATV is already fully repaired.");
+                }
+                return InteractionResult.SUCCESS;
+            }
+        }
+
         if (player.isShiftKeyDown()) {
             if (!this.level().isClientSide) {
                 boolean newState = !isEngineOn();
@@ -275,7 +301,7 @@ public class AtvEntity extends PathfinderMob implements GeoEntity {
 
         registrar.add(new AnimationController<>(this, "actions", 0, event -> PlayState.STOP)
                 .triggerableAnim("impact", RawAnimation.begin().thenPlay("impact"))
-                .triggerableAnim("car_onground", RawAnimation.begin().thenPlay("car_onground")) // ДОБАВИЛИ СЮДА
+                .triggerableAnim("car_onground", RawAnimation.begin().thenPlay("car_onground"))
                 .triggerableAnim("brakes_start", RawAnimation.begin().thenPlay("brakes_start"))
                 .triggerableAnim("brakes_end", RawAnimation.begin().thenPlay("brakes_end"))
         );

@@ -90,7 +90,6 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
                 break;
 
             case 2: // WAIT
-                // === НОВОЕ: Спавн Entity при приземлении ===
                 if (waitTimer == 0) {
                     for (int i = 0; i < this.inventory.getContainerSize(); i++) {
                         net.minecraft.world.item.ItemStack stack = this.inventory.getItem(i);
@@ -107,14 +106,12 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
                                 for(int j = 0; j < stack.getCount(); j++) {
                                     net.minecraft.world.entity.Entity spawned = typeToSpawn.create(this.level());
                                     if (spawned != null) {
-                                        // Разбрасываем предметы немного в стороны, чтобы они не застряли друг в друге
                                         double offsetX = (this.random.nextDouble() - 0.5) * 1.5;
                                         double offsetZ = (this.random.nextDouble() - 0.5) * 1.5;
                                         spawned.moveTo(this.getX() + offsetX, this.getY() - 0.5, this.getZ() + offsetZ, this.random.nextFloat() * 360F, 0);
                                         this.level().addFreshEntity(spawned);
                                     }
                                 }
-                                // Удаляем предмет из инвентаря дрона, так как мы его заспавнили
                                 this.inventory.setItem(i, net.minecraft.world.item.ItemStack.EMPTY);
                             }
                         }

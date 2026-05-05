@@ -30,6 +30,40 @@ public class ConsoleBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        BlockEntity be = level.getBlockEntity(pos);
+        net.minecraft.world.item.ItemStack stack = player.getItemInHand(hand);
+
+        // tr link
+        if (stack.getItem() == net.minecraft.world.item.Items.REDSTONE) {
+            if (!level.isClientSide()) {
+                net.minecraft.nbt.CompoundTag tag = stack.getTag();
+                if (tag != null && tag.contains("SelectedMainTransformer")) {
+                    BlockPos mainPos = BlockPos.of(tag.getLong("SelectedMainTransformer"));
+                    BlockEntity mainBe = level.getBlockEntity(mainPos);
+                    if (mainBe instanceof TransformerBlockEntity mainTransformer && mainTransformer.isMain) {
+                        if (!mainTransformer.connectedDevices.contains(pos)) {
+                            mainTransformer.connectedDevices.add(pos);
+                            mainTransformer.setChanged();
+                            if (be instanceof IPowerableDevice device) {
+                                device.setPowered(mainTransformer.isActive);
+                            }
+                            player.displayClientMessage(net.minecraft.network.chat.Component.literal("§bConsole linked to network!"), true);
+                            level.playSound(null, pos, VotmSounds.CONNECT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f);
+                            ((net.minecraft.server.level.ServerLevel) level).sendParticles(net.minecraft.core.particles.DustParticleOptions.REDSTONE, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 10, 0.2, 0.2, 0.2, 0.0);
+                        } else {
+                            player.displayClientMessage(net.minecraft.network.chat.Component.literal("§cDevice already linked!"), true);
+                        }
+                    }
+                }
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
+        // power
+        if (be instanceof IPowerableDevice device && !device.isPowered()) {
+            if (!level.isClientSide()) level.playSound(null, pos, VotmSounds.DENY.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+            return InteractionResult.SUCCESS;
+        }
 
         if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
             boolean isBaseBroken = false;
@@ -59,38 +93,30 @@ public class ConsoleBlock extends BaseEntityBlock {
 
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
-// ROAR ATTACK
-@Override
-public void attack(BlockState state, Level level, BlockPos pos, Player player) {
-    if (!level.isClientSide()) {
-        float damage = net.votmdevs.voicesofthemines.config.VotmConfig.getTerminalPunchDamage();
-        if (damage > 0 && this == VoicesOfTheMines.CONSOLE_BLOCK.get()) {
-            player.hurt(level.damageSources().generic(), damage);
-            level.playSound(null, pos, VotmSounds.ROAR_PC.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
+
+    @Override
+    public void attack(BlockState state, Level level, BlockPos pos, Player player) {
+        if (!level.isClientSide()) {
+            float damage = net.votmdevs.voicesofthemines.config.VotmConfig.getTerminalPunchDamage();
+            if (damage > 0 && this == VoicesOfTheMines.CONSOLE_BLOCK.get()) {
+                player.hurt(level.damageSources().generic(), damage);
+                level.playSound(null, pos, VotmSounds.ROAR_PC.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.2F);
+            }
         }
+        super.attack(state, level, pos, player);
     }
-    super.attack(state, level, pos, player);
-}
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
-    }
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(FACING); }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
-    }
+    public BlockState getStateForPlacement(BlockPlaceContext context) { return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()); }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
-    }
+    public RenderShape getRenderShape(BlockState state) { return RenderShape.ENTITYBLOCK_ANIMATED; }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new ConsoleBlockEntity(pos, state);
-    }
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new ConsoleBlockEntity(pos, state); }
 }

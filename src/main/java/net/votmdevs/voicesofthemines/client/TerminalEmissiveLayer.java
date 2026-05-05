@@ -20,6 +20,9 @@ public class TerminalEmissiveLayer extends GeoRenderLayer<VotvTerminalBlockEntit
 
     @Override
     public void render(PoseStack poseStack, VotvTerminalBlockEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+        // power check
+        if (!animatable.isPowered()) return;
+
         Block block = animatable.getBlockState().getBlock();
         String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
         ResourceLocation texture = new ResourceLocation(VoicesOfTheMines.MODID, "textures/block/" + name + "_emissive.png");

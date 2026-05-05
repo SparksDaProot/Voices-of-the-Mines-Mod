@@ -848,8 +848,28 @@ public class VoicesOfTheMines {
                     new Item.Properties(),
                     ResourceLocation.fromNamespaceAndPath(MODID, "geo/radio.geo.json"),
                     ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/radio.png"),
-                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json") // Анимации в инвентаре нам не нужны
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
+
+    public static final RegistryObject<Item> TOOLBOX = ITEMS.register("toolbox",
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
+
+    public static final RegistryObject<Block> TRANSFORMER_BLOCK = BLOCKS.register("transformer_block",
+            () -> new net.votmdevs.voicesofthemines.block.TransformerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(3.0F, 6.0F).requiresCorrectToolForDrops().noOcclusion()));
+
+    public static final RegistryObject<Item> TRANSFORMER_ITEM = ITEMS.register("transformer_block",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    TRANSFORMER_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/transformer.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/transformer.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.TransformerBlockEntity>> TRANSFORMER_BE = BLOCK_ENTITIES.register("transformer_be",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.TransformerBlockEntity::new, TRANSFORMER_BLOCK.get()).build(null));
+
 
     public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.RadioBlockEntity>> RADIO_BE = BLOCK_ENTITIES.register("radio_be",
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.RadioBlockEntity::new, RADIO_BLOCK.get()).build(null));
@@ -914,6 +934,7 @@ public class VoicesOfTheMines {
             event.accept(TERMINAL_CHECK_ITEM);
             event.accept(TERMINAL_CALIBRATE_ITEM);
             event.accept(CANDLE_HANDLE_ITEM);
+            event.accept(TRANSFORMER_ITEM);
         }
 
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
@@ -995,6 +1016,7 @@ public class VoicesOfTheMines {
             event.accept(HOOK_ITEM);
             event.accept(MARACAS);
             event.accept(METAL_DETECTOR_ITEM);
+            event.accept(TOOLBOX);
         }
     }
 
@@ -1075,6 +1097,7 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(VoicesOfTheMines.TRANSFORMER_BE.get(), net.votmdevs.voicesofthemines.client.TransformerRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.RADIO_BE.get(), net.votmdevs.voicesofthemines.client.RadioRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.ALARM_BE.get(), net.votmdevs.voicesofthemines.client.AlarmRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.VENDING_BE.get(), net.votmdevs.voicesofthemines.client.VendingRenderer::new);

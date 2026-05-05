@@ -2,6 +2,7 @@ package net.votmdevs.voicesofthemines.client;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
 import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.client.gui.GmodNotificationManager;
@@ -44,6 +45,7 @@ public class ClientInputHandler {
     public static int evilChatTimer = -1;
 
     private static DroneLoopSound droneSoundInstance = null;
+    private static TransformerLoopSound transformerSoundInstance = null; // НОВЫЙ ЗВУК
 
     public static int knockdownTicks = 0;
     public static float vignetteAlpha = 0.0f;
@@ -98,8 +100,6 @@ public class ClientInputHandler {
         }
     }
 
-
-
     @SubscribeEvent
     public static void onMouseClickHook(InputEvent.InteractionKeyMappingTriggered event) {
         Minecraft mc = Minecraft.getInstance();
@@ -114,6 +114,42 @@ public class ClientInputHandler {
         if (event.phase != TickEvent.Phase.END) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
+
+        // --- ЛОГИКА ЗВУКА ТРАНСФОРМАТОРОВ ---
+        BlockPos closestActiveTransformer = null;
+        double closestTransformerDist = 15.0 * 15.0; // Радиус звука
+        BlockPos playerPos = mc.player.blockPosition();
+
+        for (BlockPos checkPos : BlockPos.betweenClosed(playerPos.offset(-10, -10, -10), playerPos.offset(10, 10, 10))) {
+            if (mc.level.getBlockState(checkPos).getBlock() == VoicesOfTheMines.TRANSFORMER_BLOCK.get()) {
+                net.minecraft.world.level.block.entity.BlockEntity be = mc.level.getBlockEntity(checkPos);
+                if (be instanceof net.votmdevs.voicesofthemines.block.TransformerBlockEntity tr) {
+                    boolean isOn = tr.isMain ? tr.isActive : (tr.mainTransformerPos != null && !tr.needsReboot && tr.isNetworkActive);
+                    if (isOn) {
+                        double dist = checkPos.distToCenterSqr(mc.player.position());
+                        if (dist < closestTransformerDist) {
+                            closestTransformerDist = dist;
+                            closestActiveTransformer = checkPos.immutable();
+                        }
+                    }
+                }
+            }
+        }
+
+        if (closestActiveTransformer != null) {
+            if (transformerSoundInstance == null || !mc.getSoundManager().isActive(transformerSoundInstance)) {
+                transformerSoundInstance = new TransformerLoopSound(closestActiveTransformer);
+                mc.getSoundManager().play(transformerSoundInstance);
+            } else {
+                transformerSoundInstance.updatePos(closestActiveTransformer); // Звук перетекает к ближайшему
+            }
+        } else {
+            if (transformerSoundInstance != null) {
+                mc.getSoundManager().stop(transformerSoundInstance);
+                transformerSoundInstance = null;
+            }
+        }
+
 
         if (evilEventTimer > 0) {
             evilEventTimer--;
@@ -138,13 +174,16 @@ public class ClientInputHandler {
             if (evilChatTimer == 0) {
                 if (evilChatStage == 1) {
                     mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal(">START").withStyle(ChatFormatting.AQUA), false);
-                    evilChatStage++; evilChatTimer = 20; // 1 сек
+                    evilChatStage++;
+                    evilChatTimer = 20; // 1 сек
                 } else if (evilChatStage == 2) {
                     mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal(">OBJECT: ELIMINATED").withStyle(ChatFormatting.AQUA), false);
-                    evilChatStage++; evilChatTimer = 20;
+                    evilChatStage++;
+                    evilChatTimer = 20;
                 } else if (evilChatStage == 3) {
                     mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal(">PLANET: EARTH").withStyle(ChatFormatting.AQUA), false);
-                    evilChatStage++; evilChatTimer = 20;
+                    evilChatStage++;
+                    evilChatTimer = 20;
                 } else if (evilChatStage == 4) {
                     mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal(">STATUS: DETECTED").withStyle(ChatFormatting.AQUA), false);
                     evilChatStage = 0;
@@ -547,7 +586,8 @@ public class ClientInputHandler {
                     java.lang.reflect.Method setPosSrg = net.minecraft.client.Camera.class.getDeclaredMethod("m_90584_", double.class, double.class, double.class);
                     setPosSrg.setAccessible(true);
                     setPosSrg.invoke(camera, camera.getPosition().x, camera.getPosition().y - dropOffset, camera.getPosition().z);
-                } catch (Exception ex) {}
+                } catch (Exception ex) {
+                }
             }
         }
     }
@@ -569,10 +609,9 @@ public class ClientInputHandler {
         int width = event.getWindow().getGuiScaledWidth();
         int height = event.getWindow().getGuiScaledHeight();
 
-// Рендерим наши полноэкранные эффекты только один раз за кадр (привязываемся к HOTBAR)
         if (event.getOverlay() == net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.HOTBAR.type()) {
 
-            // 1. Эффект урона (Vignette)
+            // vignette
             if (vignetteAlpha > 0) {
                 ResourceLocation VIGNETTE = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/damage_vignette.png");
                 com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
@@ -589,12 +628,11 @@ public class ClientInputHandler {
                 com.mojang.blaze3d.systems.RenderSystem.disableBlend();
             }
 
-            // 2. Оверлей для EVIL (Красный фильтр)
+            // evil
             if (evilFlashTicks > 0) {
                 ResourceLocation EVIL_OVERLAY = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/evil_redoverlay.png");
 
                 event.getGuiGraphics().pose().pushPose();
-                // Поднимаем Z-индекс на 500, чтобы красный экран перекрыл хотбар, руку и весь мир
                 event.getGuiGraphics().pose().translate(0, 0, 500);
 
                 com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
@@ -602,10 +640,8 @@ public class ClientInputHandler {
                 com.mojang.blaze3d.systems.RenderSystem.enableBlend();
                 com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
 
-                // Ставим прозрачность 0.7 (70%), чтобы мир сквозь него проглядывал, как через фильтр
                 com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.7F);
 
-                // Рисуем на весь экран (без отрицательного Z)
                 event.getGuiGraphics().blit(EVIL_OVERLAY, 0, 0, 0, 0.0F, 0.0F, width, height, width, height);
 
                 com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -636,10 +672,13 @@ public class ClientInputHandler {
                 event.getGuiGraphics().drawString(mc.font, hpStr, x + 10, y + 25, 0xFFFFFF, false);
                 event.getGuiGraphics().drawString(mc.font, brakeStr, x + 10, y + 40, 0xFFFFFF, false);
             }
-            // drone overlay
-            if (mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult blockHit) {
-                if (mc.level.getBlockState(blockHit.getBlockPos()).getBlock() == VoicesOfTheMines.DRONE_PANEL.get()) {
 
+            // drone panel/transformer overlay
+            if (mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult blockHit) {
+                Block targetBlock = mc.level.getBlockState(blockHit.getBlockPos()).getBlock();
+
+                // Drone panel
+                if (targetBlock == VoicesOfTheMines.DRONE_PANEL.get()) {
                     int boxWidth = 140;
                     int boxHeight = 55;
                     int x = width - boxWidth - 15;
@@ -675,6 +714,26 @@ public class ClientInputHandler {
                         event.getGuiGraphics().drawString(mc.font, "Distance: N/A", x + 10, y + 25, 0x888888, false);
                         event.getGuiGraphics().drawString(mc.font, "Status: Standby", x + 10, y + 40, 0x888888, false);
                     }
+                } else if (targetBlock == VoicesOfTheMines.TRANSFORMER_BLOCK.get()) {
+                    net.minecraft.world.level.block.entity.BlockEntity be = mc.level.getBlockEntity(blockHit.getBlockPos());
+                    if (be instanceof net.votmdevs.voicesofthemines.block.TransformerBlockEntity transformer) {
+                        int x = 15;
+                        int y = (height - 40) / 2;
+                        event.getGuiGraphics().fill(x - 5, y - 5, x + 150, y + 35, 0xDD222222);
+
+                        if (transformer.isMain) {
+                            event.getGuiGraphics().drawString(mc.font, "Main Transformer", x, y, 0xFFFFFF, false);
+                            event.getGuiGraphics().drawString(mc.font, "Power: " + transformer.energy + "%", x, y + 12, 0xFFFF55, false);
+                            event.getGuiGraphics().drawString(mc.font, "Connected to " + transformer.connectedDevices.size() + " devices", x, y + 24, 0x55FFFF, false);
+                        } else {
+                            event.getGuiGraphics().drawString(mc.font, "Secondary Transformer", x, y, 0xAAAAAA, false);
+                            if (transformer.mainTransformerPos != null) {
+                                event.getGuiGraphics().drawString(mc.font, "Power: " + transformer.energy + "%", x, y + 12, 0xFFFF55, false);
+                            } else {
+                                event.getGuiGraphics().drawString(mc.font, "Unlinked", x, y + 12, 0xFF5555, false);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -682,56 +741,55 @@ public class ClientInputHandler {
 
     public static class AtvLoopSound extends net.minecraft.client.resources.sounds.AbstractTickableSoundInstance {
         private final net.votmdevs.voicesofthemines.entity.AtvEntity atv;
-
         public AtvLoopSound(net.votmdevs.voicesofthemines.entity.AtvEntity atv, net.minecraft.sounds.SoundEvent sound) {
             super(sound, net.minecraft.sounds.SoundSource.PLAYERS, net.minecraft.util.RandomSource.create());
-            this.atv = atv;
+            this.atv = atv; this.looping = true; this.delay = 0; this.volume = 1.0F; this.pitch = 1.0F;
+            this.x = atv.getX(); this.y = atv.getY(); this.z = atv.getZ();
+        }
+        @Override
+        public void tick() {
+            if (!this.atv.isAlive() || !this.atv.isEngineOn()) this.stop();
+            else { this.x = this.atv.getX(); this.y = this.atv.getY(); this.z = this.atv.getZ(); }
+        }
+    }
+
+    public static class DroneLoopSound extends net.minecraft.client.resources.sounds.AbstractTickableSoundInstance {
+        private final net.votmdevs.voicesofthemines.entity.DroneEntity drone;
+        public DroneLoopSound(net.votmdevs.voicesofthemines.entity.DroneEntity drone, net.minecraft.sounds.SoundEvent sound) {
+            super(sound, net.minecraft.sounds.SoundSource.NEUTRAL, net.minecraft.util.RandomSource.create());
+            this.drone = drone; this.looping = true; this.delay = 0; this.volume = 2.0F; this.pitch = 1.0F;
+            this.x = drone.getX(); this.y = drone.getY(); this.z = drone.getZ();
+        }
+        @Override
+        public void tick() {
+            if (!this.drone.isAlive()) this.stop();
+            else { this.x = this.drone.getX(); this.y = this.drone.getY(); this.z = this.drone.getZ(); }
+        }
+    }
+
+    public static class TransformerLoopSound extends net.minecraft.client.resources.sounds.AbstractTickableSoundInstance {
+        private BlockPos pos;
+        public TransformerLoopSound(BlockPos pos) {
+            super(VotmSounds.TRANSFORMERLOOP.get(), net.minecraft.sounds.SoundSource.BLOCKS, net.minecraft.util.RandomSource.create());
+            this.pos = pos;
             this.looping = true;
             this.delay = 0;
             this.volume = 1.0F;
             this.pitch = 1.0F;
-            this.x = atv.getX();
-            this.y = atv.getY();
-            this.z = atv.getZ();
+            this.x = pos.getX() + 0.5;
+            this.y = pos.getY() + 0.5;
+            this.z = pos.getZ() + 0.5;
+        }
+
+        public void updatePos(BlockPos newPos) {
+            this.pos = newPos;
         }
 
         @Override
         public void tick() {
-            if (!this.atv.isAlive() || !this.atv.isEngineOn()) {
-                this.stop();
-            } else {
-                this.x = this.atv.getX();
-                this.y = this.atv.getY();
-                this.z = this.atv.getZ();
-            }
-        }
-    }
-
-    // drone sound
-    public static class DroneLoopSound extends net.minecraft.client.resources.sounds.AbstractTickableSoundInstance {
-        private final net.votmdevs.voicesofthemines.entity.DroneEntity drone;
-
-        public DroneLoopSound(net.votmdevs.voicesofthemines.entity.DroneEntity drone, net.minecraft.sounds.SoundEvent sound) {
-            super(sound, net.minecraft.sounds.SoundSource.NEUTRAL, net.minecraft.util.RandomSource.create());
-            this.drone = drone;
-            this.looping = true;
-            this.delay = 0;
-            this.volume = 2.0F;
-            this.pitch = 1.0F;
-            this.x = drone.getX();
-            this.y = drone.getY();
-            this.z = drone.getZ();
-        }
-
-        @Override
-        public void tick() {
-            if (!this.drone.isAlive()) {
-                this.stop();
-            } else {
-                this.x = this.drone.getX();
-                this.y = this.drone.getY();
-                this.z = this.drone.getZ();
-            }
+            this.x = pos.getX() + 0.5;
+            this.y = pos.getY() + 0.5;
+            this.z = pos.getZ() + 0.5;
         }
     }
 }

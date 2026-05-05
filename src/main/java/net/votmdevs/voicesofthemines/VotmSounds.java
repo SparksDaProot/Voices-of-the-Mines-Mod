@@ -59,6 +59,12 @@ public class VotmSounds {
 
     public static final RegistryObject<SoundEvent> PLUSHBEEP = registerSoundEvent("plushbeep");
 
+    public static final RegistryObject<SoundEvent> BASETURNOFF = registerSoundEvent("baseturnoff");
+    public static final RegistryObject<SoundEvent> TRANSFORMERLOOP = registerSoundEvent("transformerloop");
+    public static final RegistryObject<SoundEvent> TURNON = registerSoundEvent("turnon");
+    public static final RegistryObject<SoundEvent> TURNOFF = registerSoundEvent("turnoff");
+
+
 
 
     public static final RegistryObject<SoundEvent> LIGHTSWITCH = registerSoundEvent("lightswitch");

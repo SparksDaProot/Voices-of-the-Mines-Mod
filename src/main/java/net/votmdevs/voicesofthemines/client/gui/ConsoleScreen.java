@@ -5,7 +5,9 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.VotmSounds;
+import net.votmdevs.voicesofthemines.block.TransformerBlockEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,7 +136,34 @@ public class ConsoleScreen extends Screen {
                 addOutput(cmd);
 
                 String lowerCmd = cmd.toLowerCase();
-                if (lowerCmd.equals("sd.calall")) {
+                if (lowerCmd.equals("tr.check")) {
+                    boolean foundNetwork = false;
+                    for (BlockPos p : BlockPos.betweenClosed(blockPos.offset(-100, -50, -100), blockPos.offset(100, 50, 100))) {
+                        if (this.minecraft.level.getBlockState(p).getBlock() == VoicesOfTheMines.TRANSFORMER_BLOCK.get()) {
+                            net.minecraft.world.level.block.entity.BlockEntity be = this.minecraft.level.getBlockEntity(p);
+                            if (be instanceof TransformerBlockEntity tr && tr.isMain) {
+                                foundNetwork = true;
+                                String statusMain = tr.isActive ? "\u00A7aActive\u00A7f" : "\u00A7cInactive\u00A7f";
+                                addOutput("> Transformer \u00A7b\"TR_MAIN\"\u00A7f is " + statusMain + " | Power: \u00A7e" + tr.energy + "%\u00A7f");
+
+                                int id = 1;
+                                for (BlockPos secPos : tr.secondaries) {
+                                    net.minecraft.world.level.block.entity.BlockEntity secBe = this.minecraft.level.getBlockEntity(secPos);
+                                    if (secBe instanceof TransformerBlockEntity secTr) {
+                                        String statusSec = (secTr.isNetworkActive && !secTr.needsReboot) ? "\u00A7aActive\u00A7f" : "\u00A7cInactive\u00A7f";
+                                        addOutput("> Transformer \u00A7b\"TR_" + id + "\"\u00A7f is " + statusSec + " | Power: \u00A7e" + secTr.energy + "%\u00A7f");
+                                    }
+                                    id++;
+                                }
+                                break; // Нашли главную сеть, дальше не ищем
+                            }
+                        }
+                    }
+                    if (!foundNetwork) {
+                        addOutput("\u00A7c> ERR: No Main Transformer found in radius.\u00A7f");
+                    }
+                }
+                else if (lowerCmd.equals("sd.calall")) {
                     String[] sats = {"Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec", "Romeo", "Tango", "Victor", "Echo", "Xray", "Yankee", "Uniform", "Sierra", "Whiskey", "Golf", "Delta", "Charlie", "Bravo", "Hotel", "India", "Juliett", "Foxtrot"};
                     for (String s : sats) calQueue.add(s);
                 } else if (lowerCmd.startsWith("sd.cal ")) {
@@ -188,6 +217,9 @@ public class ConsoleScreen extends Screen {
 
         guiGraphics.drawString(this.font, "sv.hash", rightX + 5, ty + 120, 0xFFFFFF, false);
         guiGraphics.drawString(this.font, "Prints hashcode", rightX + 5, ty + 130, 0x55FF55, false);
+
+        guiGraphics.drawString(this.font, "tr.check", rightX + 5, ty + 150, 0xFFFFFF, false);
+        guiGraphics.drawString(this.font, "Transformers status", rightX + 5, ty + 160, 0x55FF55, false);
 
         int drawY = y + h - 45;
 

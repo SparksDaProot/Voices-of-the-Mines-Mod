@@ -1,0 +1,44 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 256,
+				"texture_height": 256,
+				"visible_bounds_width": 5,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "trasformer",
+					"pivot": [0, 16, 0],
+					"cubes": [
+						{"origin": [-22, 0.25, -28], "size": [44, 0, 56], "pivot": [0, -15.75, 0], "rotation": [0, -90, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "trans",
+					"parent": "trasformer",
+					"pivot": [4.78103, 0.87883, -3.3],
+					"cubes": [
+						{"origin": [-2, 10, -27], "size": [4, 4, 3], "pivot": [0, 16, 0], "rotation": [0, -90, 0], "uv": [158, 146]},
+						{"origin": [-17, 17, 12], "size": [1, 4, 4], "pivot": [0, 16, 0], "rotation": [0, -90, 0], "uv": [158, 153]},
+						{"origin": [-16, 7, -24], "size": [32, 25, 48], "pivot": [0, 16, 0], "rotation": [0, -90, 0], "uv": [0, 56]},
+						{"origin": [-16, 0, -14], "size": [32, 7, 38], "pivot": [0, 16, 0], "rotation": [0, -90, 0], "uv": [0, 129]},
+						{"origin": [-5.13173, -2.88909, -15.5], "size": [30, 5, 12], "pivot": [9.86827, -0.38909, 0], "rotation": [0, -90, -37.5], "uv": [140, 129]}
+					]
+				},
+				{
+					"name": "flare",
+					"parent": "trans",
+					"pivot": [-14, 19, -17.25],
+					"cubes": [
+						{"origin": [-17.5, 14.5, 8.75], "size": [0, 9, 9], "pivot": [-0.5, 15.5, -0.25], "rotation": [0, -90, 0], "uv": [140, 146]}
+					]
+				}
+			]
+		}
+	]
+}
