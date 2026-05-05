@@ -199,6 +199,7 @@
   "transformerloop": { "sounds": [ "voicesofthemines:transformerloop" ] },
   "turnon": { "sounds": [ "voicesofthemines:turnon" ] },
   "turnoff": { "sounds": [ "voicesofthemines:turnoff" ] },
+  "yawn": { "sounds": [ "voicesofthemines:yawn" ] },
 
   "raw1": { "sounds": [ "voicesofthemines:raw1" ] },
   "raw2": { "sounds": [ "voicesofthemines:raw2" ] },

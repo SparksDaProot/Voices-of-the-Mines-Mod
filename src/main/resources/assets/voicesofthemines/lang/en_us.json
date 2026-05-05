@@ -41,12 +41,17 @@
   "item.voicesofthemines.cockroach_spawn_egg": "Cockroach Spawn Egg",
   "item.voicesofthemines.paper_sheet": "Paper sheet",
   "item.voicesofthemines.maracas": "Maracas",
+  "item.voicesofthemines.stetoscope": "Stethoscope",
+  "item.voicesofthemines.sleep_pills": "Sleep Pills",
   "item.voicesofthemines.metal_detector": "Metal Detector",
+  "item.voicesofthemines.toolbox": "Toolbox",
   "item.voicesofthemines.garbage_spawn_egg": "Garbage Bag",
 
 
 
   "block.voicesofthemines.kerfur_workbench": "Workbench",
+  "block.voicesofthemines.transformer_block": "Transformer",
+  "block.voicesofthemines.safe_block": "Safe",
   "block.voicesofthemines.wall": "Wall block",
   "block.voicesofthemines.candle_handle": "Candle Handle",
   "block.voicesofthemines.wall_lines": "Color-Line Wall",
@@ -105,5 +110,6 @@
 
   "itemGroup.voicesofthemines": "Voices of the Mines",
 
-  "effect.voicesofthemines.radiation": "Radiation Poisoning"
+  "effect.voicesofthemines.radiation": "Radiation Poisoning",
+  "effect.voicesofthemines.sleepiness": "Sleepiness"
 }

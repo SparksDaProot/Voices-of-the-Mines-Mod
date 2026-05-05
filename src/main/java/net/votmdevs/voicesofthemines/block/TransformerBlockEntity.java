@@ -93,8 +93,9 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
     }
 
     public void checkNetworkStart() {
-        if (isMain && secondaries.size() >= 2 && !isActive && !needsReboot) {
+        if (isMain && secondaries.size() >= 2) {
             isActive = true;
+            needsReboot = false;
             energy = 100;
             isReady = false;
             setChanged();
@@ -111,7 +112,6 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
         setChanged();
         if (level != null) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-            // ЗВУК ОТКЛЮЧЕНИЯ ВСЕЙ БАЗЫ (Рассылаем всем игрокам)
             level.playSound(null, worldPosition, VotmSounds.BASETURNOFF.get(), net.minecraft.sounds.SoundSource.MASTER, 1.0F, 1.0F);
         }
 
@@ -171,6 +171,10 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
             if (secBe instanceof TransformerBlockEntity sec) {
                 sec.isNetworkActive = active;
                 sec.energy = 100;
+                if (active) {
+                    sec.needsReboot = false;
+                    sec.isReady = false;
+                }
                 sec.setChanged();
                 level.sendBlockUpdated(secPos, sec.getBlockState(), sec.getBlockState(), 3);
             }

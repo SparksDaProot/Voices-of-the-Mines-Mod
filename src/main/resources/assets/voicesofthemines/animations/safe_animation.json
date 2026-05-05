@@ -1,0 +1,73 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"close_idle": {
+			"loop": true
+		},
+		"open_idle": {
+			"loop": true,
+			"bones": {
+				"door": {
+					"rotation": {
+						"vector": [0, -135, 0],
+						"easing": "easeInElastic"
+					}
+				}
+			}
+		},
+		"open": {
+			"animation_length": 1.5,
+			"bones": {
+				"ruk": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, -360],
+							"easing": "easeOutBack"
+						}
+					}
+				},
+				"door": {
+					"rotation": {
+						"1.0417": {
+							"vector": [0, 0, 0]
+						},
+						"1.5": {
+							"vector": [0, -135, 0],
+							"easing": "easeInElastic"
+						}
+					}
+				}
+			}
+		},
+		"close": {
+			"animation_length": 1.5,
+			"bones": {
+				"ruk": {
+					"rotation": {
+						"0.5": {
+							"vector": [0, 0, -360]
+						},
+						"1.5": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutBack"
+						}
+					}
+				},
+				"door": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -135, 0]
+						},
+						"0.4583": {
+							"vector": [0, 0, 0],
+							"easing": "easeInElastic"
+						}
+					}
+				}
+			}
+		}
+	}
+}

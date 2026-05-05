@@ -33,6 +33,10 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, SafeCodePacket.class, SafeCodePacket::encode, SafeCodePacket::decode, SafeCodePacket::handle);
+        INSTANCE.registerMessage(id++, HackSafePacket.class, HackSafePacket::encode, HackSafePacket::decode, HackSafePacket::handle);
+        INSTANCE.registerMessage(id++, TriggerSleepAnimPacket.class, TriggerSleepAnimPacket::encode, TriggerSleepAnimPacket::decode, TriggerSleepAnimPacket::handle);
+        INSTANCE.registerMessage(id++, ForceSleepTimeSkipPacket.class, ForceSleepTimeSkipPacket::encode, ForceSleepTimeSkipPacket::decode, ForceSleepTimeSkipPacket::handle);
         INSTANCE.registerMessage(id++, EraseDrivePacket.class, EraseDrivePacket::encode, EraseDrivePacket::decode, EraseDrivePacket::handle);
         INSTANCE.registerMessage(id++, RadioActionPacket.class, RadioActionPacket::encode, RadioActionPacket::decode, RadioActionPacket::handle);
         INSTANCE.registerMessage(id++, RadioSyncPacket.class, RadioSyncPacket::encode, RadioSyncPacket::decode, RadioSyncPacket::handle);
@@ -1389,6 +1393,124 @@ public class KerfurPacketHandler {
                         }
 
                         terminal.setDrive(false, "", "", 0);
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    public static class TriggerSleepAnimPacket {
+        public TriggerSleepAnimPacket() {}
+        public static void encode(TriggerSleepAnimPacket msg, net.minecraft.network.FriendlyByteBuf buffer) {}
+        public static TriggerSleepAnimPacket decode(net.minecraft.network.FriendlyByteBuf buffer) { return new TriggerSleepAnimPacket(); }
+        public static void handle(TriggerSleepAnimPacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> net.votmdevs.voicesofthemines.client.ClientInputHandler.startSleepAnimation());
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public static class ForceSleepTimeSkipPacket {
+        public ForceSleepTimeSkipPacket() {}
+        public static void encode(ForceSleepTimeSkipPacket msg, net.minecraft.network.FriendlyByteBuf buffer) {}
+        public static ForceSleepTimeSkipPacket decode(net.minecraft.network.FriendlyByteBuf buffer) { return new ForceSleepTimeSkipPacket(); }
+        public static void handle(ForceSleepTimeSkipPacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.minecraft.server.level.ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.minecraft.server.level.ServerLevel level = player.serverLevel();
+
+                    if (level.players().size() == 1) {
+                        long time = level.getDayTime();
+                        if (level.isDay()) {
+                            level.setDayTime(time - (time % 24000L) + 13000L);
+                        } else {
+                            level.setDayTime(time - (time % 24000L) + 24000L);
+                        }
+                    } else {
+                        player.displayClientMessage(net.minecraft.network.chat.Component.literal("§eYou fell asleep, but you are not alone bro..."), true);
+                    }
+
+                    player.removeEffect(VoicesOfTheMines.SLEEPINESS.get());
+                    player.getPersistentData().remove("IsFallingAsleep");
+
+                    player.playSound(net.minecraft.sounds.SoundEvents.PLAYER_BREATH, 1.0f, 0.8f);
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    public static class SafeCodePacket {
+        private final BlockPos pos;
+        private final String code;
+        private final boolean isSetting;
+
+        public SafeCodePacket(BlockPos pos, String code, boolean isSetting) {
+            this.pos = pos;
+            this.code = code;
+            this.isSetting = isSetting;
+        }
+
+        public static void encode(SafeCodePacket msg, net.minecraft.network.FriendlyByteBuf buffer) {
+            buffer.writeBlockPos(msg.pos);
+            buffer.writeUtf(msg.code);
+            buffer.writeBoolean(msg.isSetting);
+        }
+
+        public static SafeCodePacket decode(net.minecraft.network.FriendlyByteBuf buffer) {
+            return new SafeCodePacket(buffer.readBlockPos(), buffer.readUtf(), buffer.readBoolean());
+        }
+
+        public static void handle(SafeCodePacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.minecraft.server.level.ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    BlockEntity be = player.level().getBlockEntity(msg.pos);
+                    if (be instanceof net.votmdevs.voicesofthemines.block.SafeBlockEntity safe) {
+                        if (msg.isSetting) {
+                            safe.passcode = msg.code;
+                            safe.setChanged();
+                            player.level().sendBlockUpdated(msg.pos, safe.getBlockState(), safe.getBlockState(), 3); // ФИКС ТУТ
+                            player.displayClientMessage(net.minecraft.network.chat.Component.literal("§aPasscode set successfully!"), true);
+                            player.level().playSound(null, msg.pos, net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+                        } else {
+                            if (safe.passcode.equals(msg.code)) {
+                                safe.openSafe();
+                                player.level().playSound(null, msg.pos, VotmSounds.OPEN_STORAGE.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+                            } else {
+                                player.displayClientMessage(net.minecraft.network.chat.Component.literal("§cIncorrect Passcode!"), true);
+                                player.level().playSound(null, msg.pos, VotmSounds.DENY.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+                            }
+                        }
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public static class HackSafePacket {
+        private final BlockPos pos;
+
+        public HackSafePacket(BlockPos pos) {
+            this.pos = pos;
+        }
+
+        public static void encode(HackSafePacket msg, net.minecraft.network.FriendlyByteBuf buffer) {
+            buffer.writeBlockPos(msg.pos);
+        }
+
+        public static HackSafePacket decode(net.minecraft.network.FriendlyByteBuf buffer) {
+            return new HackSafePacket(buffer.readBlockPos());
+        }
+
+        public static void handle(HackSafePacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.minecraft.server.level.ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    BlockEntity be = player.level().getBlockEntity(msg.pos);
+                    if (be instanceof net.votmdevs.voicesofthemines.block.SafeBlockEntity safe) {
+                        safe.openSafe();
+                        player.level().playSound(null, msg.pos, VotmSounds.OPEN_STORAGE.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
                     }
                 }
             });

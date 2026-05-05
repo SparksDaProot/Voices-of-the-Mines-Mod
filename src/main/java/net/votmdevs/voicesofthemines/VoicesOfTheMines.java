@@ -73,6 +73,9 @@ public class VoicesOfTheMines {
 
     public static final RegistryObject<MobEffect> RADIATION = EFFECTS.register("radiation", RadiationEffect::new);
 
+    public static final RegistryObject<MobEffect> SLEEPINESS = EFFECTS.register("sleepiness",
+            () -> new net.votmdevs.voicesofthemines.effect.SleepinessEffect(net.minecraft.world.effect.MobEffectCategory.NEUTRAL, 0x00AAFF));
+
     public static final RegistryObject<EntityType<CockroachEntity>> COCKROACH = ENTITY_TYPES.register("cockroach",
             () -> EntityType.Builder.of(CockroachEntity::new, MobCategory.MISC)
                     .sized(0.3f, 0.1f)
@@ -198,6 +201,14 @@ public class VoicesOfTheMines {
             ()-> new Item(new Item.Properties().food(net.votmdevs.voicesofthemines.item.ModFoods.TOBLERONE)));
     public static final RegistryObject<Item> BURGER = ITEMS.register("burger",
             ()-> new Item(new Item.Properties().food(net.votmdevs.voicesofthemines.item.ModFoods.BURGER)));
+    public static final RegistryObject<Item> SLEEP_PILLS = ITEMS.register("sleep_pills",
+            () -> new Item(new Item.Properties().food(
+                    new net.minecraft.world.food.FoodProperties.Builder()
+                            .alwaysEat() // Можно есть всегда
+                            .nutrition(0).saturationMod(0f)
+                            .effect(() -> new net.minecraft.world.effect.MobEffectInstance(SLEEPINESS.get(), 1200, 0), 1.0F) // 1200 тиков = 1 минута
+                            .build()
+            )));
 
     // term items
     public static final RegistryObject<Item> TABLE_ITEM = ITEMS.register("table",
@@ -837,6 +848,25 @@ public class VoicesOfTheMines {
     public static final RegistryObject<BlockEntityType<net.votmdevs.voicesofthemines.block.AlarmBlockEntity>> ALARM_BE = BLOCK_ENTITIES.register("alarm_be",
             () -> BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.AlarmBlockEntity::new, ALARM_BLOCK.get()).build(null));
 
+    // SAFE
+    public static final RegistryObject<Block> SAFE_BLOCK = BLOCKS.register("safe_block",
+            () -> new net.votmdevs.voicesofthemines.block.SafeBlock(BlockBehaviour.Properties.copy(Blocks.ANVIL).strength(5.0F, 1200.0F).requiresCorrectToolForDrops().noOcclusion()));
+
+    public static final RegistryObject<Item> SAFE_ITEM = ITEMS.register("safe_block",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    SAFE_BLOCK.get(), new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/safe.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/safe.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json") // Можно использовать пустышку или safe_animation.json
+            ));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.SafeBlockEntity>> SAFE_BE = BLOCK_ENTITIES.register("safe_be",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.SafeBlockEntity::new, SAFE_BLOCK.get()).build(null));
+
+    // stetoscope
+    public static final RegistryObject<Item> STETOSCOPE = ITEMS.register("stetoscope",
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
     //RADIO
 
     public static final RegistryObject<Block> RADIO_BLOCK = BLOCKS.register("radio_block",
@@ -1010,6 +1040,7 @@ public class VoicesOfTheMines {
             event.accept(DRIVE_SPAWN_EGG);
         }
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(SLEEP_PILLS);
             event.accept(DISK_BLUE);
             event.accept(TRASH_BAG);
             event.accept(TRASH_ROLL);
@@ -1097,6 +1128,7 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(VoicesOfTheMines.SAFE_BE.get(), net.votmdevs.voicesofthemines.client.SafeRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.TRANSFORMER_BE.get(), net.votmdevs.voicesofthemines.client.TransformerRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.RADIO_BE.get(), net.votmdevs.voicesofthemines.client.RadioRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.ALARM_BE.get(), net.votmdevs.voicesofthemines.client.AlarmRenderer::new);

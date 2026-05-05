@@ -37,6 +37,11 @@ public class ClientInputHandler {
     private static String currentAtvSoundState = "none"; // none, idle, drive_start, drive_loop
     private static int atvSoundTimer = 0;
 
+    public static BlockPos activeHackSafe = null;
+    public static int hackDigitsUnlocked = 0;
+    public static int tickUntilClick = 0;
+    public static boolean clickWindowActive = false;
+
     public static int evilEventTimer = -1;
     public static int funeralEventTimer = -1;
     public static int evilFlashTicks = 0;
@@ -44,8 +49,23 @@ public class ClientInputHandler {
     public static int evilChatStage = 0;
     public static int evilChatTimer = -1;
 
+    public static int sleepStage = 0;
+    public static float sleepOverlayAlpha = 0.0f;
+    public static int sleepTimer = 0;
+
+
+    public static void startSleepAnimation() {
+        sleepStage = 1;
+        sleepTimer = 0;
+        sleepOverlayAlpha = 0.0f;
+
+        if (Minecraft.getInstance().player != null) {
+            Minecraft.getInstance().player.playSound(VotmSounds.YAWN.get(), 1.0F, 1.0F);
+        }
+    }
+
     private static DroneLoopSound droneSoundInstance = null;
-    private static TransformerLoopSound transformerSoundInstance = null; // НОВЫЙ ЗВУК
+    private static TransformerLoopSound transformerSoundInstance = null;
 
     public static int knockdownTicks = 0;
     public static float vignetteAlpha = 0.0f;
@@ -76,6 +96,21 @@ public class ClientInputHandler {
     public static void onMouseScroll(net.minecraftforge.client.event.InputEvent.MouseScrollingEvent event) {
         net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
         if (mc.player == null) return;
+
+        if (activeHackSafe != null) {
+            if (event.getScrollDelta() != 0) {
+                if (!clickWindowActive) {
+                    tickUntilClick--;
+                    if (tickUntilClick <= 0) {
+                        clickWindowActive = true;
+                        mc.player.playSound(net.minecraft.sounds.SoundEvents.IRON_DOOR_OPEN, 1.0F, 2.0F);
+                        tickUntilClick = 30;
+                    }
+                }
+            }
+            event.setCanceled(true);
+            return;
+        }
 
         // HOOK
         if (mc.player.getMainHandItem().getItem() == VoicesOfTheMines.HOOK_ITEM.get()) {
@@ -115,7 +150,53 @@ public class ClientInputHandler {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
 
-        // --- ЛОГИКА ЗВУКА ТРАНСФОРМАТОРОВ ---
+// STETO
+        boolean isUsingStethoscope = mc.options.keyUse.isDown() && mc.player.isShiftKeyDown() && mc.player.getMainHandItem().getItem() == VoicesOfTheMines.STETOSCOPE.get();
+        BlockPos lookingAtSafe = null;
+
+        if (isUsingStethoscope && mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult blockHit) {
+            if (mc.level.getBlockState(blockHit.getBlockPos()).getBlock() == VoicesOfTheMines.SAFE_BLOCK.get()) {
+                net.minecraft.world.level.block.entity.BlockEntity be = mc.level.getBlockEntity(blockHit.getBlockPos());
+                // Взламываем только если закрыт и есть пароль
+                if (be instanceof net.votmdevs.voicesofthemines.block.SafeBlockEntity safe && safe.doorState == 0 && !safe.passcode.isEmpty()) {
+                    lookingAtSafe = blockHit.getBlockPos();
+                }
+            }
+        }
+
+        if (lookingAtSafe != null) {
+            if (activeHackSafe == null || !activeHackSafe.equals(lookingAtSafe)) {
+                // hack
+                activeHackSafe = lookingAtSafe;
+                hackDigitsUnlocked = 0;
+                clickWindowActive = false;
+                tickUntilClick = 60 + mc.player.getRandom().nextInt(80);
+                GmodNotificationManager.addNotification("Hack started. Keep holding Shift+RightClick, scroll mouse wheel and listen...");
+            }
+
+            if (mc.player.getRandom().nextInt(5) == 0) {
+                mc.level.addParticle(net.minecraft.core.particles.ParticleTypes.SMOKE,
+                        activeHackSafe.getX() + 0.5, activeHackSafe.getY() + 0.5, activeHackSafe.getZ() + 0.5,
+                        (mc.player.getRandom().nextDouble() - 0.5) * 0.05, 0.05, (mc.player.getRandom().nextDouble() - 0.5) * 0.05);
+            }
+
+            if (clickWindowActive) {
+                tickUntilClick--;
+                if (tickUntilClick <= 0) {
+                    // ПРОПУСТИЛ!
+                    activeHackSafe = null;
+                    GmodNotificationManager.addNotification("Hack failed! Too slow.");
+                    mc.player.playSound(VotmSounds.DENY.get(), 1.0F, 1.0F);
+                }
+            }
+        } else {
+            if (activeHackSafe != null) {
+                activeHackSafe = null;
+                GmodNotificationManager.addNotification("Hack aborted.");
+            }
+        }
+        //TRANSFORMERS
+
         BlockPos closestActiveTransformer = null;
         double closestTransformerDist = 15.0 * 15.0; // Радиус звука
         BlockPos playerPos = mc.player.blockPosition();
@@ -147,6 +228,42 @@ public class ClientInputHandler {
             if (transformerSoundInstance != null) {
                 mc.getSoundManager().stop(transformerSoundInstance);
                 transformerSoundInstance = null;
+            }
+        }
+
+
+// --- ЛОГИКА МОЗГА (СНА) ---
+        if (sleepStage == 1) { // Моргание (3 раза)
+            sleepTimer++;
+            // Математика синуса для создания 3-х плавных вспышек черного
+            // Скорость 0.2 дает приятный ритм моргания
+            sleepOverlayAlpha = (float) Math.max(0, Math.sin(sleepTimer * 0.2f));
+
+            if (sleepTimer > 48) { // Примерно через 2.5 секунды моргание заканчивается
+                sleepStage = 2;
+                sleepTimer = 0;
+            }
+        }
+        else if (sleepStage == 2) { // Плавное окончательное затухание
+            sleepOverlayAlpha += 0.02f; // Медленно темнеет
+            if (sleepOverlayAlpha >= 1.0f) {
+                sleepOverlayAlpha = 1.0f;
+                sleepStage = 3;
+                sleepTimer = 0;
+                KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.ForceSleepTimeSkipPacket());
+            }
+        }
+        else if (sleepStage == 3) {
+            sleepTimer++;
+            if (sleepTimer > 60) {
+                sleepStage = 4;
+            }
+        }
+        else if (sleepStage == 4) {
+            sleepOverlayAlpha -= 0.01f;
+            if (sleepOverlayAlpha <= 0.0f) {
+                sleepOverlayAlpha = 0.0f;
+                sleepStage = 0;
             }
         }
 
@@ -474,8 +591,41 @@ public class ClientInputHandler {
     }
 
     @SubscribeEvent
+    public static void onMiddleClick(net.minecraftforge.client.event.InputEvent.MouseButton event) {
+        // Код кнопки 2 - это нажатие на колесико мыши
+        if (event.getButton() == 2 && event.getAction() == org.lwjgl.glfw.GLFW.GLFW_PRESS) {
+            if (activeHackSafe != null) {
+                if (clickWindowActive) {
+                    // ИГРОК УСПЕЛ!
+                    hackDigitsUnlocked++;
+                    clickWindowActive = false; // Закрываем окно
+
+                    Minecraft.getInstance().player.playSound(net.minecraft.sounds.SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5F, 1.0F);
+
+                    if (hackDigitsUnlocked >= 4) {
+                        // ВЗЛОМ ЗАВЕРШЕН! Отправляем пакет
+                        KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.HackSafePacket(activeHackSafe));
+                        activeHackSafe = null;
+                        GmodNotificationManager.addNotification("Hack Successful!");
+                    } else {
+                        // Генерируем таймер для следующей цифры (немного увеличен)
+                        tickUntilClick = 60 + new Random().nextInt(80);
+                        GmodNotificationManager.addNotification("Digit " + hackDigitsUnlocked + "/4 unlocked...");
+                    }
+                } else {
+                    // Игрок нажал СЛИШКОМ РАНО -> Провал!
+                    activeHackSafe = null;
+                    GmodNotificationManager.addNotification("Hack failed! Missed the timing.");
+                    Minecraft.getInstance().player.playSound(VotmSounds.DENY.get(), 1.0F, 1.0F);
+                }
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void onMovementInput(MovementInputUpdateEvent event) {
-        if (knockdownTicks > 0) {
+        if (knockdownTicks > 0 || sleepStage > 0) {
             event.getInput().forwardImpulse = 0;
             event.getInput().leftImpulse = 0;
             event.getInput().up = false;
@@ -610,6 +760,24 @@ public class ClientInputHandler {
         int height = event.getWindow().getGuiScaledHeight();
 
         if (event.getOverlay() == net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.HOTBAR.type()) {
+            //SLEEP
+            if (sleepStage > 0 && sleepOverlayAlpha > 0) {
+                ResourceLocation BLACK_OVERLAY = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/blackoverlay.png");
+
+                com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(false);
+                com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+                com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
+
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, sleepOverlayAlpha);
+
+                event.getGuiGraphics().blit(BLACK_OVERLAY, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
+
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
+                com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+            }
 
             // vignette
             if (vignetteAlpha > 0) {
