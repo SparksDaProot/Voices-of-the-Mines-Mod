@@ -2,8 +2,7 @@ package net.votmdevs.voicesofthemines;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
-import net.votmdevs.voicesofthemines.entity.CockroachEntity;
-import net.votmdevs.voicesofthemines.entity.FleshEntity;
+import net.votmdevs.voicesofthemines.entity.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -15,8 +14,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.votmdevs.voicesofthemines.entity.TrashSplashEntity;
-import net.votmdevs.voicesofthemines.entity.TreasureSpotEntity;
 
 import java.util.List;
 
@@ -106,6 +103,35 @@ public class VotmEventHandler {
                             return 1;
                         })
                 )
+                //ROZITALS
+                        .then(net.minecraft.commands.Commands.literal("rozitals")
+                                .executes(context -> {
+                                    ServerLevel level = context.getSource().getLevel();
+                                    Player player = context.getSource().getPlayerOrException();
+
+                                    // SHIP
+                                    RozitalShipEntity ship = VoicesOfTheMines.ROZITAL_SHIP.get().create(level);
+                                    if (ship != null) {
+                                        ship.moveTo(player.getX(), player.getY() + 60.0D, player.getZ(), player.getYRot(), 0.0F);
+                                        level.addFreshEntity(ship);
+                                    }
+
+                                    // PYRAMID
+                                    for (int i = 0; i < 3; i++) {
+                                        RozitalPyramidEntity pyramid = VoicesOfTheMines.ROZITAL_PYRAMID.get().create(level);
+                                        if (pyramid != null) {
+                                            double ox = (level.random.nextDouble() - 0.5) * 100;
+                                            double oz = (level.random.nextDouble() - 0.5) * 100;
+                                            // ASTEROID
+                                            pyramid.moveTo(player.getX() + ox, player.getY() + 100, player.getZ() + oz, level.random.nextFloat() * 1080, 0);
+                                            level.addFreshEntity(pyramid);
+                                        }
+                                    }
+
+                                    context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("§dThe Rozitals have arrived!"), true); //debug messsage
+                                    return 1;
+                                })
+                        )
 
                 // /votmevent spsig <signal> - for tests
                 .then(net.minecraft.commands.Commands.literal("spsig")
@@ -335,6 +361,25 @@ public class VotmEventHandler {
             if (level.dimension() == Level.OVERWORLD) {
                 net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(level);
                 manager.tick();
+
+                // --- ЛОГИКА ПОЯВЛЕНИЯ РОЗИТАЛОВ ---
+                if (manager.isRozitalEventPending && manager.currentDay >= manager.rozitalEventTargetDay) {
+                    long currentTime = level.getDayTime() % 24000;
+                    if (currentTime >= manager.rozitalEventTargetTime) {
+                        manager.isRozitalEventPending = false;
+                        manager.setDirty();
+
+                        // Спавним над случайным игроком на сервере
+                        Player target = level.getRandomPlayer();
+                        if (target != null) {
+                            net.votmdevs.voicesofthemines.entity.RozitalShipEntity ship = VoicesOfTheMines.ROZITAL_SHIP.get().create(level);
+                            if (ship != null) {
+                                ship.moveTo(target.getX(), target.getY() + 30.0D, target.getZ(), target.getYRot(), 0.0F);
+                                level.addFreshEntity(ship);
+                            }
+                        }
+                    }
+                }
 
                 if (level.getDayTime() > 0 && level.getDayTime() % 24000 == 0) {
                     manager.advanceDay();

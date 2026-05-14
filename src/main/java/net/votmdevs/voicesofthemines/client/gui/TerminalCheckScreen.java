@@ -234,6 +234,7 @@ public class TerminalCheckScreen extends Screen {
             return ast[new Random().nextInt(ast.length)];
         }
         switch (type) {
+            case "piramid": return VotmSounds.SIGNAL_PIRAMID.get();
             case "blackhole0": return VotmSounds.SIGNAL_BLACKHOLE0.get();
             case "funeral": return VotmSounds.SIGNAL_FUNERAL.get();
             case "mettus": return VotmSounds.SIGNAL_METTUS.get();

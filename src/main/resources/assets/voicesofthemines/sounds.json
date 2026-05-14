@@ -195,6 +195,26 @@
   "roar": { "sounds": [ "voicesofthemines:roar" ] },
   "roar_pc": { "sounds": [ "voicesofthemines:roar_pc" ] },
 
+  "rozitalship_ambience": { "sounds": [ "voicesofthemines:rozitalship_ambience" ] },
+
+  "piramid_step_close1": { "sounds": [ "voicesofthemines:piramid_step_close1" ] },
+  "piramid_step_close2": { "sounds": [ "voicesofthemines:piramid_step_close2" ] },
+  "piramid_step_close3": { "sounds": [ "voicesofthemines:piramid_step_close3" ] },
+
+  "piramid_step_far1": { "sounds": [ "voicesofthemines:piramid_step_far1" ] },
+  "piramid_step_far2": { "sounds": [ "voicesofthemines:piramid_step_far2" ] },
+  "piramid_step_far3": { "sounds": [ "voicesofthemines:piramid_step_far3" ] },
+
+  "transform": { "sounds": [ "voicesofthemines:transform" ] },
+
+
+  "pyramid_hold": { "sounds": [ "voicesofthemines:pyramid_hold" ] },
+  "pyramid_grab": { "sounds": [ "voicesofthemines:pyramid_grab" ] },
+
+  "piramidping1": { "sounds": [ "voicesofthemines:piramidping1" ] },
+  "piramidping2": { "sounds": [ "voicesofthemines:piramidping2" ] },
+  "piramidping3": { "sounds": [ "voicesofthemines:piramidping3" ] },
+
   "baseturnoff": { "sounds": [ "voicesofthemines:baseturnoff" ] },
   "transformerloop": { "sounds": [ "voicesofthemines:transformerloop" ] },
   "turnon": { "sounds": [ "voicesofthemines:turnon" ] },
@@ -209,6 +229,8 @@
   "raw6": { "sounds": [ "voicesofthemines:raw6" ] },
   "raw7": { "sounds": [ "voicesofthemines:raw7" ] },
   "raw8": { "sounds": [ "voicesofthemines:raw8" ] },
+
+  "signal_piramid": { "sounds": [ "voicesofthemines:signal_piramid" ] },
 
   "noisy1": { "sounds": [ "voicesofthemines:noisy1" ] },
   "noisy2": { "sounds": [ "voicesofthemines:noisy2" ] },

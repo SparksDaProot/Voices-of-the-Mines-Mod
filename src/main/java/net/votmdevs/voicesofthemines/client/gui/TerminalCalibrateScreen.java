@@ -215,7 +215,7 @@ public class TerminalCalibrateScreen extends Screen {
                     t.equals("makemake") || t.equals("rhea") || t.equals("iris") || t.equals("amazur") ||
                     t.equals("vion") || t.equals("subplanet") || t.equals("europa") || t.equals("moon") ||
                     t.equals("jupiter") || t.equals("uranus") || t.equals("neptune") || t.equals("saturn") ||
-                    t.equals("hilero") || t.equals("votv_earth") || t.equals("fard") || t.equals("ironlung") ||
+                    t.equals("hilero") || t.equals("votv_earth") || t.equals("fard") || t.equals("piramid") || t.equals("ironlung") ||
                     t.equals("asteroid") || t.equals("pizzabreather") || t.equals("blackhole0") || t.equals("io")) {
 
                 targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + t + "_sheet.png");
@@ -287,7 +287,7 @@ public class TerminalCalibrateScreen extends Screen {
         if (t.equals("neutron0") || t.equals("hatefulstar") || t.equals("white_dwarf")) return "star";
         if (t.equals("blackhole0")) return "blackhole";
 
-        List<String> unind = Arrays.asList("asteroid", "evil", "funeral", "mettus", "monty", "nev", "niko", "pizzabreather", "roz0", "sat1", "exogen1", "exogen2", "tulpar");
+        List<String> unind = Arrays.asList("asteroid", "evil", "funeral", "mettus", "monty", "nev", "niko", "pizzabreather", "roz0", "sat1", "exogen1", "exogen2", "tulpar", "piramid");
         if (unind.contains(t)) return "unind_object";
 
         if (t.equals("tamalan") || t.equals("tamalanflag") || t.equals("io")) return "planet_" + t.replace("planet_", "");

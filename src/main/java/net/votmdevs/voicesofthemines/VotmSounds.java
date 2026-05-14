@@ -152,6 +152,7 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> SIGNAL_TAMALAN = registerSoundEvent("signal_tamalan");
     public static final RegistryObject<SoundEvent> SIGNAL_TAMALANFLAG = registerSoundEvent("signal_tamalanflag");
     public static final RegistryObject<SoundEvent> SIGNAL_WHITEDWARF = registerSoundEvent("signal_whitedwarf");
+    public static final RegistryObject<SoundEvent> SIGNAL_PIRAMID = registerSoundEvent("signal_piramid");
 
     public static final RegistryObject<SoundEvent> SIGNAL_TULPAR = registerSoundEvent("signal_tulpar");
     public static final RegistryObject<SoundEvent> SIGNAL_HATEFULSTAR = registerSoundEvent("signal_hatefulstar");
@@ -268,6 +269,27 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> IMPACT_DRIVE_1 = registerSoundEvent("impact_drive_0001");
     public static final RegistryObject<SoundEvent> IMPACT_DRIVE_2 = registerSoundEvent("impact_drive_0002");
     public static final RegistryObject<SoundEvent> IMPACT_DRIVE_3 = registerSoundEvent("impact_drive_0003");
+
+    //ROZITALS
+
+    public static final RegistryObject<SoundEvent> ROZITALSHIP_AMBIENCE = registerSoundEvent("rozitalship_ambience");
+    public static final RegistryObject<SoundEvent> PYRAMID_WALK1 = registerSoundEvent("piramid_step_close1");
+    public static final RegistryObject<SoundEvent> PYRAMID_WALK2 = registerSoundEvent("piramid_step_close2");
+    public static final RegistryObject<SoundEvent> PYRAMID_WALK3 = registerSoundEvent("piramid_step_close3");
+
+    public static final RegistryObject<SoundEvent> PYRAMID_FARWALK1 = registerSoundEvent("piramid_step_far1");
+    public static final RegistryObject<SoundEvent> PYRAMID_FARWALK2 = registerSoundEvent("piramid_step_far2");
+    public static final RegistryObject<SoundEvent> PYRAMID_FARWALK3 = registerSoundEvent("piramid_step_far3");
+
+    public static final RegistryObject<SoundEvent> TRANSFORM = registerSoundEvent("transform");
+
+
+    public static final RegistryObject<SoundEvent> PIRAMIDPING1 = registerSoundEvent("piramidping1");
+    public static final RegistryObject<SoundEvent> PIRAMIDPING2 = registerSoundEvent("piramidping2");
+    public static final RegistryObject<SoundEvent> PIRAMIDPING3 = registerSoundEvent("piramidping3");
+
+    public static final RegistryObject<SoundEvent> PYRAMID_GRAB = registerSoundEvent("pyramid_grab");
+    public static final RegistryObject<SoundEvent> PYRAMID_HOLD = registerSoundEvent("pyramid_hold");
 
     // Flesh
     public static final RegistryObject<SoundEvent> FLESH_GRAB = registerSoundEvent("flesh_grab");

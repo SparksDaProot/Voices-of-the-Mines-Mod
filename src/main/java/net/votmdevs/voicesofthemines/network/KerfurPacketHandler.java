@@ -491,7 +491,15 @@ public class KerfurPacketHandler {
                             player.level().playSound(null, msg.pos, VotmSounds.BUTTON_CLICK.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
                         }
                         terminal.setDrive(false, "", "", 0);
-                        if (sigId != null && !sigId.isEmpty()) net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel()).finishCheck(sigId);
+
+                        if (sigId != null && !sigId.isEmpty()) {
+                            net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel());
+                            manager.finishCheck(sigId);
+
+                            if ("piramid".equals(sigType)) {
+                                manager.scheduleRozitalEvent();
+                            }
+                        }
                     }
                 }
             });

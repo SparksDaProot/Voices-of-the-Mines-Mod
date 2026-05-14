@@ -905,6 +905,21 @@ public class VoicesOfTheMines {
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.RadioBlockEntity::new, RADIO_BLOCK.get()).build(null));
 
 
+    //ROZITALS ENTITY
+
+    public static final RegistryObject<EntityType<net.votmdevs.voicesofthemines.entity.RozitalShipEntity>> ROZITAL_SHIP = ENTITY_TYPES.register("rozitalship",
+            () -> EntityType.Builder.of(net.votmdevs.voicesofthemines.entity.RozitalShipEntity::new, net.minecraft.world.entity.MobCategory.MISC)
+                    .sized(40.0F, 30.0F) // Огромный размер
+                    .clientTrackingRange(256) // Чтобы его было видно издалека
+                    .build("rozitalship"));
+
+    public static final RegistryObject<EntityType<RozitalPyramidEntity>> ROZITAL_PYRAMID = ENTITY_TYPES.register("cuboid",
+            () -> EntityType.Builder.of(RozitalPyramidEntity::new, net.minecraft.world.entity.MobCategory.MONSTER)
+                    .sized(10.0F, 26.0F) // Соответствует 160x410x160 (примерно)
+                    .clientTrackingRange(128)
+                    .build("cuboid"));
+
+
     public static final RegistryObject<EntityType<KerfurEntity>> KERFUR = ENTITY_TYPES.register("kerfur",
             () -> EntityType.Builder.of(KerfurEntity::new, MobCategory.CREATURE)
                     .sized(0.6f, 1.8f)
@@ -1060,6 +1075,8 @@ public class VoicesOfTheMines {
 
         @SubscribeEvent
         public static void registerSpawnPlacements(net.minecraftforge.event.entity.SpawnPlacementRegisterEvent event) {
+            event.register(ROZITAL_PYRAMID.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
+            event.register(ROZITAL_SHIP.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
             event.register(GEOM_OCTAHEDRON.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
             event.register(BLACK_WISP.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
             event.register(BLUE_WISP.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
@@ -1076,6 +1093,8 @@ public class VoicesOfTheMines {
 
         @SubscribeEvent
         public static void onAttributeCreate(EntityAttributeCreationEvent event) {
+            event.put(ROZITAL_PYRAMID.get(), RozitalPyramidEntity.createAttributes().build());
+            event.put(ROZITAL_SHIP.get(), RozitalShipEntity.createAttributes().build());
             event.put(GEOM_OCTAHEDRON.get(), GeomOctahedronEntity.createAttributes().build());
             event.put(BLACK_WISP.get(), BlackWispEntity.createAttributes().build());
             event.put(BLUE_WISP.get(), BlueWispEntity.createAttributes().build());
@@ -1128,6 +1147,8 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerEntityRenderer(VoicesOfTheMines.ROZITAL_PYRAMID.get(), net.votmdevs.voicesofthemines.client.RozitalPyramidRenderer::new);
+                event.registerEntityRenderer(VoicesOfTheMines.ROZITAL_SHIP.get(), net.votmdevs.voicesofthemines.client.RozitalShipRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.SAFE_BE.get(), net.votmdevs.voicesofthemines.client.SafeRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.TRANSFORMER_BE.get(), net.votmdevs.voicesofthemines.client.TransformerRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.RADIO_BE.get(), net.votmdevs.voicesofthemines.client.RadioRenderer::new);

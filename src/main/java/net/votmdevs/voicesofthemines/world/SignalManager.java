@@ -51,6 +51,10 @@ public class SignalManager extends SavedData {
     public boolean isBadSunActive = false;
     private boolean isFirstDayInitialized = false;
 
+    public boolean isRozitalEventPending = false;
+    public int rozitalEventTargetDay = -1;
+    public long rozitalEventTargetTime = -1;
+
     public int currentDay = 1;
     public final Map<String, String> dailyHashes = new HashMap<>();
     public final Map<String, Float> calibrations = new HashMap<>();
@@ -133,6 +137,15 @@ public class SignalManager extends SavedData {
                 net.minecraftforge.network.PacketDistributor.ALL.noArg(),
                 new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.EmailNotificationPacket()
         );
+    }
+
+    public void scheduleRozitalEvent() {
+        if (!isRozitalEventPending) {
+            isRozitalEventPending = true;
+            rozitalEventTargetDay = currentDay + 1; // Запланировано на следующий день
+            rozitalEventTargetTime = new Random().nextInt(24000); // В рандомный тик (от 0 до 24000)
+            setDirty();
+        }
     }
 
     public void advanceDay() {
@@ -350,7 +363,7 @@ public class SignalManager extends SavedData {
                 String[] commons = {"mars", "venus", "enceladus", "ceres", "dione", "bennu", "mercury", "makemake", "rhea", "iris", "amazur", "vion", "subplanet", "europa", "moon", "jupiter", "uranus", "neptune", "saturn", "hilero", "asteroid", "mettus", "white_dwarf", "io", "tamalan"};
                 String[] rares = {"siggen1", "siggen2", "siggen3", "siggen4", "siggen5", "siggen6", "earth", "exogen1", "exogen2", "neutron0", "blackhole0", "monty", "sat1", "hatefulstar"};
                 String[] rarers = {"faces", "retroplanet", "votv_earth", "hairy", "roz0", "tamalanflag", "nev", "niko", "tulpar"};
-                String[] veryRares = {"siggenus1", "siggenus2", "siggenus3", "siggenus4", "siggenus5", "siggenus6", "siggenus7", "siggenus8", "fard", "ironlung", "funeral", "evil", "pizzabreather"};
+                String[] veryRares = {"siggenus1", "siggenus2", "siggenus3", "siggenus4", "siggenus5", "siggenus6", "siggenus7", "siggenus8", "fard", "ironlung", "funeral", "evil", "pizzabreather", "piramid"};
 
                 int roll = (int) (Math.random() * 100);
                 String type = roll < 60 ? commons[(int)(Math.random()*commons.length)] : roll < 85 ? rares[(int)(Math.random()*rares.length)] : roll < 95 ? rarers[(int)(Math.random()*rarers.length)] : veryRares[(int)(Math.random()*veryRares.length)];
@@ -374,6 +387,10 @@ public class SignalManager extends SavedData {
         tag.put("Signals", list);
         tag.put("BaseData", globalPlayerData.serializeNBT());
         tag.putInt("TickCounter", tickCounter);
+
+        tag.putBoolean("RozitalPending", isRozitalEventPending);
+        tag.putInt("RozitalDay", rozitalEventTargetDay);
+        tag.putLong("RozitalTime", rozitalEventTargetTime);
 
         tag.putInt("CurrentDay", currentDay);
         tag.putBoolean("BadSun", isBadSunActive);
@@ -413,6 +430,9 @@ public class SignalManager extends SavedData {
         }
         if (tag.contains("TickCounter")) manager.tickCounter = tag.getInt("TickCounter");
 
+        if (tag.contains("RozitalPending")) manager.isRozitalEventPending = tag.getBoolean("RozitalPending");
+        if (tag.contains("RozitalDay")) manager.rozitalEventTargetDay = tag.getInt("RozitalDay");
+        if (tag.contains("RozitalTime")) manager.rozitalEventTargetTime = tag.getLong("RozitalTime");
         if (tag.contains("CurrentDay")) manager.currentDay = tag.getInt("CurrentDay");
         if (tag.contains("BadSun")) manager.isBadSunActive = tag.getBoolean("BadSun");
         if (tag.contains("FirstDayInit")) manager.isFirstDayInitialized = tag.getBoolean("FirstDayInit");
