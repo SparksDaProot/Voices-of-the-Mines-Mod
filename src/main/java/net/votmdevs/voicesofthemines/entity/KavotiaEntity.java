@@ -46,7 +46,7 @@ public class KavotiaEntity extends PathfinderMob implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 30.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.42D)
                 .add(Attributes.FOLLOW_RANGE, 64.0D)
-                .add(Attributes.ATTACK_DAMAGE, 8.0D);
+                .add(Attributes.ATTACK_DAMAGE, 5.0D);
     }
 
     @Override

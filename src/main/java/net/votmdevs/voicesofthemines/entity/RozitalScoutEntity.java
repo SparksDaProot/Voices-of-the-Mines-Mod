@@ -116,11 +116,11 @@ public class RozitalScoutEntity extends PathfinderMob implements GeoEntity {
             }
 
             // KAVOTIANS
-            if (state == 0 && this.tickCount % 100 == 0) { // Проверяем каждые 5 секунд
-                if (this.random.nextInt(4) == 0) { // Шанс 25% (в среднем 1 Кавотия раз в 20 секунд)
+            if (state == 0 && this.tickCount % 100 == 0) {
+                if (this.random.nextInt(4) == 0) {
                     List<KavotiaEntity> kavotias = this.level().getEntitiesOfClass(KavotiaEntity.class, this.getBoundingBox().inflate(20.0D));
 
-                    if (kavotias.size() < 5 && this.level() instanceof ServerLevel serverLevel) { // Максимум 5 штук рядом
+                    if (kavotias.size() < 5 && this.level() instanceof ServerLevel serverLevel) {
                         KavotiaEntity kavotia = net.votmdevs.voicesofthemines.VoicesOfTheMines.KAVOTIA.get().create(serverLevel);
                         if (kavotia != null) {
                             double ox = this.getX() + (this.random.nextDouble() - 0.5) * 10;
@@ -134,7 +134,7 @@ public class RozitalScoutEntity extends PathfinderMob implements GeoEntity {
                 }
             }
 
-            if (state == 0 && sequenceStep == 0 && this.random.nextInt(150) == 0) { // Шанс срабатывания
+            if (state == 0 && sequenceStep == 0 && this.random.nextInt(150) == 0) {
                 sequenceStep = 1;
                 sequenceTimer = 0;
             }
@@ -159,7 +159,7 @@ public class RozitalScoutEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        if (this.entityData.get(STATE) != 0) return; // Только когда ходит
+        if (this.entityData.get(STATE) != 0) return;
 
         net.minecraft.sounds.SoundEvent[] walkSounds = {
                 VotmSounds.PYRAMID_WALK1.get(),
