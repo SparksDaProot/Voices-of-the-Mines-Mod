@@ -48,7 +48,7 @@ public class VotmConfig {
 
         PYRAMID_KILL_QUOTA = builder
                 .comment("The number of hostile mobs a single Rozital Pyramid must consume before disappearing.")
-                .defineInRange("pyramidKillQuota", 20, 1, 1000); // 20 по умолчанию, от 1 до 1000
+                .defineInRange("pyramidKillQuota", 20, 1, 1000); // now quota is 20
 
         builder.pop();
 

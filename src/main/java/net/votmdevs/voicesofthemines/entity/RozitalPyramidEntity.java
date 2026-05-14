@@ -259,7 +259,7 @@ public class RozitalPyramidEntity extends PathfinderMob implements GeoEntity {
         @Override
         public boolean canUse() {
             if (pyramid.attackCooldown > 0) return false;
-            
+
             int quota = net.votmdevs.voicesofthemines.config.VotmConfig.getPyramidKillQuota();
 
             if (pyramid.killCount >= quota && pyramid.entityData.get(STATE) == 2) {
