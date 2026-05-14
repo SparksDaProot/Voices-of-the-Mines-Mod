@@ -11,6 +11,8 @@ public class VotmConfig {
     public static final ForgeConfigSpec.BooleanValue DEBUG_SIGNAL_BREAKS;
     public static final ForgeConfigSpec.DoubleValue TERMINAL_PUNCH_DAMAGE;
 
+    public static final ForgeConfigSpec.IntValue PYRAMID_KILL_QUOTA;
+
     private static final double TICKS_PER_MINUTE = 20.0D * 60.0D;
 
     static {
@@ -42,6 +44,14 @@ public class VotmConfig {
 
         builder.pop();
 
+        builder.push("events");
+
+        PYRAMID_KILL_QUOTA = builder
+                .comment("The number of hostile mobs a single Rozital Pyramid must consume before disappearing.")
+                .defineInRange("pyramidKillQuota", 20, 1, 1000); // 20 по умолчанию, от 1 до 1000
+
+        builder.pop();
+
         SERVER_SPEC = builder.build();
     }
 
@@ -59,6 +69,10 @@ public class VotmConfig {
 
     public static boolean debugSignalBreaks() {
         return DEBUG_SIGNAL_BREAKS.get();
+    }
+
+    public static int getPyramidKillQuota() {
+        return PYRAMID_KILL_QUOTA.get();
     }
 
     private static long minutesToTicks(double minutes, long disabledValue) {

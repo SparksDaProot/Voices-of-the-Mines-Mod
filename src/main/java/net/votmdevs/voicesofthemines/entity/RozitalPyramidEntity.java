@@ -66,7 +66,7 @@ public class RozitalPyramidEntity extends PathfinderMob implements GeoEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PyramidAttackGoal(this));
-        
+
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D) {
             @Override
             public boolean canUse() {
@@ -259,9 +259,10 @@ public class RozitalPyramidEntity extends PathfinderMob implements GeoEntity {
         @Override
         public boolean canUse() {
             if (pyramid.attackCooldown > 0) return false;
+            
+            int quota = net.votmdevs.voicesofthemines.config.VotmConfig.getPyramidKillQuota();
 
-            // KILL COUNT LIMIT = 5 MAY BE CHANGHED
-            if (pyramid.killCount >= 5 && pyramid.entityData.get(STATE) == 2) {
+            if (pyramid.killCount >= quota && pyramid.entityData.get(STATE) == 2) {
                 pyramid.entityData.set(STATE, 4);
                 pyramid.stateTimer = 0;
 
