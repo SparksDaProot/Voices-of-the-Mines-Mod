@@ -207,6 +207,30 @@
 
   "transform": { "sounds": [ "voicesofthemines:transform" ] },
 
+  "camera": { "sounds": [ "voicesofthemines:camera" ] },
+  "zoom": { "sounds": [ "voicesofthemines:zoom" ] },
+  "kavattack": { "sounds": [ "voicesofthemines:kavattack" ] },
+  "scout_siren": { "sounds": [ "voicesofthemines:scout_siren" ] },
+
+  "scan1": { "sounds": [ "voicesofthemines:scan1" ] },
+  "scan2": { "sounds": [ "voicesofthemines:scan2" ] },
+  "scan3": { "sounds": [ "voicesofthemines:scan3" ] },
+  "scan4": { "sounds": [ "voicesofthemines:scan4" ] },
+
+
+  "soltlaugh1": { "sounds": [ "voicesofthemines:soltlaugh1" ] },
+  "soltlaugh2": { "sounds": [ "voicesofthemines:soltlaugh2" ] },
+  "soltlaugh3": { "sounds": [ "voicesofthemines:soltlaugh3" ] },
+
+  "soltv1": { "sounds": [ "voicesofthemines:soltv1" ] },
+  "soltv2": { "sounds": [ "voicesofthemines:soltv2" ] },
+  "soltv3": { "sounds": [ "voicesofthemines:soltv3" ] },
+  "soltv4": { "sounds": [ "voicesofthemines:soltv4" ] },
+  "soltv5": { "sounds": [ "voicesofthemines:soltv5" ] },
+  "soltv6": { "sounds": [ "voicesofthemines:soltv6" ] },
+  "soltv7": { "sounds": [ "voicesofthemines:soltv7" ] },
+  "soltv8": { "sounds": [ "voicesofthemines:soltv8" ] },
+  "soltv9": { "sounds": [ "voicesofthemines:soltv9" ] },
 
   "pyramid_hold": { "sounds": [ "voicesofthemines:pyramid_hold" ] },
   "pyramid_grab": { "sounds": [ "voicesofthemines:pyramid_grab" ] },

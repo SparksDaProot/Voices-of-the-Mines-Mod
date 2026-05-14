@@ -33,6 +33,7 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, ScoutStunPacket.class, ScoutStunPacket::encode, ScoutStunPacket::decode, ScoutStunPacket::handle);
         INSTANCE.registerMessage(id++, SafeCodePacket.class, SafeCodePacket::encode, SafeCodePacket::decode, SafeCodePacket::handle);
         INSTANCE.registerMessage(id++, HackSafePacket.class, HackSafePacket::encode, HackSafePacket::decode, HackSafePacket::handle);
         INSTANCE.registerMessage(id++, TriggerSleepAnimPacket.class, TriggerSleepAnimPacket::encode, TriggerSleepAnimPacket::decode, TriggerSleepAnimPacket::handle);
@@ -1520,6 +1521,36 @@ public class KerfurPacketHandler {
                         safe.openSafe();
                         player.level().playSound(null, msg.pos, VotmSounds.OPEN_STORAGE.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
                     }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    public static class ScoutStunPacket {
+        private final boolean isStun;
+        private final boolean doFlash;
+
+        public ScoutStunPacket(boolean isStun, boolean doFlash) {
+            this.isStun = isStun;
+            this.doFlash = doFlash;
+        }
+
+        public static void encode(ScoutStunPacket msg, net.minecraft.network.FriendlyByteBuf buffer) {
+            buffer.writeBoolean(msg.isStun);
+            buffer.writeBoolean(msg.doFlash);
+        }
+
+        public static ScoutStunPacket decode(net.minecraft.network.FriendlyByteBuf buffer) {
+            return new ScoutStunPacket(buffer.readBoolean(), buffer.readBoolean());
+        }
+
+        public static void handle(ScoutStunPacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                if (msg.isStun) {
+                    net.votmdevs.voicesofthemines.client.ClientInputHandler.scoutStunTicks = 80;
+                }
+                if (msg.doFlash) {
+                    net.votmdevs.voicesofthemines.client.ClientInputHandler.scoutFlashTicks = 60;
                 }
             });
             ctx.get().setPacketHandled(true);

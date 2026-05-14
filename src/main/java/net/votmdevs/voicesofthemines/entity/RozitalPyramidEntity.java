@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.VotmSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -73,6 +74,12 @@ public class RozitalPyramidEntity extends PathfinderMob implements GeoEntity {
                 (entity) -> entity instanceof Enemy || entity.getClass().getSimpleName().contains("YellowWispEntity")));
     }
 
+    public boolean isPushable() { return false; }
+    @Override
+    protected void doPush(net.minecraft.world.entity.Entity entityIn) {}
+    @Override
+    public boolean canBeCollidedWith() { return false; }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -89,7 +96,7 @@ public class RozitalPyramidEntity extends PathfinderMob implements GeoEntity {
             int state = this.entityData.get(STATE);
 
             if (state == 0) {
-                this.setDeltaMovement(0, -0.8, 0);
+                this.setDeltaMovement(0, -2.0, 0);
                 if (this.level() instanceof ServerLevel serverLevel) {
                     serverLevel.sendParticles(ParticleTypes.FLAME, this.getX(), this.getY() + 2, this.getZ(), 5, 0.5, 0.5, 0.5, 0.05);
                     serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 2, this.getZ(), 3, 0.3, 0.3, 0.3, 0.02);
@@ -101,6 +108,31 @@ public class RozitalPyramidEntity extends PathfinderMob implements GeoEntity {
                     this.stateTimer = 0;
 
                     this.playSound(VotmSounds.TRANSFORM.get(), 5.0F, 1.0F);
+
+                    if (this.level() instanceof ServerLevel serverLevel) {
+                        for (int i = 0; i < 2; i++) {
+                            RozitalScoutEntity scout = net.votmdevs.voicesofthemines.VoicesOfTheMines.ROZITAL_SCOUT.get().create(serverLevel);
+                            if (scout != null) {
+                                double sx = this.getX() + (this.random.nextDouble() - 0.5) * 8;
+                                double sz = this.getZ() + (this.random.nextDouble() - 0.5) * 8;
+                                int groundY = serverLevel.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) sx, (int) sz);
+                                scout.moveTo(sx, groundY, sz, this.random.nextFloat() * 360, 0);
+                                serverLevel.addFreshEntity(scout);
+
+                                // spawn 2 kavotia near scouts
+                                for (int j = 0; j < 2; j++) {
+                                    KavotiaEntity kavotia = net.votmdevs.voicesofthemines.VoicesOfTheMines.KAVOTIA.get().create(serverLevel);
+                                    if (kavotia != null) {
+                                        double kx = sx + (this.random.nextDouble() - 0.5) * 6;
+                                        double kz = sz + (this.random.nextDouble() - 0.5) * 6;
+                                        int kGroundY = serverLevel.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) kx, (int) kz);
+                                        kavotia.moveTo(kx, kGroundY, kz, this.random.nextFloat() * 360, 0);
+                                        serverLevel.addFreshEntity(kavotia);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             else if (state == 1) {
@@ -171,6 +203,9 @@ public class RozitalPyramidEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) { return false; }
+
+    @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("KillCount", this.killCount);
@@ -225,6 +260,7 @@ public class RozitalPyramidEntity extends PathfinderMob implements GeoEntity {
             }
             return pyramid.getTarget() != null && pyramid.entityData.get(STATE) == 2;
         }
+
 
         @Override
         public boolean canContinueToUse() {

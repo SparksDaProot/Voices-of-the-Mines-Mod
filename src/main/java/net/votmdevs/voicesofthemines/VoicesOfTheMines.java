@@ -919,6 +919,23 @@ public class VoicesOfTheMines {
                     .clientTrackingRange(128)
                     .build("cuboid"));
 
+    public static final RegistryObject<EntityType<net.votmdevs.voicesofthemines.entity.SoltomiaEntity>> SOLTOMIA = ENTITY_TYPES.register("soltomia",
+            () -> EntityType.Builder.of(net.votmdevs.voicesofthemines.entity.SoltomiaEntity::new, net.minecraft.world.entity.MobCategory.CREATURE)
+                    .sized(0.8F, 2.0F) // Обычный размер гуманоида
+                    .clientTrackingRange(64)
+                    .build("soltomia"));
+
+    public static final RegistryObject<EntityType<net.votmdevs.voicesofthemines.entity.RozitalScoutEntity>> ROZITAL_SCOUT = ENTITY_TYPES.register("scout",
+            () -> EntityType.Builder.of(net.votmdevs.voicesofthemines.entity.RozitalScoutEntity::new, net.minecraft.world.entity.MobCategory.MONSTER)
+                    .sized(0.6F, 8.6F) // Хитбокс (ширина 10 пикселей, высота 138)
+                    .clientTrackingRange(128)
+                    .build("scout"));
+
+    public static final RegistryObject<EntityType<net.votmdevs.voicesofthemines.entity.KavotiaEntity>> KAVOTIA = ENTITY_TYPES.register("kavotia",
+            () -> EntityType.Builder.of(net.votmdevs.voicesofthemines.entity.KavotiaEntity::new, net.minecraft.world.entity.MobCategory.MONSTER)
+                    .sized(1.1F, 1.1F) // 18x18x18 = Чуть больше одного блока (1.0F = 16 пикселей)
+                    .clientTrackingRange(64)
+                    .build("kavotia"));
 
     public static final RegistryObject<EntityType<KerfurEntity>> KERFUR = ENTITY_TYPES.register("kerfur",
             () -> EntityType.Builder.of(KerfurEntity::new, MobCategory.CREATURE)
@@ -1075,6 +1092,9 @@ public class VoicesOfTheMines {
 
         @SubscribeEvent
         public static void registerSpawnPlacements(net.minecraftforge.event.entity.SpawnPlacementRegisterEvent event) {
+            event.register(KAVOTIA.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
+            event.register(ROZITAL_SCOUT.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
+            event.register(SOLTOMIA.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
             event.register(ROZITAL_PYRAMID.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
             event.register(ROZITAL_SHIP.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
             event.register(GEOM_OCTAHEDRON.get(), net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND, net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CommonModEvents::checkDarkSpawnRules, net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
@@ -1093,6 +1113,9 @@ public class VoicesOfTheMines {
 
         @SubscribeEvent
         public static void onAttributeCreate(EntityAttributeCreationEvent event) {
+            event.put(KAVOTIA.get(), KavotiaEntity.createAttributes().build());
+            event.put(ROZITAL_SCOUT.get(), RozitalScoutEntity.createAttributes().build());
+            event.put(SOLTOMIA.get(), SoltomiaEntity.createAttributes().build());
             event.put(ROZITAL_PYRAMID.get(), RozitalPyramidEntity.createAttributes().build());
             event.put(ROZITAL_SHIP.get(), RozitalShipEntity.createAttributes().build());
             event.put(GEOM_OCTAHEDRON.get(), GeomOctahedronEntity.createAttributes().build());
@@ -1147,6 +1170,9 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerEntityRenderer(VoicesOfTheMines.KAVOTIA.get(), net.votmdevs.voicesofthemines.client.KavotiaRenderer::new);
+                event.registerEntityRenderer(VoicesOfTheMines.ROZITAL_SCOUT.get(), net.votmdevs.voicesofthemines.client.RozitalScoutRenderer::new);
+                event.registerEntityRenderer(VoicesOfTheMines.SOLTOMIA.get(), net.votmdevs.voicesofthemines.client.SoltomiaRenderer::new);
                 event.registerEntityRenderer(VoicesOfTheMines.ROZITAL_PYRAMID.get(), net.votmdevs.voicesofthemines.client.RozitalPyramidRenderer::new);
                 event.registerEntityRenderer(VoicesOfTheMines.ROZITAL_SHIP.get(), net.votmdevs.voicesofthemines.client.RozitalShipRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.SAFE_BE.get(), net.votmdevs.voicesofthemines.client.SafeRenderer::new);

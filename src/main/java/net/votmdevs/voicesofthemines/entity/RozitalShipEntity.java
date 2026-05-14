@@ -97,7 +97,7 @@ public class RozitalShipEntity extends PathfinderMob implements GeoEntity {
             if (soundTimer >= 200 || soundTimer == 1) {
                 soundTimer = 1;
                 if (currentState != 2) {
-                    this.level().playSound(null, this.blockPosition(), VotmSounds.ROZITALSHIP_AMBIENCE.get(), net.minecraft.sounds.SoundSource.HOSTILE, 3.0F, 1.0F);
+                    this.level().playSound(null, this.blockPosition(), VotmSounds.ROZITALSHIP_AMBIENCE.get(), net.minecraft.sounds.SoundSource.HOSTILE, 5.0F, 1.0F);
                 }
             }
         }

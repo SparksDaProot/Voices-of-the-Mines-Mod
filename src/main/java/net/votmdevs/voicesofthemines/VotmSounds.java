@@ -283,6 +283,30 @@ public class VotmSounds {
 
     public static final RegistryObject<SoundEvent> TRANSFORM = registerSoundEvent("transform");
 
+    public static final RegistryObject<SoundEvent> SOLTLAUGH1 = registerSoundEvent("soltlaugh1");
+    public static final RegistryObject<SoundEvent> SOLTLAUGH2 = registerSoundEvent("soltlaugh2");
+    public static final RegistryObject<SoundEvent> SOLTLAUGH3 = registerSoundEvent("soltlaugh3");
+
+    public static final RegistryObject<SoundEvent> CAMERA = registerSoundEvent("camera");
+    public static final RegistryObject<SoundEvent> SCOUT_SIREN = registerSoundEvent("scout_siren");
+    public static final RegistryObject<SoundEvent> ZOOM = registerSoundEvent("zoom");
+    public static final RegistryObject<SoundEvent> KAVATTACK = registerSoundEvent("kavattack");
+
+
+    public static final RegistryObject<SoundEvent> SCAN1 = registerSoundEvent("scan1");
+    public static final RegistryObject<SoundEvent> SCAN2 = registerSoundEvent("scan2");
+    public static final RegistryObject<SoundEvent> SCAN3 = registerSoundEvent("scan3");
+    public static final RegistryObject<SoundEvent> SCAN4 = registerSoundEvent("scan4");
+
+    public static final RegistryObject<SoundEvent> SOLTV1 = registerSoundEvent("soltv1");
+    public static final RegistryObject<SoundEvent> SOLTV2 = registerSoundEvent("soltv2");
+    public static final RegistryObject<SoundEvent> SOLTV3 = registerSoundEvent("soltv3");
+    public static final RegistryObject<SoundEvent> SOLTV4 = registerSoundEvent("soltv4");
+    public static final RegistryObject<SoundEvent> SOLTV5 = registerSoundEvent("soltv5");
+    public static final RegistryObject<SoundEvent> SOLTV6 = registerSoundEvent("soltv6");
+    public static final RegistryObject<SoundEvent> SOLTV7 = registerSoundEvent("soltv7");
+    public static final RegistryObject<SoundEvent> SOLTV8 = registerSoundEvent("soltv8");
+    public static final RegistryObject<SoundEvent> SOLTV9 = registerSoundEvent("soltv9");
 
     public static final RegistryObject<SoundEvent> PIRAMIDPING1 = registerSoundEvent("piramidping1");
     public static final RegistryObject<SoundEvent> PIRAMIDPING2 = registerSoundEvent("piramidping2");

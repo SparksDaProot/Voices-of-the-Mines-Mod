@@ -53,6 +53,10 @@ public class VotmEventHandler {
                 entity instanceof net.votmdevs.voicesofthemines.entity.BloodSplashEntity ||
                 entity instanceof net.votmdevs.voicesofthemines.entity.AtvEntity ||
                 entity instanceof net.votmdevs.voicesofthemines.entity.MaxwellEntity ||
+                entity instanceof RozitalShipEntity ||
+                entity instanceof RozitalPyramidEntity ||
+                entity instanceof SoltomiaEntity ||
+                entity instanceof RozitalScoutEntity ||
                 entity instanceof net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity) {
             return;
         }
@@ -90,7 +94,7 @@ public class VotmEventHandler {
         event.getDispatcher().register(net.minecraft.commands.Commands.literal("votmevent")
                 .requires(s -> s.hasPermission(2))
 
-                // 1. Команда badsun
+                // badsun
                 .then(net.minecraft.commands.Commands.literal("badsun")
                         .executes(context -> {
                             ServerLevel level = context.getSource().getLevel();
@@ -126,6 +130,15 @@ public class VotmEventHandler {
                                             pyramid.moveTo(player.getX() + ox, player.getY() + 100, player.getZ() + oz, level.random.nextFloat() * 1080, 0);
                                             level.addFreshEntity(pyramid);
                                         }
+                                    }
+
+                                    // SOLTOMIA
+                                    SoltomiaEntity soltomia = VoicesOfTheMines.SOLTOMIA.get().create(level);
+                                    if (soltomia != null) {
+                                        double ox = (level.random.nextDouble() - 0.5) * 20;
+                                        double oz = (level.random.nextDouble() - 0.5) * 20;
+                                        soltomia.moveTo(player.getX() + ox, player.getY() + 5, player.getZ() + oz, 0, 0);
+                                        level.addFreshEntity(soltomia);
                                     }
 
                                     context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("§dThe Rozitals have arrived!"), true); //debug messsage
@@ -236,7 +249,6 @@ public class VotmEventHandler {
         );
     }
 
-    // Спавн кладов
     @SubscribeEvent
     public static void onPlayerTickDetector(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide() && event.player.tickCount % 40 == 0) {
@@ -361,21 +373,44 @@ public class VotmEventHandler {
             if (level.dimension() == Level.OVERWORLD) {
                 net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(level);
                 manager.tick();
-
-                // --- ЛОГИКА ПОЯВЛЕНИЯ РОЗИТАЛОВ ---
+                // ROZITALS SPAWN
                 if (manager.isRozitalEventPending && manager.currentDay >= manager.rozitalEventTargetDay) {
                     long currentTime = level.getDayTime() % 24000;
                     if (currentTime >= manager.rozitalEventTargetTime) {
                         manager.isRozitalEventPending = false;
                         manager.setDirty();
 
-                        // Спавним над случайным игроком на сервере
                         Player target = level.getRandomPlayer();
                         if (target != null) {
-                            net.votmdevs.voicesofthemines.entity.RozitalShipEntity ship = VoicesOfTheMines.ROZITAL_SHIP.get().create(level);
+                            // SHIP SPAWN
+                            RozitalShipEntity ship = VoicesOfTheMines.ROZITAL_SHIP.get().create(level);
                             if (ship != null) {
                                 ship.moveTo(target.getX(), target.getY() + 30.0D, target.getZ(), target.getYRot(), 0.0F);
                                 level.addFreshEntity(ship);
+                            }
+                            // 3 PYRAMIDS AND 2 SCOUTS SPAWN
+                            for (int i = 0; i < 3; i++) {
+                                double ox = (level.random.nextDouble() - 0.5) * 100;
+                                double oz = (level.random.nextDouble() - 0.5) * 100;
+
+                                RozitalPyramidEntity pyramid = VoicesOfTheMines.ROZITAL_PYRAMID.get().create(level);
+                                if (pyramid != null) {
+                                    pyramid.moveTo(target.getX() + ox, target.getY() + 100, target.getZ() + oz, level.random.nextFloat() * 1080, 0);
+                                    level.addFreshEntity(pyramid);
+                                }
+                            }
+                            // SOLTOMIA SPAWN
+                            SoltomiaEntity soltomia = VoicesOfTheMines.SOLTOMIA.get().create(level);
+                            if (soltomia != null) {
+                                double ox = (level.random.nextDouble() - 0.5) * 20;
+                                double oz = (level.random.nextDouble() - 0.5) * 20;
+
+                                int targetX = (int) (target.getX() + ox);
+                                int targetZ = (int) (target.getZ() + oz);
+                                int groundY = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, targetX, targetZ);
+
+                                soltomia.moveTo(targetX + 0.5, groundY, targetZ + 0.5, 0, 0);
+                                level.addFreshEntity(soltomia);
                             }
                         }
                     }

@@ -42,6 +42,9 @@ public class ClientInputHandler {
     public static int tickUntilClick = 0;
     public static boolean clickWindowActive = false;
 
+    public static int scoutStunTicks = 0;
+    public static int scoutFlashTicks = 0;
+
     public static int evilEventTimer = -1;
     public static int funeralEventTimer = -1;
     public static int evilFlashTicks = 0;
@@ -150,6 +153,9 @@ public class ClientInputHandler {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
 
+        if (scoutStunTicks > 0) scoutStunTicks--;
+        if (scoutFlashTicks > 0) scoutFlashTicks--;
+
 // STETO
         boolean isUsingStethoscope = mc.options.keyUse.isDown() && mc.player.isShiftKeyDown() && mc.player.getMainHandItem().getItem() == VoicesOfTheMines.STETOSCOPE.get();
         BlockPos lookingAtSafe = null;
@@ -157,7 +163,6 @@ public class ClientInputHandler {
         if (isUsingStethoscope && mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult blockHit) {
             if (mc.level.getBlockState(blockHit.getBlockPos()).getBlock() == VoicesOfTheMines.SAFE_BLOCK.get()) {
                 net.minecraft.world.level.block.entity.BlockEntity be = mc.level.getBlockEntity(blockHit.getBlockPos());
-                // Взламываем только если закрыт и есть пароль
                 if (be instanceof net.votmdevs.voicesofthemines.block.SafeBlockEntity safe && safe.doorState == 0 && !safe.passcode.isEmpty()) {
                     lookingAtSafe = blockHit.getBlockPos();
                 }
@@ -198,7 +203,7 @@ public class ClientInputHandler {
         //TRANSFORMERS
 
         BlockPos closestActiveTransformer = null;
-        double closestTransformerDist = 15.0 * 15.0; // Радиус звука
+        double closestTransformerDist = 15.0 * 15.0;
         BlockPos playerPos = mc.player.blockPosition();
 
         for (BlockPos checkPos : BlockPos.betweenClosed(playerPos.offset(-10, -10, -10), playerPos.offset(10, 10, 10))) {
@@ -222,7 +227,7 @@ public class ClientInputHandler {
                 transformerSoundInstance = new TransformerLoopSound(closestActiveTransformer);
                 mc.getSoundManager().play(transformerSoundInstance);
             } else {
-                transformerSoundInstance.updatePos(closestActiveTransformer); // Звук перетекает к ближайшему
+                transformerSoundInstance.updatePos(closestActiveTransformer);
             }
         } else {
             if (transformerSoundInstance != null) {
@@ -232,20 +237,17 @@ public class ClientInputHandler {
         }
 
 
-// --- ЛОГИКА МОЗГА (СНА) ---
-        if (sleepStage == 1) { // Моргание (3 раза)
+        if (sleepStage == 1) {
             sleepTimer++;
-            // Математика синуса для создания 3-х плавных вспышек черного
-            // Скорость 0.2 дает приятный ритм моргания
             sleepOverlayAlpha = (float) Math.max(0, Math.sin(sleepTimer * 0.2f));
 
-            if (sleepTimer > 48) { // Примерно через 2.5 секунды моргание заканчивается
+            if (sleepTimer > 48) {
                 sleepStage = 2;
                 sleepTimer = 0;
             }
         }
-        else if (sleepStage == 2) { // Плавное окончательное затухание
-            sleepOverlayAlpha += 0.02f; // Медленно темнеет
+        else if (sleepStage == 2) {
+            sleepOverlayAlpha += 0.02f;
             if (sleepOverlayAlpha >= 1.0f) {
                 sleepOverlayAlpha = 1.0f;
                 sleepStage = 3;
@@ -592,28 +594,23 @@ public class ClientInputHandler {
 
     @SubscribeEvent
     public static void onMiddleClick(net.minecraftforge.client.event.InputEvent.MouseButton event) {
-        // Код кнопки 2 - это нажатие на колесико мыши
         if (event.getButton() == 2 && event.getAction() == org.lwjgl.glfw.GLFW.GLFW_PRESS) {
             if (activeHackSafe != null) {
                 if (clickWindowActive) {
-                    // ИГРОК УСПЕЛ!
                     hackDigitsUnlocked++;
-                    clickWindowActive = false; // Закрываем окно
+                    clickWindowActive = false;
 
                     Minecraft.getInstance().player.playSound(net.minecraft.sounds.SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5F, 1.0F);
 
                     if (hackDigitsUnlocked >= 4) {
-                        // ВЗЛОМ ЗАВЕРШЕН! Отправляем пакет
                         KerfurPacketHandler.INSTANCE.sendToServer(new KerfurPacketHandler.HackSafePacket(activeHackSafe));
                         activeHackSafe = null;
                         GmodNotificationManager.addNotification("Hack Successful!");
                     } else {
-                        // Генерируем таймер для следующей цифры (немного увеличен)
                         tickUntilClick = 60 + new Random().nextInt(80);
                         GmodNotificationManager.addNotification("Digit " + hackDigitsUnlocked + "/4 unlocked...");
                     }
                 } else {
-                    // Игрок нажал СЛИШКОМ РАНО -> Провал!
                     activeHackSafe = null;
                     GmodNotificationManager.addNotification("Hack failed! Missed the timing.");
                     Minecraft.getInstance().player.playSound(VotmSounds.DENY.get(), 1.0F, 1.0F);
@@ -625,7 +622,7 @@ public class ClientInputHandler {
 
     @SubscribeEvent
     public static void onMovementInput(MovementInputUpdateEvent event) {
-        if (knockdownTicks > 0 || sleepStage > 0) {
+        if (knockdownTicks > 0 || sleepStage > 0 || scoutStunTicks > 0) {
             event.getInput().forwardImpulse = 0;
             event.getInput().leftImpulse = 0;
             event.getInput().up = false;
@@ -700,6 +697,12 @@ public class ClientInputHandler {
             float roll = 0, pitch = event.getPitch(), yaw = event.getYaw();
             float dropOffset = 0, targetDrop = 1.4f;
 
+            if (scoutStunTicks > 0) {
+                float shake = (float)(Math.random() - 0.5) * 5.0f; // Тряска 5 градусов
+                event.setPitch(-90.0F + shake); // Смотрим ровно вверх (-90)
+                event.setYaw(event.getYaw() + shake);
+            }
+
             if (progress < 0.2f) {
                 float p = progress / 0.2f;
                 float ease = p * p * (3 - 2 * p);
@@ -760,6 +763,24 @@ public class ClientInputHandler {
         int height = event.getWindow().getGuiScaledHeight();
 
         if (event.getOverlay() == net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.HOTBAR.type()) {
+            if (scoutFlashTicks > 0) {
+                ResourceLocation PURPLE_OVERLAY = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/purpleoverlay.png");
+                float alpha = scoutFlashTicks / 60.0f; // Плавно исчезает с 1.0 до 0.0
+
+                com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(false);
+                com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+                com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
+
+                event.getGuiGraphics().blit(PURPLE_OVERLAY, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
+
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
+                com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+            }
+
             //SLEEP
             if (sleepStage > 0 && sleepOverlayAlpha > 0) {
                 ResourceLocation BLACK_OVERLAY = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/blackoverlay.png");
