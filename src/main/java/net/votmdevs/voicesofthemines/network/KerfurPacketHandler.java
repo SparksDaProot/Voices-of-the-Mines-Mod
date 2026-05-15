@@ -1662,7 +1662,20 @@ public class KerfurPacketHandler {
         public static void encode(CensorShakePacket msg, net.minecraft.network.FriendlyByteBuf buffer) { buffer.writeBoolean(msg.shaking); }
         public static CensorShakePacket decode(net.minecraft.network.FriendlyByteBuf buffer) { return new CensorShakePacket(buffer.readBoolean()); }
         public static void handle(CensorShakePacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> net.votmdevs.voicesofthemines.client.ClientInputHandler.isCensorShaking = msg.shaking);
+            ctx.get().enqueueWork(() -> {
+                net.votmdevs.voicesofthemines.client.ClientInputHandler.isCensorShaking = msg.shaking;
+
+                if (msg.shaking) {
+                    if (net.votmdevs.voicesofthemines.client.ClientInputHandler.censorChaseSound == null || net.votmdevs.voicesofthemines.client.ClientInputHandler.censorChaseSound.isStopped()) {
+                        net.votmdevs.voicesofthemines.client.ClientInputHandler.censorChaseSound = new net.votmdevs.voicesofthemines.client.ClientInputHandler.CensorChaseSound();
+                        net.minecraft.client.Minecraft.getInstance().getSoundManager().play(net.votmdevs.voicesofthemines.client.ClientInputHandler.censorChaseSound);
+                    }
+                } else {
+                    if (net.votmdevs.voicesofthemines.client.ClientInputHandler.censorChaseSound != null) {
+                        net.votmdevs.voicesofthemines.client.ClientInputHandler.censorChaseSound.fadeOut();
+                    }
+                }
+            });
             ctx.get().setPacketHandled(true);
         }
     }

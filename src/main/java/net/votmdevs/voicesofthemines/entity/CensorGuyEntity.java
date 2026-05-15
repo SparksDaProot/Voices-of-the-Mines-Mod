@@ -67,6 +67,11 @@ public class CensorGuyEntity extends PathfinderMob implements GeoEntity {
             this.setPos(this.getX() + move.x, this.getY() + move.y, this.getZ() + move.z);
 
             if (this.distanceTo(targetPlayer) < 2.0f) {
+                if (this.level() instanceof ServerLevel sl) {
+                    sl.sendParticles(net.minecraft.core.particles.ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 1.0, this.getZ(), 80, 0.5, 1.0, 0.5, 0.05);
+                    sl.sendParticles(net.minecraft.core.particles.ParticleTypes.SQUID_INK, this.getX(), this.getY() + 1.0, this.getZ(), 50, 0.5, 1.0, 0.5, 0.1);
+                }
+
                 KerfurPacketHandler.INSTANCE.sendTo(new KerfurPacketHandler.CensorJumpscarePacket(), ((ServerPlayer)targetPlayer).connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
                 KerfurPacketHandler.INSTANCE.sendTo(new KerfurPacketHandler.CensorShakePacket(false), ((ServerPlayer)targetPlayer).connection.connection, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT);
                 this.discard();
@@ -76,11 +81,18 @@ public class CensorGuyEntity extends PathfinderMob implements GeoEntity {
 
             Vec3 viewVector = targetPlayer.getViewVector(1.0F).normalize();
             Vec3 entityCenter = this.position().add(0, this.getBbHeight() / 2.0, 0);
-            Vec3 toEntity = entityCenter.subtract(targetPlayer.getEyePosition()).normalize();
+            Vec3 toEntity = entityCenter.subtract(targetPlayer.getEyePosition());
+
+            double distance = toEntity.length();
+            toEntity = toEntity.normalize();
 
             double dot = viewVector.dot(toEntity);
 
-            boolean isLookingAt = dot > 0.95;
+
+            double threshold = 1.0 - (0.05 / distance);
+            if (threshold < 0.95) threshold = 0.95;
+
+            boolean isLookingAt = dot > threshold;
             boolean hasLineOfSight = targetPlayer.hasLineOfSight(this);
 
             if (isLookingAt && hasLineOfSight) {

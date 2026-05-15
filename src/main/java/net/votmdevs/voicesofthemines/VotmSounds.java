@@ -281,6 +281,10 @@ public class VotmSounds {
     }
 
     public static final RegistryObject<SoundEvent> RADAR = registerSoundEvent("radar");
+    public static final RegistryObject<SoundEvent> CENSORATTACK = registerSoundEvent("censorattack");
+    public static final RegistryObject<SoundEvent> CENSOR1 = registerSoundEvent("censor1");
+    public static final RegistryObject<SoundEvent> CENSOR2 = registerSoundEvent("censor2");
+    public static final RegistryObject<SoundEvent> CENSOR3 = registerSoundEvent("censor3");
     public static final RegistryObject<SoundEvent> BLAHBLAH = registerSoundEvent("blahblah");
 
 

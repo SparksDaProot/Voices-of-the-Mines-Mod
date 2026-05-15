@@ -140,7 +140,8 @@ public class VotmEventHandler {
                                 float f3 = (float)Math.sin(-pitch * ((float)Math.PI / 180F));
                                 net.minecraft.world.phys.Vec3 lookVec = new net.minecraft.world.phys.Vec3(f1 * f2, f3, f * f2).normalize();
 
-                                double dist = 20 + level.random.nextDouble() * 30;
+                                // ИСПРАВЛЕНИЕ: Увеличили дистанцию до 35-60 блоков
+                                double dist = 35 + level.random.nextDouble() * 25;
                                 net.minecraft.world.phys.Vec3 eyePos = player.getEyePosition();
                                 net.minecraft.world.phys.Vec3 endPos = eyePos.add(lookVec.scale(dist));
 
@@ -154,7 +155,7 @@ public class VotmEventHandler {
                                 }
 
                                 int ty = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int)spawnPos.x, (int)spawnPos.z);
-                                double finalY = Math.max(spawnPos.y, ty + 1.0);
+                                double finalY = Math.max(spawnPos.y, ty + 0.2);
 
                                 censor.moveTo(spawnPos.x, finalY, spawnPos.z, 0, 0);
                                 level.addFreshEntity(censor);
@@ -512,8 +513,22 @@ public class VotmEventHandler {
                         if (level.getGameTime() % 150 == 0 && !net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity.LOADED_RECORDERS.isEmpty()) {
                             if (level.random.nextFloat() < 0.5f) {
                                 net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity be = net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity.LOADED_RECORDERS.get(level.random.nextInt(net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity.LOADED_RECORDERS.size()));
-                                String[] msgs = {"HELP", "LOOK AT ME", "DONT BE AFRAID"};
+                                String[] msgs = {"HELP", "HELLO", "OK", "Y Y Y","I C U", "LOOK AT ME", "I M U", "O I C", "U N I", "C U SOON", "I NO U", "U R MI FREND?", "DONT BE AFRAID"};
                                 be.playMessage(msgs[level.random.nextInt(msgs.length)]);
+                            }
+                        }
+                    }
+                    if (level.getGameTime() % 60 == 0) {
+                        for (Player p : level.players()) {
+                            if (level.random.nextFloat() < 0.15f) { // 15% шанс сыграть звук рядом с игроком
+                                net.minecraft.sounds.SoundEvent[] scarySounds = {
+                                        VotmSounds.CENSOR1.get(),
+                                        VotmSounds.CENSOR2.get(),
+                                        VotmSounds.CENSOR3.get()
+                                };
+                                net.minecraft.sounds.SoundEvent randomSound = scarySounds[level.random.nextInt(scarySounds.length)];
+
+                                level.playSound(null, p.blockPosition(), randomSound, SoundSource.AMBIENT, 1.0f, level.random.nextFloat() * 0.2f + 0.9f);
                             }
                         }
                     }
@@ -532,7 +547,7 @@ public class VotmEventHandler {
                                 float f3 = (float)Math.sin(-pitch * ((float)Math.PI / 180F));
                                 net.minecraft.world.phys.Vec3 lookVec = new net.minecraft.world.phys.Vec3(f1 * f2, f3, f * f2).normalize();
 
-                                double dist = 20 + level.random.nextDouble() * 30;
+                                double dist = 35 + level.random.nextDouble() * 25;
                                 net.minecraft.world.phys.Vec3 eyePos = target.getEyePosition();
                                 net.minecraft.world.phys.Vec3 endPos = eyePos.add(lookVec.scale(dist));
 
@@ -546,7 +561,7 @@ public class VotmEventHandler {
                                 }
 
                                 int ty = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int)spawnPos.x, (int)spawnPos.z);
-                                double finalY = Math.max(spawnPos.y, ty + 1.0);
+                                double finalY = Math.max(spawnPos.y, ty + 0.2);
 
                                 censor.moveTo(spawnPos.x, finalY, spawnPos.z, 0, 0);
                                 level.addFreshEntity(censor);

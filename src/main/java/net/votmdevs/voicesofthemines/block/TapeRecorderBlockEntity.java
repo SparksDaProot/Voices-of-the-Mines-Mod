@@ -219,7 +219,7 @@ public class TapeRecorderBlockEntity extends BlockEntity implements GeoBlockEnti
                         float pitch = 0.9F + (this.level.random.nextFloat() * 0.2F);
                         this.level.playSound(null, this.worldPosition, soundObj.get(), SoundSource.RECORDS, 2.0F, pitch);
                     }
-                    ttsTimer = 2; // reading speed
+                    ttsTimer = 5; // reading speed
                 }
             }
         }

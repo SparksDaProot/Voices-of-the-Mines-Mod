@@ -41,6 +41,7 @@ public class ClientInputHandler {
     public static int hackDigitsUnlocked = 0;
     public static int tickUntilClick = 0;
     public static boolean clickWindowActive = false;
+    public static CensorChaseSound censorChaseSound;
 
     public static int scoutStunTicks = 0;
     public static int scoutFlashTicks = 0;
@@ -967,6 +968,31 @@ public class ClientInputHandler {
         public void tick() {
             if (!this.atv.isAlive() || !this.atv.isEngineOn()) this.stop();
             else { this.x = this.atv.getX(); this.y = this.atv.getY(); this.z = this.atv.getZ(); }
+        }
+    }
+    public static class CensorChaseSound extends net.minecraft.client.resources.sounds.AbstractTickableSoundInstance {
+        private boolean isFadingOut = false;
+
+        public CensorChaseSound() {
+            super(net.votmdevs.voicesofthemines.VotmSounds.CENSORATTACK.get(), net.minecraft.sounds.SoundSource.HOSTILE, net.minecraft.util.RandomSource.create());
+            this.looping = true; // Зацикливаем
+            this.delay = 0;
+            this.volume = 1.0f;
+            this.relative = true; // Звук играет "в голове", как фоновая музыка
+        }
+
+        public void fadeOut() {
+            this.isFadingOut = true;
+        }
+
+        @Override
+        public void tick() {
+            if (this.isFadingOut) {
+                this.volume -= 0.02f;
+                if (this.volume <= 0.0f) {
+                    this.stop();
+                }
+            }
         }
     }
 

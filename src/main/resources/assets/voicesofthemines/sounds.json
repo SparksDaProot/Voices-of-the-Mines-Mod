@@ -237,6 +237,11 @@
 
   "radar": { "sounds": [ "voicesofthemines:radar" ] },
   "blahblah": { "sounds": [ "voicesofthemines:blahblah" ] },
+  "censorattack": { "sounds": [ "voicesofthemines:censorattack" ] },
+
+  "censor1": { "sounds": [ "voicesofthemines:censor1" ] },
+  "censor2": { "sounds": [ "voicesofthemines:censor2" ] },
+  "censor3": { "sounds": [ "voicesofthemines:censor3" ] },
 
   "piramidping1": { "sounds": [ "voicesofthemines:piramidping1" ] },
   "piramidping2": { "sounds": [ "voicesofthemines:piramidping2" ] },
