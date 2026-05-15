@@ -48,6 +48,9 @@ public class SignalManager extends SavedData {
     private int tickCounter = 0;
     private final PlayerData globalPlayerData = new PlayerData();
 
+    public boolean isCensorEventActive = false;
+    public int censorEventTimer = 0;
+
     public boolean isBadSunActive = false;
     private boolean isFirstDayInitialized = false;
 
@@ -394,6 +397,8 @@ public class SignalManager extends SavedData {
 
         tag.putInt("CurrentDay", currentDay);
         tag.putBoolean("BadSun", isBadSunActive);
+        tag.putBoolean("CensorEventActive", isCensorEventActive);
+        tag.putInt("CensorEventTimer", censorEventTimer);
         tag.putBoolean("FirstDayInit", isFirstDayInitialized);
         CompoundTag hashTag = new CompoundTag();
         for (Map.Entry<String, String> e : dailyHashes.entrySet()) hashTag.putString(e.getKey(), e.getValue());
@@ -435,6 +440,13 @@ public class SignalManager extends SavedData {
         if (tag.contains("RozitalTime")) manager.rozitalEventTargetTime = tag.getLong("RozitalTime");
         if (tag.contains("CurrentDay")) manager.currentDay = tag.getInt("CurrentDay");
         if (tag.contains("BadSun")) manager.isBadSunActive = tag.getBoolean("BadSun");
+        if (tag.contains("CensorEventActive")) {
+            manager.isCensorEventActive = tag.getBoolean("CensorEventActive");
+        }
+
+        if (tag.contains("CensorEventTimer")) {
+            manager.censorEventTimer = tag.getInt("CensorEventTimer");
+        }
         if (tag.contains("FirstDayInit")) manager.isFirstDayInitialized = tag.getBoolean("FirstDayInit");
         if (tag.contains("DailyHashes")) {
             CompoundTag ht = tag.getCompound("DailyHashes");

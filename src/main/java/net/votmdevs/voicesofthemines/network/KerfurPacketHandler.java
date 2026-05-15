@@ -5,7 +5,6 @@ import net.minecraft.world.item.ItemStack;
 import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.VotmSounds;
 import net.votmdevs.voicesofthemines.client.gui.GmodNotificationManager;
-import net.votmdevs.voicesofthemines.entity.AbstractMannequinEntity;
 import net.votmdevs.voicesofthemines.entity.FleshEntity;
 import net.votmdevs.voicesofthemines.entity.FuelCanEntity;
 import net.votmdevs.voicesofthemines.entity.GarbageEntity;
@@ -33,6 +32,12 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, SyncCensorStatePacket.class, SyncCensorStatePacket::encode, SyncCensorStatePacket::decode, SyncCensorStatePacket::handle);
+        INSTANCE.registerMessage(id++, CensorShakePacket.class, CensorShakePacket::encode, CensorShakePacket::decode, CensorShakePacket::handle);
+        INSTANCE.registerMessage(id++, CensorJumpscarePacket.class, CensorJumpscarePacket::encode, CensorJumpscarePacket::decode, CensorJumpscarePacket::handle);
+        INSTANCE.registerMessage(id++, TapeGuiClosePacket.class, TapeGuiClosePacket::encode, TapeGuiClosePacket::decode, TapeGuiClosePacket::handle);
+        INSTANCE.registerMessage(id++, OpenTapeGuiPacket.class, OpenTapeGuiPacket::encode, OpenTapeGuiPacket::decode, OpenTapeGuiPacket::handle);
+        INSTANCE.registerMessage(id++, TapeActionPacket.class, TapeActionPacket::encode, TapeActionPacket::decode, TapeActionPacket::handle);
         INSTANCE.registerMessage(id++, ScoutStunPacket.class, ScoutStunPacket::encode, ScoutStunPacket::decode, ScoutStunPacket::handle);
         INSTANCE.registerMessage(id++, SafeCodePacket.class, SafeCodePacket::encode, SafeCodePacket::decode, SafeCodePacket::handle);
         INSTANCE.registerMessage(id++, HackSafePacket.class, HackSafePacket::encode, HackSafePacket::decode, HackSafePacket::handle);
@@ -793,6 +798,8 @@ public class KerfurPacketHandler {
 
         private static net.minecraft.world.item.Item getItemById(String id) {
             switch(id) {
+                case "cassette": return VoicesOfTheMines.CASSETTE.get();
+                case "tape_recorder": return VoicesOfTheMines.TAPE_RECORDER_ITEM.get();
                 case "alarm": return VoicesOfTheMines.ALARM_ITEM.get();
                 case "radio_block": return VoicesOfTheMines.RADIO_BLOCK_ITEM.get();
                 case "vending": return VoicesOfTheMines.VENDING_MACHINE_ITEM.get();
@@ -1552,6 +1559,123 @@ public class KerfurPacketHandler {
                 if (msg.doFlash) {
                     net.votmdevs.voicesofthemines.client.ClientInputHandler.scoutFlashTicks = 60;
                 }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    // Пакет от Сервера Клиенту: Открывает GUI со списком
+    public static class OpenTapeGuiPacket {
+        private final String dataStr;
+        private final BlockPos pos; // 1. Добавляем поле для хранения позиции
+
+        public OpenTapeGuiPacket(String dataStr, BlockPos pos) {
+            this.dataStr = dataStr;
+            this.pos = pos; // 2. Сохраняем позицию в классе
+        }
+
+        public static void encode(OpenTapeGuiPacket msg, net.minecraft.network.FriendlyByteBuf buffer) {
+            buffer.writeUtf(msg.dataStr);
+            buffer.writeBlockPos(msg.pos); // 3. Записываем позицию в сетевой буфер
+        }
+
+        public static OpenTapeGuiPacket decode(net.minecraft.network.FriendlyByteBuf buffer) {
+            // 4. Читаем строку и позицию из буфера (строго в том же порядке, в котором записывали!)
+            return new OpenTapeGuiPacket(buffer.readUtf(), buffer.readBlockPos());
+        }
+
+        public static void handle(OpenTapeGuiPacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                // 5. Передаем msg.pos в конструктор экрана
+                net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TapeRecorderScreen(msg.dataStr, msg.pos));
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    // Пакет от Клиента Серверу: Отправить текст или переименовать
+    public static class TapeActionPacket {
+        private final BlockPos targetPos;
+        private final String text;
+        private final boolean isRename;
+
+        public TapeActionPacket(BlockPos targetPos, String text, boolean isRename) {
+            this.targetPos = targetPos; this.text = text; this.isRename = isRename;
+        }
+
+        public static void encode(TapeActionPacket msg, net.minecraft.network.FriendlyByteBuf buffer) {
+            buffer.writeBlockPos(msg.targetPos); buffer.writeUtf(msg.text); buffer.writeBoolean(msg.isRename);
+        }
+        public static TapeActionPacket decode(net.minecraft.network.FriendlyByteBuf buffer) {
+            return new TapeActionPacket(buffer.readBlockPos(), buffer.readUtf(), buffer.readBoolean());
+        }
+        public static void handle(TapeActionPacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.minecraft.server.level.ServerPlayer player = ctx.get().getSender();
+                if (player != null && player.level().getBlockEntity(msg.targetPos) instanceof net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity be) {
+                    if (msg.isRename) {
+                        be.customName = msg.text;
+                        be.setChanged();
+                    } else {
+                        be.playMessage(msg.text);
+                        // Отправляем пакет всем игрокам вокруг, чтобы они обновили текст и таймер на клиенте
+                        player.level().sendBlockUpdated(msg.targetPos, be.getBlockState(), be.getBlockState(), 3);
+                    }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    // Пакет от Клиента Серверу: Игрок закрыл GUI магнитофона
+    public static class TapeGuiClosePacket {
+        private final BlockPos pos;
+        public TapeGuiClosePacket(BlockPos pos) { this.pos = pos; }
+
+        public static void encode(TapeGuiClosePacket msg, net.minecraft.network.FriendlyByteBuf buffer) { buffer.writeBlockPos(msg.pos); }
+        public static TapeGuiClosePacket decode(net.minecraft.network.FriendlyByteBuf buffer) { return new TapeGuiClosePacket(buffer.readBlockPos()); }
+        public static void handle(TapeGuiClosePacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.minecraft.server.level.ServerPlayer player = ctx.get().getSender();
+                if (player != null && player.level().getBlockEntity(msg.pos) instanceof net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity be) {
+                    be.isRecording = false;
+                    be.syncData();
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    // lamps
+    public static class SyncCensorStatePacket {
+        private final boolean active;
+        public SyncCensorStatePacket(boolean active) { this.active = active; }
+        public static void encode(SyncCensorStatePacket msg, net.minecraft.network.FriendlyByteBuf buffer) { buffer.writeBoolean(msg.active); }
+        public static SyncCensorStatePacket decode(net.minecraft.network.FriendlyByteBuf buffer) { return new SyncCensorStatePacket(buffer.readBoolean()); }
+        public static void handle(SyncCensorStatePacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> net.votmdevs.voicesofthemines.client.ClientInputHandler.IS_CENSOR_EVENT_ACTIVE = msg.active);
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    // screen shake
+    public static class CensorShakePacket {
+        private final boolean shaking;
+        public CensorShakePacket(boolean shaking) { this.shaking = shaking; }
+        public static void encode(CensorShakePacket msg, net.minecraft.network.FriendlyByteBuf buffer) { buffer.writeBoolean(msg.shaking); }
+        public static CensorShakePacket decode(net.minecraft.network.FriendlyByteBuf buffer) { return new CensorShakePacket(buffer.readBoolean()); }
+        public static void handle(CensorShakePacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> net.votmdevs.voicesofthemines.client.ClientInputHandler.isCensorShaking = msg.shaking);
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    // jumpscare
+    public static class CensorJumpscarePacket {
+        public CensorJumpscarePacket() {}
+        public static void encode(CensorJumpscarePacket msg, net.minecraft.network.FriendlyByteBuf buffer) {}
+        public static CensorJumpscarePacket decode(net.minecraft.network.FriendlyByteBuf buffer) { return new CensorJumpscarePacket(); }
+        public static void handle(CensorJumpscarePacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.votmdevs.voicesofthemines.client.ClientInputHandler.censorBlackoutAlpha = 1.0f;
+                net.minecraft.client.Minecraft.getInstance().getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(net.votmdevs.voicesofthemines.VotmSounds.BREATH.get(), 1.0F, 1.0F));
             });
             ctx.get().setPacketHandled(true);
         }

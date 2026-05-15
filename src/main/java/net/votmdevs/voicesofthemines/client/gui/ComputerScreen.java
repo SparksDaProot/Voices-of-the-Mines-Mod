@@ -97,6 +97,8 @@ public class ComputerScreen extends Screen {
 
         // what player can buy
         if (allItems.isEmpty()) {
+            allItems.add(new StoreItem("cassette", "Cassette", new ItemStack(VoicesOfTheMines.CASSETTE.get()), 10, 1));
+            allItems.add(new StoreItem("tape_recorder", "Tape Recorder", new ItemStack(VoicesOfTheMines.TAPE_RECORDER_ITEM.get()), 100, 5));
             allItems.add(new StoreItem("hazard_helmet", "Hazard Helmet", new ItemStack(VoicesOfTheMines.HAZARD_HELMET.get()), 75, 4));
             allItems.add(new StoreItem("hazard_chestplate", "Hazard Chestplate", new ItemStack(VoicesOfTheMines.HAZARD_CHESTPLATE.get()), 75, 4));
             allItems.add(new StoreItem("hazard_leggings", "Hazard Leggings", new ItemStack(VoicesOfTheMines.HAZARD_LEGGINGS.get()), 75, 4));

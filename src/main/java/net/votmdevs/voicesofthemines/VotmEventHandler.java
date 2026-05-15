@@ -1,7 +1,11 @@
 package net.votmdevs.voicesofthemines;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.sounds.SoundSource;
 import net.votmdevs.voicesofthemines.entity.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -21,6 +25,26 @@ import java.util.List;
 public class VotmEventHandler {
 
     @SubscribeEvent
+    public static void onSoundPlayPos(net.minecraftforge.event.PlayLevelSoundEvent.AtPosition event) {
+        if (event.getLevel() instanceof ServerLevel level) {
+            net.minecraft.sounds.SoundEvent sound = event.getSound() != null ? event.getSound().value() : null;
+            if (sound != null) {
+                net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity.recordAmbientSound(level, net.minecraft.core.BlockPos.containing(event.getPosition()), sound, event.getNewVolume(), event.getNewPitch());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onSoundPlayEntity(net.minecraftforge.event.PlayLevelSoundEvent.AtEntity event) {
+        if (event.getLevel() instanceof ServerLevel level && event.getEntity() != null) {
+            net.minecraft.sounds.SoundEvent sound = event.getSound() != null ? event.getSound().value() : null;
+            if (sound != null) {
+                net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity.recordAmbientSound(level, event.getEntity().blockPosition(), sound, event.getNewVolume(), event.getNewPitch());
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void onZombieDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof Zombie zombie) {
             Level level = zombie.level();
@@ -37,7 +61,6 @@ public class VotmEventHandler {
         }
     }
 
-    // badsun
     @SubscribeEvent
     public static void onLivingTick(net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent event) {
         net.minecraft.world.entity.LivingEntity entity = event.getEntity();
@@ -67,12 +90,9 @@ public class VotmEventHandler {
 
                 if (manager.isBadSunActive && serverLevel.isDay()) {
                     if (entity.tickCount % 20 == 0) {
-
                         BlockPos eyePos = BlockPos.containing(entity.getEyePosition());
                         if (serverLevel.canSeeSky(eyePos)) {
-
                             entity.hurt(serverLevel.damageSources().onFire(), 3.0F);
-
                             if (serverLevel.random.nextFloat() < 0.15F) {
                                 FleshEntity flesh = VoicesOfTheMines.FLESH.get().create(serverLevel);
                                 if (flesh != null) {
@@ -88,13 +108,10 @@ public class VotmEventHandler {
         }
     }
 
-    // /votmevent
     @SubscribeEvent
     public static void onCommandsRegister(net.minecraftforge.event.RegisterCommandsEvent event) {
         event.getDispatcher().register(net.minecraft.commands.Commands.literal("votmevent")
                 .requires(s -> s.hasPermission(2))
-
-                // badsun
                 .then(net.minecraft.commands.Commands.literal("badsun")
                         .executes(context -> {
                             ServerLevel level = context.getSource().getLevel();
@@ -107,46 +124,79 @@ public class VotmEventHandler {
                             return 1;
                         })
                 )
-                //ROZITALS
-                        .then(net.minecraft.commands.Commands.literal("rozitals")
-                                .executes(context -> {
-                                    ServerLevel level = context.getSource().getLevel();
-                                    Player player = context.getSource().getPlayerOrException();
+                .then(net.minecraft.commands.Commands.literal("censorguy")
+                        .executes(context -> {
+                            ServerLevel level = context.getSource().getLevel();
+                            Player player = context.getSource().getPlayerOrException();
 
-                                    // SHIP
-                                    RozitalShipEntity ship = VoicesOfTheMines.ROZITAL_SHIP.get().create(level);
-                                    if (ship != null) {
-                                        ship.moveTo(player.getX(), player.getY() + 60.0D, player.getZ(), player.getYRot(), 0.0F);
-                                        level.addFreshEntity(ship);
-                                    }
+                            CensorGuyEntity censor = VoicesOfTheMines.CENSOR_GUY.get().create(level);
+                            if (censor != null) {
+                                float yaw = player.getYRot() + (level.random.nextFloat() - 0.5f) * 60f;
+                                float pitch = player.getXRot();
 
-                                    // PYRAMID
-                                    for (int i = 0; i < 3; i++) {
-                                        RozitalPyramidEntity pyramid = VoicesOfTheMines.ROZITAL_PYRAMID.get().create(level);
-                                        if (pyramid != null) {
-                                            double ox = (level.random.nextDouble() - 0.5) * 100;
-                                            double oz = (level.random.nextDouble() - 0.5) * 100;
-                                            // ASTEROID
-                                            pyramid.moveTo(player.getX() + ox, player.getY() + 100, player.getZ() + oz, level.random.nextFloat() * 1080, 0);
-                                            level.addFreshEntity(pyramid);
-                                        }
-                                    }
+                                float f = (float)Math.cos(-yaw * ((float)Math.PI / 180F) - (float)Math.PI);
+                                float f1 = (float)Math.sin(-yaw * ((float)Math.PI / 180F) - (float)Math.PI);
+                                float f2 = (float)-Math.cos(-pitch * ((float)Math.PI / 180F));
+                                float f3 = (float)Math.sin(-pitch * ((float)Math.PI / 180F));
+                                net.minecraft.world.phys.Vec3 lookVec = new net.minecraft.world.phys.Vec3(f1 * f2, f3, f * f2).normalize();
 
-                                    // SOLTOMIA
-                                    SoltomiaEntity soltomia = VoicesOfTheMines.SOLTOMIA.get().create(level);
-                                    if (soltomia != null) {
-                                        double ox = (level.random.nextDouble() - 0.5) * 20;
-                                        double oz = (level.random.nextDouble() - 0.5) * 20;
-                                        soltomia.moveTo(player.getX() + ox, player.getY() + 5, player.getZ() + oz, 0, 0);
-                                        level.addFreshEntity(soltomia);
-                                    }
+                                double dist = 20 + level.random.nextDouble() * 30;
+                                net.minecraft.world.phys.Vec3 eyePos = player.getEyePosition();
+                                net.minecraft.world.phys.Vec3 endPos = eyePos.add(lookVec.scale(dist));
 
-                                    context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("§dThe Rozitals have arrived!"), true); //debug messsage
-                                    return 1;
-                                })
-                        )
+                                net.minecraft.world.phys.BlockHitResult hit = level.clip(new net.minecraft.world.level.ClipContext(eyePos, endPos, net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, player));
 
-                // /votmevent spsig <signal> - for tests
+                                net.minecraft.world.phys.Vec3 spawnPos;
+                                if (hit.getType() == net.minecraft.world.phys.HitResult.Type.MISS) {
+                                    spawnPos = endPos;
+                                } else {
+                                    spawnPos = hit.getLocation().subtract(lookVec.scale(1.5));
+                                }
+
+                                int ty = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int)spawnPos.x, (int)spawnPos.z);
+                                double finalY = Math.max(spawnPos.y, ty + 1.0);
+
+                                censor.moveTo(spawnPos.x, finalY, spawnPos.z, 0, 0);
+                                level.addFreshEntity(censor);
+                            }
+
+                            context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("§8Censor Guy spawned in field of view..."), true);
+                            return 1;
+                        })
+                )
+                .then(net.minecraft.commands.Commands.literal("rozitals")
+                        .executes(context -> {
+                            ServerLevel level = context.getSource().getLevel();
+                            Player player = context.getSource().getPlayerOrException();
+
+                            RozitalShipEntity ship = VoicesOfTheMines.ROZITAL_SHIP.get().create(level);
+                            if (ship != null) {
+                                ship.moveTo(player.getX(), player.getY() + 60.0D, player.getZ(), player.getYRot(), 0.0F);
+                                level.addFreshEntity(ship);
+                            }
+
+                            for (int i = 0; i < 3; i++) {
+                                RozitalPyramidEntity pyramid = VoicesOfTheMines.ROZITAL_PYRAMID.get().create(level);
+                                if (pyramid != null) {
+                                    double ox = (level.random.nextDouble() - 0.5) * 100;
+                                    double oz = (level.random.nextDouble() - 0.5) * 100;
+                                    pyramid.moveTo(player.getX() + ox, player.getY() + 100, player.getZ() + oz, level.random.nextFloat() * 1080, 0);
+                                    level.addFreshEntity(pyramid);
+                                }
+                            }
+
+                            SoltomiaEntity soltomia = VoicesOfTheMines.SOLTOMIA.get().create(level);
+                            if (soltomia != null) {
+                                double ox = (level.random.nextDouble() - 0.5) * 20;
+                                double oz = (level.random.nextDouble() - 0.5) * 20;
+                                soltomia.moveTo(player.getX() + ox, player.getY() + 5, player.getZ() + oz, 0, 0);
+                                level.addFreshEntity(soltomia);
+                            }
+
+                            context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("§dThe Rozitals have arrived!"), true);
+                            return 1;
+                        })
+                )
                 .then(net.minecraft.commands.Commands.literal("spsig")
                         .then(net.minecraft.commands.Commands.argument("signal_name", com.mojang.brigadier.arguments.StringArgumentType.word())
                                 .executes(context -> {
@@ -157,7 +207,6 @@ public class VotmEventHandler {
                                     net.votmdevs.voicesofthemines.entity.DriveEntity drive = VoicesOfTheMines.DRIVE.get().create(level);
                                     if (drive != null) {
                                         String fakeId = java.util.UUID.randomUUID().toString();
-
                                         drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID, fakeId);
                                         drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_TYPE, signalType);
                                         drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL, 0);
@@ -180,7 +229,6 @@ public class VotmEventHandler {
                                             net.votmdevs.voicesofthemines.entity.DriveEntity drive = VoicesOfTheMines.DRIVE.get().create(level);
                                             if (drive != null) {
                                                 String fakeId = java.util.UUID.randomUUID().toString();
-
                                                 drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_ID, fakeId);
                                                 drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_TYPE, signalType);
                                                 drive.getEntityData().set(net.votmdevs.voicesofthemines.entity.DriveEntity.SIGNAL_LEVEL, sigLvl);
@@ -196,7 +244,6 @@ public class VotmEventHandler {
                                 )
                         )
                 )
-                // /votmevent addpoints
                 .then(net.minecraft.commands.Commands.literal("addpoints")
                         .then(net.minecraft.commands.Commands.argument("amount", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1))
                                 .executes(context -> {
@@ -230,7 +277,7 @@ public class VotmEventHandler {
                         )
                 )
         );
-        // DEBUG COMMAND FOR TESTS DAILY TASKS - CHOOSE DIFFICULTY /repordif
+
         event.getDispatcher().register(net.minecraft.commands.Commands.literal("reportdif")
                 .requires(s -> s.hasPermission(2))
                 .then(net.minecraft.commands.Commands.argument("day", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1))
@@ -264,7 +311,7 @@ public class VotmEventHandler {
                 );
 
                 if (spots.size() < 2) {
-                    if (level.random.nextFloat() < 0.10f) { // 10% шанс каждые 2 секунды
+                    if (level.random.nextFloat() < 0.10f) {
                         double angle = level.random.nextDouble() * Math.PI * 2;
                         double dist = 15 + level.random.nextDouble() * 25;
                         int targetX = (int) (player.getX() + Math.cos(angle) * dist);
@@ -277,7 +324,6 @@ public class VotmEventHandler {
                             TreasureSpotEntity spot = VoicesOfTheMines.TREASURE_SPOT.get().create(level);
                             if (spot != null) {
                                 spot.moveTo(targetX + 0.5, targetY + 1.0, targetZ + 0.5, 0, 0);
-
                                 float roll = level.random.nextFloat();
                                 String lootId = "minecraft:dirt";
 
@@ -294,7 +340,6 @@ public class VotmEventHandler {
 
                                 spot.getEntityData().set(TreasureSpotEntity.LOOT_ID, lootId);
                                 spot.getEntityData().set(TreasureSpotEntity.LOOT_COUNT, 1);
-
                                 level.addFreshEntity(spot);
                             }
                         }
@@ -312,7 +357,6 @@ public class VotmEventHandler {
 
             if (handItem.getItem() == net.minecraft.world.item.Items.IRON_SHOVEL) {
                 BlockPos clickedPos = event.getPos();
-
                 net.minecraft.world.phys.AABB searchBox = new net.minecraft.world.phys.AABB(clickedPos).inflate(1.0D);
                 java.util.List<TreasureSpotEntity> spots = event.getLevel().getEntitiesOfClass(TreasureSpotEntity.class, searchBox);
 
@@ -325,7 +369,6 @@ public class VotmEventHandler {
         }
     }
 
-// TRASH BAG - trash splash
     @SubscribeEvent
     public static void onRightClickBlock(net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
         if (!event.getLevel().isClientSide() && event.getItemStack().getItem() == VoicesOfTheMines.TRASH_BAG.get()) {
@@ -360,7 +403,7 @@ public class VotmEventHandler {
                             net.votmdevs.voicesofthemines.VotmSounds.SPLAT3.get()
                     };
                     net.minecraft.sounds.SoundEvent selectedSplat = splatSounds[event.getLevel().random.nextInt(splatSounds.length)];
-                    event.getLevel().playSound(null, pos, selectedSplat, net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 0.8F + event.getLevel().random.nextFloat() * 0.4F);
+                    event.getLevel().playSound(null, pos, selectedSplat, SoundSource.BLOCKS, 1.0F, 0.8F + event.getLevel().random.nextFloat() * 0.4F);
                 }
             }
         }
@@ -373,7 +416,145 @@ public class VotmEventHandler {
             if (level.dimension() == Level.OVERWORLD) {
                 net.votmdevs.voicesofthemines.world.SignalManager manager = net.votmdevs.voicesofthemines.world.SignalManager.get(level);
                 manager.tick();
-                // ROZITALS SPAWN
+
+                if (manager.isCensorEventActive) {
+                    manager.censorEventTimer--;
+                    if (manager.censorEventTimer <= 0) {
+                        manager.isCensorEventActive = false;
+                        manager.setDirty();
+                        net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.send(net.minecraftforge.network.PacketDistributor.ALL.noArg(), new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.SyncCensorStatePacket(false));
+                    } else {
+                        // CHAOS
+                        if (level.getGameTime() % 15 == 0) {
+                            for (Player p : level.players()) {
+                                if (level.random.nextFloat() < 0.25f) {
+                                    BlockPos center = p.blockPosition();
+                                    java.util.List<BlockPos> interactableBlocks = new java.util.ArrayList<>();
+
+                                    for (BlockPos rp : BlockPos.betweenClosed(center.offset(-10, -5, -10), center.offset(10, 5, 10))) {
+                                        BlockState rs = level.getBlockState(rp);
+                                        Block b = rs.getBlock();
+                                        if (rs.hasProperty(BlockStateProperties.OPEN) ||
+                                                rs.hasProperty(BlockStateProperties.POWERED) ||
+                                                b instanceof net.minecraft.world.level.block.ChestBlock ||
+                                                b instanceof net.minecraft.world.level.block.ShulkerBoxBlock ||
+                                                b instanceof net.minecraft.world.level.block.EnderChestBlock ||
+                                                b instanceof net.minecraft.world.level.block.BellBlock ||
+                                                b instanceof net.minecraft.world.level.block.NoteBlock) {
+                                            interactableBlocks.add(rp.immutable());
+                                        }
+                                    }
+
+                                    if (!interactableBlocks.isEmpty()) {
+                                        BlockPos targetPos = interactableBlocks.get(level.random.nextInt(interactableBlocks.size()));
+                                        BlockState targetState = level.getBlockState(targetPos);
+                                        Block targetBlock = targetState.getBlock();
+
+                                        if (targetBlock instanceof net.minecraft.world.level.block.BellBlock bell) {
+                                            // BELL
+                                            bell.attemptToRing(level, targetPos, null);
+                                        } else if (targetBlock instanceof net.minecraft.world.level.block.NoteBlock) {
+                                            // NOTE BLOCK
+                                            level.blockEvent(targetPos, targetBlock, 0, 0);
+                                            level.playSound(null, targetPos, net.minecraft.sounds.SoundEvents.NOTE_BLOCK_BELL.get(), SoundSource.BLOCKS, 3.0f, level.random.nextFloat() * 1.5f + 0.5f);
+                                        } else if (targetState.hasProperty(BlockStateProperties.OPEN)) {
+                                            // DOORS & TRAPDOORS
+                                            boolean isOpening = !targetState.getValue(BlockStateProperties.OPEN);
+                                            level.setBlock(targetPos, targetState.setValue(BlockStateProperties.OPEN, isOpening), 3);
+
+                                            // SOUNDS
+                                            if (targetBlock instanceof net.minecraft.world.level.block.DoorBlock) {
+                                                level.playSound(null, targetPos, isOpening ? net.minecraft.sounds.SoundEvents.WOODEN_DOOR_OPEN : net.minecraft.sounds.SoundEvents.WOODEN_DOOR_CLOSE, SoundSource.BLOCKS, 1f, 1f);
+                                            } else {
+                                                level.playSound(null, targetPos, isOpening ? net.minecraft.sounds.SoundEvents.WOODEN_TRAPDOOR_OPEN : net.minecraft.sounds.SoundEvents.WOODEN_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 1f, 1f);
+                                            }
+
+                                            if (targetState.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF) && targetState.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER) {
+                                                BlockState upper = level.getBlockState(targetPos.above());
+                                                if (upper.getBlock() == targetBlock && upper.hasProperty(BlockStateProperties.OPEN)) {
+                                                    level.setBlock(targetPos.above(), upper.setValue(BlockStateProperties.OPEN, isOpening), 3);
+                                                }
+                                            }
+                                        } else if (targetState.hasProperty(BlockStateProperties.POWERED) && targetBlock instanceof net.minecraft.world.level.block.LeverBlock) {
+                                            // LEVER
+                                            level.setBlock(targetPos, targetState.setValue(BlockStateProperties.POWERED, !targetState.getValue(BlockStateProperties.POWERED)), 3);
+                                            level.playSound(null, targetPos, net.minecraft.sounds.SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 1f, 1f);
+                                        } else if (targetBlock instanceof net.minecraft.world.level.block.ChestBlock || targetBlock instanceof net.minecraft.world.level.block.ShulkerBoxBlock || targetBlock instanceof net.minecraft.world.level.block.EnderChestBlock) {
+                                            // CHEST,SHULKERS
+                                            level.blockEvent(targetPos, targetBlock, 1, 1);
+
+                                            if (targetBlock instanceof net.minecraft.world.level.block.ShulkerBoxBlock) {
+                                                level.playSound(null, targetPos, net.minecraft.sounds.SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 1f, 1f);
+                                            } else {
+                                                level.playSound(null, targetPos, net.minecraft.sounds.SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5f, 1f);
+                                            }
+
+                                            // AUTO-CLOSE
+                                            new java.util.Timer().schedule(new java.util.TimerTask() {
+                                                @Override
+                                                public void run() {
+                                                    level.getServer().execute(() -> {
+                                                        level.blockEvent(targetPos, targetBlock, 1, 0); // 0 = закрыть
+                                                        if (targetBlock instanceof net.minecraft.world.level.block.ShulkerBoxBlock) {
+                                                            level.playSound(null, targetPos, net.minecraft.sounds.SoundEvents.SHULKER_BOX_CLOSE, SoundSource.BLOCKS, 1f, 1f);
+                                                        } else {
+                                                            level.playSound(null, targetPos, net.minecraft.sounds.SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5f, 1f);
+                                                        }
+                                                    });
+                                                }
+                                            }, 750);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (level.getGameTime() % 150 == 0 && !net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity.LOADED_RECORDERS.isEmpty()) {
+                            if (level.random.nextFloat() < 0.5f) {
+                                net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity be = net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity.LOADED_RECORDERS.get(level.random.nextInt(net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity.LOADED_RECORDERS.size()));
+                                String[] msgs = {"HELP", "LOOK AT ME", "DONT BE AFRAID"};
+                                be.playMessage(msgs[level.random.nextInt(msgs.length)]);
+                            }
+                        }
+                    }
+                } else {
+                    if (level.random.nextInt(200000) == 0) {
+                        Player target = level.getRandomPlayer();
+                        if (target != null) {
+                            CensorGuyEntity censor = VoicesOfTheMines.CENSOR_GUY.get().create(level);
+                            if (censor != null) {
+                                float yaw = target.getYRot() + (level.random.nextFloat() - 0.5f) * 60f;
+                                float pitch = target.getXRot();
+
+                                float f = (float)Math.cos(-yaw * ((float)Math.PI / 180F) - (float)Math.PI);
+                                float f1 = (float)Math.sin(-yaw * ((float)Math.PI / 180F) - (float)Math.PI);
+                                float f2 = (float)-Math.cos(-pitch * ((float)Math.PI / 180F));
+                                float f3 = (float)Math.sin(-pitch * ((float)Math.PI / 180F));
+                                net.minecraft.world.phys.Vec3 lookVec = new net.minecraft.world.phys.Vec3(f1 * f2, f3, f * f2).normalize();
+
+                                double dist = 20 + level.random.nextDouble() * 30;
+                                net.minecraft.world.phys.Vec3 eyePos = target.getEyePosition();
+                                net.minecraft.world.phys.Vec3 endPos = eyePos.add(lookVec.scale(dist));
+
+                                net.minecraft.world.phys.BlockHitResult hit = level.clip(new net.minecraft.world.level.ClipContext(eyePos, endPos, net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, target));
+
+                                net.minecraft.world.phys.Vec3 spawnPos;
+                                if (hit.getType() == net.minecraft.world.phys.HitResult.Type.MISS) {
+                                    spawnPos = endPos;
+                                } else {
+                                    spawnPos = hit.getLocation().subtract(lookVec.scale(1.5));
+                                }
+
+                                int ty = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int)spawnPos.x, (int)spawnPos.z);
+                                double finalY = Math.max(spawnPos.y, ty + 1.0);
+
+                                censor.moveTo(spawnPos.x, finalY, spawnPos.z, 0, 0);
+                                level.addFreshEntity(censor);
+                            }
+                        }
+                    }
+                }
+
                 if (manager.isRozitalEventPending && manager.currentDay >= manager.rozitalEventTargetDay) {
                     long currentTime = level.getDayTime() % 24000;
                     if (currentTime >= manager.rozitalEventTargetTime) {
@@ -382,33 +563,27 @@ public class VotmEventHandler {
 
                         Player target = level.getRandomPlayer();
                         if (target != null) {
-                            // SHIP SPAWN
                             RozitalShipEntity ship = VoicesOfTheMines.ROZITAL_SHIP.get().create(level);
                             if (ship != null) {
                                 ship.moveTo(target.getX(), target.getY() + 30.0D, target.getZ(), target.getYRot(), 0.0F);
                                 level.addFreshEntity(ship);
                             }
-                            // 3 PYRAMIDS AND 2 SCOUTS SPAWN
                             for (int i = 0; i < 3; i++) {
                                 double ox = (level.random.nextDouble() - 0.5) * 100;
                                 double oz = (level.random.nextDouble() - 0.5) * 100;
-
                                 RozitalPyramidEntity pyramid = VoicesOfTheMines.ROZITAL_PYRAMID.get().create(level);
                                 if (pyramid != null) {
                                     pyramid.moveTo(target.getX() + ox, target.getY() + 100, target.getZ() + oz, level.random.nextFloat() * 1080, 0);
                                     level.addFreshEntity(pyramid);
                                 }
                             }
-                            // SOLTOMIA SPAWN
                             SoltomiaEntity soltomia = VoicesOfTheMines.SOLTOMIA.get().create(level);
                             if (soltomia != null) {
                                 double ox = (level.random.nextDouble() - 0.5) * 20;
                                 double oz = (level.random.nextDouble() - 0.5) * 20;
-
                                 int targetX = (int) (target.getX() + ox);
                                 int targetZ = (int) (target.getZ() + oz);
                                 int groundY = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, targetX, targetZ);
-
                                 soltomia.moveTo(targetX + 0.5, groundY, targetZ + 0.5, 0, 0);
                                 level.addFreshEntity(soltomia);
                             }
@@ -431,15 +606,6 @@ public class VotmEventHandler {
                 long protectionTicks = net.votmdevs.voicesofthemines.config.VotmConfig.getRecentlyFixedProtectionTicks();
 
                 if (breakIntervalTicks > 0L && level.getGameTime() % breakIntervalTicks == 0L) {
-                    if (net.votmdevs.voicesofthemines.config.VotmConfig.debugSignalBreaks()) {
-                        VoicesOfTheMines.LOGGER.info(
-                                "[VOTM Signal Debug] Break timer fired at gameTime={} | intervalTicks={} | protectionTicks={}",
-                                level.getGameTime(),
-                                breakIntervalTicks,
-                                protectionTicks
-                        );
-                    }
-
                     manager.degradeRandomCalibration(level.getGameTime(), protectionTicks);
                 }
             }
@@ -473,19 +639,17 @@ public class VotmEventHandler {
                 if (timer > 0) {
                     data.putInt("WispDoomTimer", timer - 1);
                     if (timer - 1 <= 0) {
-                        event.player.kill(); // /kill от лица системы
-                        data.remove("WispDoomTimer"); // Очищаем таймер
+                        event.player.kill();
+                        data.remove("WispDoomTimer");
                     }
                 }
             }
         }
     }
 
-    // Knockdown
     @SubscribeEvent
     public static void onPlayerDamage(net.minecraftforge.event.entity.living.LivingDamageEvent event) {
         if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) {
-
             if (event.getAmount() >= 6.0F) {
                 net.votmdevs.voicesofthemines.network.KerfurPacketHandler.INSTANCE.sendTo(
                         new net.votmdevs.voicesofthemines.network.KerfurPacketHandler.KnockdownPacket(),
@@ -496,14 +660,11 @@ public class VotmEventHandler {
         }
     }
 
-
-    // Radiation/Suit
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide()) {
             Player player = event.player;
             if (player.tickCount % 20 == 0) {
-
                 boolean hasCapsule = false;
                 for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                     if (player.getInventory().getItem(i).getItem() == VoicesOfTheMines.RADIOACTIVE_CAPSULE.get()) {

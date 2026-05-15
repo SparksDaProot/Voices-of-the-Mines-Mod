@@ -270,6 +270,21 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> IMPACT_DRIVE_2 = registerSoundEvent("impact_drive_0002");
     public static final RegistryObject<SoundEvent> IMPACT_DRIVE_3 = registerSoundEvent("impact_drive_0003");
 
+    // ALPHABET TTS
+    public static final java.util.Map<Character, net.minecraftforge.registries.RegistryObject<net.minecraft.sounds.SoundEvent>> TTS_SOUNDS = new java.util.HashMap<>();
+
+    // from a ---> z
+    static {
+        for (char c = 'a'; c <= 'z'; c++) {
+            TTS_SOUNDS.put(c, registerSoundEvent("tts_" + c));
+        }
+    }
+
+    public static final RegistryObject<SoundEvent> RADAR = registerSoundEvent("radar");
+    public static final RegistryObject<SoundEvent> BLAHBLAH = registerSoundEvent("blahblah");
+
+
+
     //ROZITALS
 
     public static final RegistryObject<SoundEvent> ROZITALSHIP_AMBIENCE = registerSoundEvent("rozitalship_ambience");

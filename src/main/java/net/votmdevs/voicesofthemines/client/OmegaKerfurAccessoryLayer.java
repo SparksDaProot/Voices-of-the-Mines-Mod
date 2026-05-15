@@ -23,7 +23,9 @@ public class OmegaKerfurAccessoryLayer extends GeoRenderLayer<OmegaKerfurEntity>
     @Override
     public void render(PoseStack poseStack, OmegaKerfurEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
 
-        if (!animatable.getKerfurAccessory().equals("none")) {
+        String accessory = animatable.getKerfurAccessory();
+
+        if (!accessory.equals("none") && !accessory.equals("plushie_benjikus") && !accessory.equals("paper_sheet")) {
             RenderType armorRenderType = RenderType.entityCutoutNoCull(ACCESSORY_TEXTURE);
             VertexConsumer armorBuffer = bufferSource.getBuffer(armorRenderType);
 

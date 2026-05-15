@@ -45,11 +45,14 @@
   "item.voicesofthemines.sleep_pills": "Sleep Pills",
   "item.voicesofthemines.metal_detector": "Metal Detector",
   "item.voicesofthemines.toolbox": "Toolbox",
+  "item.voicesofthemines.cassette": "Cassette",
   "item.voicesofthemines.garbage_spawn_egg": "Garbage Bag",
 
 
 
   "block.voicesofthemines.kerfur_workbench": "Workbench",
+  "block.voicesofthemines.radar": "Radar",
+  "block.voicesofthemines.tape_recorder": "Tape Recorder",
   "block.voicesofthemines.transformer_block": "Transformer",
   "block.voicesofthemines.safe_block": "Safe",
   "block.voicesofthemines.wall": "Wall block",

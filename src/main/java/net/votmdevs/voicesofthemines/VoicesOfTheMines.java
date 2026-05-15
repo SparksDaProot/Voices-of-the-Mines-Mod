@@ -826,10 +826,51 @@ public class VoicesOfTheMines {
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.VendingBlockEntity::new, VENDING_MACHINE.get()).build(null));
 
 
+    // RADAR
+    public static final RegistryObject<Block> RADAR_BLOCK = BLOCKS.register("radar",
+            () -> new net.votmdevs.voicesofthemines.block.RadarBlock(
+                    net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                            .strength(3.0F).noOcclusion()
+            ));
+
+    public static final RegistryObject<Item> RADAR_ITEM = ITEMS.register("radar",
+            () -> new net.votmdevs.voicesofthemines.item.RadarItem(RADAR_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.RadarBlockEntity>> RADAR_BE = BLOCK_ENTITIES.register("radar",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(
+                    net.votmdevs.voicesofthemines.block.RadarBlockEntity::new, RADAR_BLOCK.get()
+            ).build(null));
+
+    // TAPE RECORDER
+    public static final RegistryObject<Block> TAPE_RECORDER_BLOCK = BLOCKS.register("tape_recorder",
+            () -> new net.votmdevs.voicesofthemines.block.TapeRecorderBlock(
+                    net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                            .strength(3.0F)
+                            .noOcclusion() // Чтобы модель была прозрачной (не рендерила X-Ray пустоты)
+            ));
+
+    // cassette
+    public static final RegistryObject<Item> CASSETTE = ITEMS.register("cassette",
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> TAPE_RECORDER_ITEM = ITEMS.register("tape_recorder",
+            () -> new net.votmdevs.voicesofthemines.item.TapeRecorderItem(TAPE_RECORDER_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity>> TAPE_RECORDER_BE = BLOCK_ENTITIES.register("tape_recorder",
+            () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(
+                    net.votmdevs.voicesofthemines.block.TapeRecorderBlockEntity::new, TAPE_RECORDER_BLOCK.get()
+            ).build(null));
+
+
     public static final RegistryObject<EntityType<RestockerEntity>> RESTOCKER = ENTITY_TYPES.register("restocker",
             () -> EntityType.Builder.of(RestockerEntity::new, MobCategory.CREATURE)
                     .sized(0.6f, 1.0f)
                     .build(ResourceLocation.fromNamespaceAndPath(MODID, "restocker").toString()));
+
+    public static final net.minecraftforge.registries.RegistryObject<net.minecraft.world.entity.EntityType<net.votmdevs.voicesofthemines.entity.CensorGuyEntity>> CENSOR_GUY = ENTITY_TYPES.register("censorguy",
+            () -> net.minecraft.world.entity.EntityType.Builder.of(net.votmdevs.voicesofthemines.entity.CensorGuyEntity::new, net.minecraft.world.entity.MobCategory.MONSTER)
+                    .sized(2.0F, 2.0F) // Размер хитбокса (сделал его широким квадратом 2х2)
+                    .build("censorguy"));
 
     //ALARM
 
@@ -1113,6 +1154,7 @@ public class VoicesOfTheMines {
 
         @SubscribeEvent
         public static void onAttributeCreate(EntityAttributeCreationEvent event) {
+            event.put(CENSOR_GUY.get(), CensorGuyEntity.createAttributes().build());
             event.put(KAVOTIA.get(), KavotiaEntity.createAttributes().build());
             event.put(ROZITAL_SCOUT.get(), RozitalScoutEntity.createAttributes().build());
             event.put(SOLTOMIA.get(), SoltomiaEntity.createAttributes().build());
@@ -1170,6 +1212,9 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerEntityRenderer(CENSOR_GUY.get(), net.votmdevs.voicesofthemines.client.CensorGuyRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.RADAR_BE.get(), net.votmdevs.voicesofthemines.client.RadarRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.TAPE_RECORDER_BE.get(), net.votmdevs.voicesofthemines.client.TapeRecorderRenderer::new);
                 event.registerEntityRenderer(VoicesOfTheMines.KAVOTIA.get(), net.votmdevs.voicesofthemines.client.KavotiaRenderer::new);
                 event.registerEntityRenderer(VoicesOfTheMines.ROZITAL_SCOUT.get(), net.votmdevs.voicesofthemines.client.RozitalScoutRenderer::new);
                 event.registerEntityRenderer(VoicesOfTheMines.SOLTOMIA.get(), net.votmdevs.voicesofthemines.client.SoltomiaRenderer::new);

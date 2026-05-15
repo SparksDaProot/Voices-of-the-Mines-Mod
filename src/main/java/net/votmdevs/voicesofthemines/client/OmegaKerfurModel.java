@@ -11,7 +11,11 @@ public class OmegaKerfurModel extends GeoModel<OmegaKerfurEntity> {
         String accessory = object.getKerfurAccessory();
         String color = object.getKerfurColor();
 
-        if (!accessory.equals("none")) {
+        if (accessory.equals("plushie_benjikus")) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "geo/omega_kerfur_alien.geo.json");
+        } else if (accessory.equals("paper_sheet")) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "geo/omega_kerfur_fuch.geo.json");
+        } else if (!accessory.equals("none")) {
             return new ResourceLocation(VoicesOfTheMines.MODID, "geo/omega_kerfur_" + accessory + ".geo.json");
         }
 
@@ -23,6 +27,14 @@ public class OmegaKerfurModel extends GeoModel<OmegaKerfurEntity> {
 
     @Override
     public ResourceLocation getTextureResource(OmegaKerfurEntity object) {
+        String accessory = object.getKerfurAccessory();
+
+        if (accessory.equals("plushie_benjikus")) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/omega_kerfur_alien.png");
+        } else if (accessory.equals("paper_sheet")) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/omega_kerfur_fuch.png");
+        }
+
         String color = object.getKerfurColor();
         if (color.equals("blue") || color.equals("none")) {
             return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/omega_kerfur.png");
@@ -34,7 +46,9 @@ public class OmegaKerfurModel extends GeoModel<OmegaKerfurEntity> {
     public ResourceLocation getAnimationResource(OmegaKerfurEntity object) {
         String accessory = object.getKerfurAccessory();
 
-        if (!accessory.equals("none")) {
+        if (accessory.equals("plushie_benjikus") || accessory.equals("paper_sheet")) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "animations/omega_kerfur_animations.json");
+        } else if (!accessory.equals("none")) {
             return new ResourceLocation(VoicesOfTheMines.MODID, "animations/omega_kerfur_animations_" + accessory + ".json");
         }
 

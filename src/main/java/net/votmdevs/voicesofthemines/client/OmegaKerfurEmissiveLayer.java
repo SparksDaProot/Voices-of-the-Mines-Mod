@@ -21,14 +21,24 @@ public class OmegaKerfurEmissiveLayer extends GeoRenderLayer<OmegaKerfurEntity> 
     @Override
     public void render(PoseStack poseStack, OmegaKerfurEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
         if (!animatable.isDeactivated()) {
-            ResourceLocation glowTexture = getGlowTextureForColor(animatable.getKerfurColor());
+            ResourceLocation glowTexture = getGlowTextureForEntity(animatable);
             RenderType eyesRenderType = RenderType.eyes(glowTexture);
             VertexConsumer eyesBuffer = bufferSource.getBuffer(eyesRenderType);
             getRenderer().reRender(bakedModel, poseStack, bufferSource, animatable, eyesRenderType, eyesBuffer, partialTick, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
-    private ResourceLocation getGlowTextureForColor(String color) {
+    private ResourceLocation getGlowTextureForEntity(OmegaKerfurEntity animatable) {
+        String accessory = animatable.getKerfurAccessory();
+        String color = animatable.getKerfurColor();
+
+        // emissive for skins
+        if (accessory.equals("plushie_benjikus")) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/omega_kerfur_alien_emissive.png");
+        } else if (accessory.equals("paper_sheet")) {
+            return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/omega_kerfur_fuch_emissive.png");
+        }
+
         if (color.equals("blue") || color.equals("none")) {
             return new ResourceLocation(VoicesOfTheMines.MODID, "textures/entity/omega_emissive_kerfur.png");
         }

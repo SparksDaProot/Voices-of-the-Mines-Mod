@@ -254,10 +254,13 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
 
         ItemStack itemInHand = player.getItemInHand(hand);
 
+        // accesosr
         if (itemInHand.getItem() == VoicesOfTheMines.ACCESSORY_MAID.get() ||
                 itemInHand.getItem() == VoicesOfTheMines.ACCESSORY_RIBBON.get() ||
                 itemInHand.getItem() == VoicesOfTheMines.ACCESSORY_GLASSES.get() ||
-                itemInHand.getItem() == VoicesOfTheMines.ACCESSORY_JACKET.get()) {
+                itemInHand.getItem() == VoicesOfTheMines.ACCESSORY_JACKET.get() ||
+                itemInHand.getItem() == VoicesOfTheMines.PLUSHIE_BENJIKUS_ITEM.get() ||
+                itemInHand.getItem() == VoicesOfTheMines.PAPER_SHEET.get()) {
 
             if (!this.level().isClientSide()) {
                 String currentAcc = this.getKerfurAccessory();
@@ -269,7 +272,7 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
                 }
 
                 String newAccName = ForgeRegistries.ITEMS.getKey(itemInHand.getItem()).getPath();
-                this.setKerfurAccessory(newAccName); // Ставим аксессуар (maid, ribbon, glasses, jacket)
+                this.setKerfurAccessory(newAccName);
 
                 if (!player.isCreative()) {
                     itemInHand.shrink(1);
@@ -279,7 +282,6 @@ public class OmegaKerfurEntity extends TamableAnimal implements GeoEntity, MenuP
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide());
         }
-
 
         if (attackTicks > 0) return InteractionResult.sidedSuccess(this.level().isClientSide());
 

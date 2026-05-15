@@ -43,8 +43,16 @@ public class UpLampBlockEntity extends BlockEntity implements GeoBlockEntity, IP
     public void registerControllers(AnimatableManager.ControllerRegistrar registrar) {
         registrar.add(new AnimationController<>(this, "controller", 0, event -> {
             boolean isLit = getBlockState().getValue(UpLampBlock.LIT);
-            // Если лампа включена, но нет энергии — проигрываем анимацию off
-            if (isLit && isPowered) {
+
+            // event check
+            boolean censorActive = false;
+            if (this.level instanceof net.minecraft.server.level.ServerLevel sl) {
+                censorActive = net.votmdevs.voicesofthemines.world.SignalManager.get(sl).isCensorEventActive;
+            } else if (this.level != null && this.level.isClientSide()) {
+                censorActive = net.votmdevs.voicesofthemines.client.ClientInputHandler.IS_CENSOR_EVENT_ACTIVE;
+            }
+
+            if (isLit && isPowered && !censorActive) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("light"));
             } else {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));

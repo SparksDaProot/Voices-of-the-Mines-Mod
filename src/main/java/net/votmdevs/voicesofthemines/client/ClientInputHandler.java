@@ -45,6 +45,10 @@ public class ClientInputHandler {
     public static int scoutStunTicks = 0;
     public static int scoutFlashTicks = 0;
 
+    public static boolean IS_CENSOR_EVENT_ACTIVE = false;
+    public static boolean isCensorShaking = false;
+    public static float censorBlackoutAlpha = 0.0f;
+
     public static int evilEventTimer = -1;
     public static int funeralEventTimer = -1;
     public static int evilFlashTicks = 0;
@@ -692,6 +696,11 @@ public class ClientInputHandler {
 
     @SubscribeEvent
     public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
+        if (isCensorShaking) {
+            float shake = (float)(Math.random() - 0.5) * 6.0f;
+            event.setPitch(event.getPitch() + shake);
+            event.setYaw(event.getYaw() + shake);
+        }
         if (knockdownTicks > 0) {
             float progress = (80 - knockdownTicks) / 80.0f;
             float roll = 0, pitch = event.getPitch(), yaw = event.getYaw();
@@ -779,6 +788,25 @@ public class ClientInputHandler {
                 com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
                 com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
                 com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+            }
+            // CENSOR GUY
+            if (censorBlackoutAlpha > 0) {
+                ResourceLocation BLACK_OVERLAY = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/blackoverlay.png");
+
+                com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(false);
+                com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+                com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, censorBlackoutAlpha);
+
+                event.getGuiGraphics().blit(BLACK_OVERLAY, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
+
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
+                com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+
+                censorBlackoutAlpha -= 0.005f;
             }
 
             //SLEEP
