@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public enum SignalType {
-    // Format: ID (example: mars), Category (Name for check and processing),
+    // Format: ID (example: mars), Category (Name for calibrate,check,processing),
     // Rarity, CALIBRATE Texture, CHECK (NOISE) Texture, Unique Text in CHECK, Signal Sound
 
     // COMMON
@@ -55,7 +55,7 @@ public enum SignalType {
     EXOGEN1("exogen1", "unind_object", Rarity.RARE, Tex.GENSTARS, Check.NOISE, null, VotmSounds.EXOGEN1::get),
     EXOGEN2("exogen2", "unind_object", Rarity.RARE, Tex.GENSTARS, Check.NOISE, null, VotmSounds.EXOGEN2::get),
     NEUTRON0("neutron0", "star", Rarity.RARE, Tex.STATIC_CAL, Check.NOISE, null, VotmSounds.SIGNAL_NEUTRON0::get),
-    BLACKHOLE0("blackhole0", "blackhole", Rarity.RARE, Tex.SHEET, Check.NOISE, null, VotmSounds.SIGNAL_BLACKHOLE0::get),
+    BLACKHOLE0("blackhole0", "black_hole", Rarity.RARE, Tex.SHEET, Check.NOISE, null, VotmSounds.SIGNAL_BLACKHOLE0::get),
     MONTY("monty", "unind_object", Rarity.RARE, Tex.GENSTARS, Check.UNIQUE, "...come here...", VotmSounds.SIGNAL_MONTY::get),
     SAT1("sat1", "unind_object", Rarity.RARE, Tex.GENSTARS, Check.UNIQUE, null, VotmSounds.SIGNAL_SAT1::get),
     HATEFULSTAR("hatefulstar", "star", Rarity.RARE, Tex.STATIC_CAL, Check.UNIQUE, "1548_EX\n[REDACTED]", VotmSounds.SIGNAL_HATEFULSTAR::get),
