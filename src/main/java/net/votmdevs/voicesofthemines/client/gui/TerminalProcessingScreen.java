@@ -92,7 +92,7 @@ public class TerminalProcessingScreen extends Screen {
         guiGraphics.fill(topWinX, botWinY, topWinX + botLeftW, botWinY + botWinH, 0xFF000000);
 
         if (HAS_ACTIVE_SIGNAL) {
-            String displayName = TerminalCalibrateScreen.getDisplayName(CURRENT_SIGNAL_TYPE);
+            String displayName = net.votmdevs.voicesofthemines.world.SignalType.fromId(CURRENT_SIGNAL_TYPE).getDisplayName();
 
             guiGraphics.drawString(this.font, "DATA:", topWinX + 10, botWinY + 20, 0xFFAA00, false);
             guiGraphics.drawString(this.font, displayName, topWinX + 50, botWinY + 20, 0xFFFFFF, false);

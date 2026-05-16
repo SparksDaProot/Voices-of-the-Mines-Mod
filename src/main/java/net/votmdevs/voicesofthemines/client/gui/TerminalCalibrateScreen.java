@@ -10,6 +10,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.votmdevs.voicesofthemines.world.SignalType;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -201,55 +202,17 @@ public class TerminalCalibrateScreen extends Screen {
         String objectNameText = "no";
 
         if (HAS_ACTIVE_SIGNAL) {
+            SignalType currentType = SignalType.fromId(CURRENT_SIGNAL_TYPE); // ПОЛУЧАЕМ НАШ ENUM
+
             if (data.loadingProgress >= 100f) {
-                objectNameText = getDisplayName(CURRENT_SIGNAL_TYPE);
+                objectNameText = currentType.getDisplayName(); // БЕРЕМ ИМЯ ИЗ ENUM
             }
             float alphaSignal = data.loadingProgress / 100f;
             RenderSystem.setShaderColor(1f, 1f, 1f, alphaSignal);
 
-            ResourceLocation targetTex = null;
-            boolean isAnimatedSheet = false;
-            String t = CURRENT_SIGNAL_TYPE;
-
-            if (t.equals("mars") || t.equals("venus") || t.equals("earth") || t.equals("mercury") ||
-                    t.equals("makemake") || t.equals("rhea") || t.equals("iris") || t.equals("amazur") ||
-                    t.equals("vion") || t.equals("subplanet") || t.equals("europa") || t.equals("moon") ||
-                    t.equals("jupiter") || t.equals("uranus") || t.equals("neptune") || t.equals("saturn") ||
-                    t.equals("hilero") || t.equals("votv_earth") || t.equals("fard") || t.equals("piramid") || t.equals("ironlung") ||
-                    t.equals("asteroid") || t.equals("pizzabreather") || t.equals("blackhole0") || t.equals("io")) {
-
-                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + t + "_sheet.png");
-                isAnimatedSheet = true;
-            }
-            else if (t.equals("tamalan") || t.equals("tamalanflag")) {
-                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/tamalan_sheet.png");
-                isAnimatedSheet = true;
-            }
-            else if (t.equals("retroplanet")) {
-                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/retro_planet_sheet.png");
-                isAnimatedSheet = true;
-            }
-            else if (t.equals("enceladus") || t.equals("ceres") || t.equals("dione") || t.equals("bennu")) {
-                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/grey_sheet.png");
-                isAnimatedSheet = true;
-            }
-            else if (t.equals("evil") || t.equals("neutron0") || t.equals("hatefulstar") || t.equals("tulpar") || t.equals("white_dwarf")) {
-                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/" + t + "_callibrate.png");
-                isAnimatedSheet = false;
-            }
-            else if (t.startsWith("siggen") || t.startsWith("exogen") || t.startsWith("siggenus") || t.equals("hairy") ||
-                    t.equals("funeral") || t.equals("mettus") || t.equals("monty") || t.equals("nev") || t.equals("niko") || t.equals("roz0") || t.equals("sat1")) {
-                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/genstars" + randomStarType + ".png");
-                isAnimatedSheet = false;
-            }
-            else if (t.equals("faces")) {
-                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/faces_im.png");
-                isAnimatedSheet = false;
-            }
-            else {
-                targetTex = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/terminal/generic_signal_image.png");
-                isAnimatedSheet = false;
-            }
+            // ENUM TEXTURE
+            ResourceLocation targetTex = currentType.getCalibrateTexture(randomStarType);
+            boolean isAnimatedSheet = currentType.isAnimated();
 
             if (isAnimatedSheet) {
                 guiGraphics.blit(targetTex, imgX, imgY, 0, noiseFrame * 128, 128, 128, 128, 5120);

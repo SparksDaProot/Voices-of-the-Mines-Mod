@@ -32,6 +32,7 @@ public class KerfurPacketHandler {
 
     public static void register() {
         int id = 0;
+        INSTANCE.registerMessage(id++, ScheduleRozitalPacket.class, ScheduleRozitalPacket::encode, ScheduleRozitalPacket::decode, ScheduleRozitalPacket::handle);
         INSTANCE.registerMessage(id++, SyncCensorStatePacket.class, SyncCensorStatePacket::encode, SyncCensorStatePacket::decode, SyncCensorStatePacket::handle);
         INSTANCE.registerMessage(id++, CensorShakePacket.class, CensorShakePacket::encode, CensorShakePacket::decode, CensorShakePacket::handle);
         INSTANCE.registerMessage(id++, CensorJumpscarePacket.class, CensorJumpscarePacket::encode, CensorJumpscarePacket::decode, CensorJumpscarePacket::handle);
@@ -1563,36 +1564,33 @@ public class KerfurPacketHandler {
             ctx.get().setPacketHandled(true);
         }
     }
-    // Пакет от Сервера Клиенту: Открывает GUI со списком
     public static class OpenTapeGuiPacket {
         private final String dataStr;
-        private final BlockPos pos; // 1. Добавляем поле для хранения позиции
+        private final BlockPos pos;
 
         public OpenTapeGuiPacket(String dataStr, BlockPos pos) {
             this.dataStr = dataStr;
-            this.pos = pos; // 2. Сохраняем позицию в классе
+            this.pos = pos;
         }
 
         public static void encode(OpenTapeGuiPacket msg, net.minecraft.network.FriendlyByteBuf buffer) {
             buffer.writeUtf(msg.dataStr);
-            buffer.writeBlockPos(msg.pos); // 3. Записываем позицию в сетевой буфер
+            buffer.writeBlockPos(msg.pos);
         }
 
         public static OpenTapeGuiPacket decode(net.minecraft.network.FriendlyByteBuf buffer) {
-            // 4. Читаем строку и позицию из буфера (строго в том же порядке, в котором записывали!)
             return new OpenTapeGuiPacket(buffer.readUtf(), buffer.readBlockPos());
         }
 
         public static void handle(OpenTapeGuiPacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
-                // 5. Передаем msg.pos в конструктор экрана
                 net.minecraft.client.Minecraft.getInstance().setScreen(new net.votmdevs.voicesofthemines.client.gui.TapeRecorderScreen(msg.dataStr, msg.pos));
             });
             ctx.get().setPacketHandled(true);
         }
     }
 
-    // Пакет от Клиента Серверу: Отправить текст или переименовать
+    // RENAME
     public static class TapeActionPacket {
         private final BlockPos targetPos;
         private final String text;
@@ -1625,7 +1623,7 @@ public class KerfurPacketHandler {
             ctx.get().setPacketHandled(true);
         }
     }
-    // Пакет от Клиента Серверу: Игрок закрыл GUI магнитофона
+    // TAPE RECORDER
     public static class TapeGuiClosePacket {
         private final BlockPos pos;
         public TapeGuiClosePacket(BlockPos pos) { this.pos = pos; }
@@ -1679,7 +1677,6 @@ public class KerfurPacketHandler {
             ctx.get().setPacketHandled(true);
         }
     }
-
     // jumpscare
     public static class CensorJumpscarePacket {
         public CensorJumpscarePacket() {}
@@ -1689,6 +1686,21 @@ public class KerfurPacketHandler {
             ctx.get().enqueueWork(() -> {
                 net.votmdevs.voicesofthemines.client.ClientInputHandler.censorBlackoutAlpha = 1.0f;
                 net.minecraft.client.Minecraft.getInstance().getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(net.votmdevs.voicesofthemines.VotmSounds.BREATH.get(), 1.0F, 1.0F));
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+    // Rozitals
+    public static class ScheduleRozitalPacket {
+        public ScheduleRozitalPacket() {}
+        public static void encode(ScheduleRozitalPacket msg, net.minecraft.network.FriendlyByteBuf buffer) {}
+        public static ScheduleRozitalPacket decode(net.minecraft.network.FriendlyByteBuf buffer) { return new ScheduleRozitalPacket(); }
+        public static void handle(ScheduleRozitalPacket msg, java.util.function.Supplier<net.minecraftforge.network.NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                net.minecraft.server.level.ServerPlayer player = ctx.get().getSender();
+                if (player != null) {
+                    net.votmdevs.voicesofthemines.world.SignalManager.get(player.serverLevel()).scheduleRozitalEvent();
+                }
             });
             ctx.get().setPacketHandled(true);
         }
