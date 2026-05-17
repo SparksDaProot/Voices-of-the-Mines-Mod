@@ -799,6 +799,19 @@ public class KerfurPacketHandler {
 
         private static net.minecraft.world.item.Item getItemById(String id) {
             switch(id) {
+                case "telescope": return VoicesOfTheMines.TELESCOPE_ITEM.get();
+                case "crate": return VoicesOfTheMines.CRATE_ITEM.get();
+                case "fire_barrel": return VoicesOfTheMines.FIRE_BARREL_ITEM.get();
+                case "aso_sign": return VoicesOfTheMines.ASO_SIGN_ITEM.get();
+                case "shelf": return VoicesOfTheMines.SHELF_ITEM.get();
+                case "postal_box": return VoicesOfTheMines.POSTAL_BOX_ITEM.get();
+                case "cone": return VoicesOfTheMines.CONE_ITEM.get();
+                case "camera_wall": return VoicesOfTheMines.CAMERA_WALL_ITEM.get();
+                case "wet_sign": return VoicesOfTheMines.WET_SIGN_ITEM.get();
+                case "locker": return VoicesOfTheMines.LOCKER_ITEM.get();
+
+
+
                 case "cassette": return VoicesOfTheMines.CASSETTE.get();
                 case "tape_recorder": return VoicesOfTheMines.TAPE_RECORDER_ITEM.get();
                 case "alarm": return VoicesOfTheMines.ALARM_ITEM.get();

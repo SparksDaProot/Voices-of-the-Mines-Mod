@@ -314,6 +314,15 @@ public class DroneEntity extends PathfinderMob implements GeoEntity {
             }
             return totalBoxPrice; // summ
         }
+        if (item == VoicesOfTheMines.TELESCOPE_ITEM.get()) return 10;
+        if (item == VoicesOfTheMines.CRATE_ITEM.get()) return 5;
+        if (item == VoicesOfTheMines.SHELF_ITEM.get()) return 5;
+        if (item == VoicesOfTheMines.FIRE_BARREL_ITEM.get()) return 25;
+        if (item == VoicesOfTheMines.POSTAL_BOX_ITEM.get()) return 2;
+        if (item == VoicesOfTheMines.CONE_ITEM.get()) return 2;
+        if (item == VoicesOfTheMines.CAMERA_WALL_ITEM.get()) return 10;
+        if (item == VoicesOfTheMines.WET_SIGN_ITEM.get()) return 3;
+        if (item == VoicesOfTheMines.LOCKER_ITEM.get()) return 5;
         if (item == VoicesOfTheMines.CASSETTE.get()) return 2;
         if (item == VoicesOfTheMines.TAPE_RECORDER_ITEM.get()) return 50;
         if (item == VoicesOfTheMines.RADIO_BLOCK_ITEM.get()) return 40;

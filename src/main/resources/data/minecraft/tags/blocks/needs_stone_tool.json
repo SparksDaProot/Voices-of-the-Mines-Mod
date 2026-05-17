@@ -3,6 +3,11 @@
   "values": [
     "voicesofthemines:keypad",
     "voicesofthemines:wall",
+    "voicesofthemines:exting",
+    "voicesofthemines:postal_box",
+    "voicesofthemines:camera_wall",
+    "voicesofthemines:locker",
+    "voicesofthemines:telescope",
     "voicesofthemines:wall_down",
     "voicesofthemines:wall_lines",
     "voicesofthemines:greywall_up",

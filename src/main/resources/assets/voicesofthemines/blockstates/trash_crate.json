@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "voicesofthemines:block/trash_crate" },
+    "facing=south": { "model": "voicesofthemines:block/trash_crate", "y": 180 },
+    "facing=west":  { "model": "voicesofthemines:block/trash_crate", "y": 270 },
+    "facing=east":  { "model": "voicesofthemines:block/trash_crate", "y": 90 }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "voicesofthemines:block/postal_box" },
+    "facing=south": { "model": "voicesofthemines:block/postal_box", "y": 180 },
+    "facing=west":  { "model": "voicesofthemines:block/postal_box", "y": 270 },
+    "facing=east":  { "model": "voicesofthemines:block/postal_box", "y": 90 }
+  }
+}

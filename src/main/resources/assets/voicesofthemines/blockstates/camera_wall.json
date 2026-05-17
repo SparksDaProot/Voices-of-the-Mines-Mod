@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "voicesofthemines:block/camera_wall" },
+    "facing=south": { "model": "voicesofthemines:block/camera_wall", "y": 180 },
+    "facing=west":  { "model": "voicesofthemines:block/camera_wall", "y": 270 },
+    "facing=east":  { "model": "voicesofthemines:block/camera_wall", "y": 90 }
+  }
+}

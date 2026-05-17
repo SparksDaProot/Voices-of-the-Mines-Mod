@@ -134,6 +134,16 @@ public class ComputerScreen extends Screen {
             allItems.add(new StoreItem("vending", "Vending Machine", new ItemStack(VoicesOfTheMines.VENDING_MACHINE_ITEM.get()), 120, 25));
             allItems.add(new StoreItem("alarm", "Alarm system", new ItemStack(VoicesOfTheMines.ALARM_ITEM.get()), 80, 5));
             allItems.add(new StoreItem("radio_block", "Radio", new ItemStack(VoicesOfTheMines.RADIO_BLOCK_ITEM.get()), 100, 5));
+            allItems.add(new StoreItem("telescope", "Telescope", new ItemStack(VoicesOfTheMines.TELESCOPE_ITEM.get()), 30, 5));
+            allItems.add(new StoreItem("crate", "Supply Crate", new ItemStack(VoicesOfTheMines.CRATE_ITEM.get()), 20, 10));
+            allItems.add(new StoreItem("fire_barrel", "Barrel of fuel", new ItemStack(VoicesOfTheMines.FIRE_BARREL_ITEM.get()), 50, 5));
+            allItems.add(new StoreItem("aso_sign", "Sign ASO", new ItemStack(VoicesOfTheMines.ASO_SIGN_ITEM.get()), 10, 5));
+            allItems.add(new StoreItem("shelf", "Shelf", new ItemStack(VoicesOfTheMines.SHELF_ITEM.get()), 20, 5));
+            allItems.add(new StoreItem("postal_box", "Postal box", new ItemStack(VoicesOfTheMines.POSTAL_BOX_ITEM.get()), 10, 1));
+            allItems.add(new StoreItem("cone", "Traffic Cone", new ItemStack(VoicesOfTheMines.CONE_ITEM.get()), 20, 1));
+            allItems.add(new StoreItem("camera_wall", "Camera", new ItemStack(VoicesOfTheMines.CAMERA_WALL_ITEM.get()), 50, 1));
+            allItems.add(new StoreItem("wet_sign", "Wet sign", new ItemStack(VoicesOfTheMines.WET_SIGN_ITEM.get()), 10, 1));
+            allItems.add(new StoreItem("locker", "Locker", new ItemStack(VoicesOfTheMines.LOCKER_ITEM.get()), 20, 5));
             allItems.add(new StoreItem("wash_sponge", "Sponge", new ItemStack(VoicesOfTheMines.WASH_SPONGE_ITEM.get()), 5, 1));
             allItems.add(new StoreItem("plushie_benjikus", "Plush Alien", new ItemStack(VoicesOfTheMines.PLUSHIE_BENJIKUS_ITEM.get()), 50, 1));
             allItems.add(new StoreItem("plushie_benjikuscommon", "Plush Benj1kus", new ItemStack(VoicesOfTheMines.PLUSHIE_BENJIKUS_COMMON_ITEM.get()), 50, 1));

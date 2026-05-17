@@ -841,6 +841,198 @@ public class VoicesOfTheMines {
                     net.votmdevs.voicesofthemines.block.RadarBlockEntity::new, RADAR_BLOCK.get()
             ).build(null));
 
+
+    // CRATE
+    public static final RegistryObject<Block> CRATE_BLOCK = BLOCKS.register("crate", () -> new net.votmdevs.voicesofthemines.block.CrateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).strength(1.0F).noOcclusion()));
+    public static final RegistryObject<Item> CRATE_ITEM = ITEMS.register("crate",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    CRATE_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/crate.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/crate.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.CrateBlockEntity>> CRATE_BE = BLOCK_ENTITIES.register("crate", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.CrateBlockEntity::new, CRATE_BLOCK.get()).build(null));
+
+    // STREET LAMP
+    public static final RegistryObject<Block> STREET_LAMP_BLOCK = BLOCKS.register("street_lamp", () -> new net.votmdevs.voicesofthemines.block.StreetLampBlock(BlockBehaviour.Properties.copy(Blocks.NETHERITE_BLOCK).strength(2.0F).requiresCorrectToolForDrops().noOcclusion().lightLevel(s -> 15)));
+    public static final RegistryObject<Item> STREET_LAMP_ITEM = ITEMS.register("street_lamp",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    STREET_LAMP_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/street_lamp.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/street_lamp.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.StreetLampBlockEntity>> STREET_LAMP_BE = BLOCK_ENTITIES.register("street_lamp", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.StreetLampBlockEntity::new, STREET_LAMP_BLOCK.get()).build(null));
+
+    // 3. TELESCOPE
+    public static final RegistryObject<Block> TELESCOPE_BLOCK = BLOCKS.register("telescope", () -> new net.votmdevs.voicesofthemines.block.TelescopeBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(1.5F).requiresCorrectToolForDrops().noOcclusion()));
+    public static final RegistryObject<Item> TELESCOPE_ITEM = ITEMS.register("telescope",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    TELESCOPE_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/telescope.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/telescope.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.TelescopeBlockEntity>> TELESCOPE_BE = BLOCK_ENTITIES.register("telescope", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.TelescopeBlockEntity::new, TELESCOPE_BLOCK.get()).build(null));
+
+
+    // FIRE BARREL
+    public static final RegistryObject<Block> FIRE_BARREL_BLOCK = BLOCKS.register("fire_barrel", () -> new net.votmdevs.voicesofthemines.block.FireBarrelBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(2.0F).requiresCorrectToolForDrops().noOcclusion()));
+    public static final RegistryObject<Item> FIRE_BARREL_ITEM = ITEMS.register("fire_barrel",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    FIRE_BARREL_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/fire_barrel.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/fire_barrel.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.FireBarrelBlockEntity>> FIRE_BARREL_BE = BLOCK_ENTITIES.register("fire_barrel", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.FireBarrelBlockEntity::new, FIRE_BARREL_BLOCK.get()).build(null));
+
+    // TRASH CRATE
+    public static final RegistryObject<Block> TRASH_CRATE_BLOCK = BLOCKS.register("trash_crate", () -> new net.votmdevs.voicesofthemines.block.TrashCrateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).strength(1.0F).noOcclusion()));
+    public static final RegistryObject<Item> TRASH_CRATE_ITEM = ITEMS.register("trash_crate",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    TRASH_CRATE_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/trash_crate.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/trash_crate.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/trash_crate.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.TrashCrateBlockEntity>> TRASH_CRATE_BE = BLOCK_ENTITIES.register("trash_crate", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.TrashCrateBlockEntity::new, TRASH_CRATE_BLOCK.get()).build(null));
+
+
+    // decorative blocks [new]
+
+    // DAP SIGN
+    public static final RegistryObject<Block> DAP_SIGN_BLOCK = BLOCKS.register("dap_sign", () -> new net.votmdevs.voicesofthemines.block.DapSignBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).strength(0.5F).noOcclusion()));
+    public static final RegistryObject<Item> DAP_SIGN_ITEM = ITEMS.register("dap_sign",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    DAP_SIGN_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/dap_sign.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/dap_sign.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.DapSignBlockEntity>> DAP_SIGN_BE = BLOCK_ENTITIES.register("dap_sign", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.DapSignBlockEntity::new, DAP_SIGN_BLOCK.get()).build(null));
+
+    // ASO SIGN
+    public static final RegistryObject<Block> ASO_SIGN_BLOCK = BLOCKS.register("aso_sign", () -> new net.votmdevs.voicesofthemines.block.AsoSignBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).strength(0.5F).noOcclusion()));
+    public static final RegistryObject<Item> ASO_SIGN_ITEM = ITEMS.register("aso_sign",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    ASO_SIGN_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/aso_sign.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/aso_sign.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.AsoSignBlockEntity>> ASO_SIGN_BE = BLOCK_ENTITIES.register("aso_sign", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.AsoSignBlockEntity::new, ASO_SIGN_BLOCK.get()).build(null));
+
+    // SHELF
+    public static final RegistryObject<Block> SHELF_BLOCK = BLOCKS.register("shelf", () -> new net.votmdevs.voicesofthemines.block.ShelfBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.5F).noOcclusion()));
+    public static final RegistryObject<Item> SHELF_ITEM = ITEMS.register("shelf",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    SHELF_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/shelf.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/shelf.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ShelfBlockEntity>> SHELF_BE = BLOCK_ENTITIES.register("shelf", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ShelfBlockEntity::new, SHELF_BLOCK.get()).build(null));
+
+    // POSTAL BOX
+    public static final RegistryObject<Block> POSTAL_BOX_BLOCK = BLOCKS.register("postal_box", () -> new net.votmdevs.voicesofthemines.block.PostalBoxBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(1.0F).requiresCorrectToolForDrops().noOcclusion()));
+    public static final RegistryObject<Item> POSTAL_BOX_ITEM = ITEMS.register("postal_box",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    POSTAL_BOX_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/postal_box.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/postal_box.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.PostalBoxBlockEntity>> POSTAL_BOX_BE = BLOCK_ENTITIES.register("postal_box", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.PostalBoxBlockEntity::new, POSTAL_BOX_BLOCK.get()).build(null));
+
+    // CONE
+    public static final RegistryObject<Block> CONE_BLOCK = BLOCKS.register("cone", () -> new net.votmdevs.voicesofthemines.block.ConeBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).strength(0.5F).noOcclusion()));
+    public static final RegistryObject<Item> CONE_ITEM = ITEMS.register("cone",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    CONE_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/cone.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/cone.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ConeBlockEntity>> CONE_BE = BLOCK_ENTITIES.register("cone", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ConeBlockEntity::new, CONE_BLOCK.get()).build(null));
+
+    // EXTINGUISHER
+    public static final RegistryObject<Block> EXTING_BLOCK = BLOCKS.register("exting", () -> new net.votmdevs.voicesofthemines.block.ExtingBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(1.0F).requiresCorrectToolForDrops().noOcclusion()));
+    public static final RegistryObject<Item> EXTING_ITEM = ITEMS.register("exting",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    EXTING_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/exting.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/exting.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.ExtingBlockEntity>> EXTING_BE = BLOCK_ENTITIES.register("exting", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ExtingBlockEntity::new, EXTING_BLOCK.get()).build(null));
+
+
+    // intercative
+
+    // CAMERA WALL
+    public static final RegistryObject<Block> CAMERA_WALL_BLOCK = BLOCKS.register("camera_wall", () -> new net.votmdevs.voicesofthemines.block.CameraWallBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(1.0F).requiresCorrectToolForDrops().noOcclusion()));
+    public static final RegistryObject<Item> CAMERA_WALL_ITEM = ITEMS.register("camera_wall",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    CAMERA_WALL_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/camera_wall.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/camera_wall.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/camera_wall.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.CameraWallBlockEntity>> CAMERA_WALL_BE = BLOCK_ENTITIES.register("camera_wall", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.CameraWallBlockEntity::new, CAMERA_WALL_BLOCK.get()).build(null));
+
+
+    // WET SIGN & PUDDLE
+    public static final RegistryObject<Block> WET_PUDDLE_BLOCK = BLOCKS.register("wet_puddle",
+            () -> new net.votmdevs.voicesofthemines.block.WetPuddleBlock(
+                    BlockBehaviour.Properties.copy(Blocks.GLASS).instabreak().noCollission().noOcclusion()
+            ));
+    public static final RegistryObject<Item> WET_PUDDLE_ITEM = ITEMS.register("wet_puddle",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    WET_PUDDLE_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/wet_puddle.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/wet_puddle.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.WetPuddleBlockEntity>> WET_PUDDLE_BE = BLOCK_ENTITIES.register("wet_puddle", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.WetPuddleBlockEntity::new, WET_PUDDLE_BLOCK.get()).build(null));
+
+    public static final RegistryObject<Block> WET_SIGN_BLOCK = BLOCKS.register("wet_sign", () -> new net.votmdevs.voicesofthemines.block.WetSignBlock(BlockBehaviour.Properties.copy(Blocks.YELLOW_WOOL).strength(0.5F).noOcclusion()));
+    public static final RegistryObject<Item> WET_SIGN_ITEM = ITEMS.register("wet_sign",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    WET_SIGN_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/wet_sign.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/wet_sign.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.WetSignBlockEntity>> WET_SIGN_BE = BLOCK_ENTITIES.register("wet_sign", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.WetSignBlockEntity::new, WET_SIGN_BLOCK.get()).build(null));
+
+    // LOCKER
+    public static final RegistryObject<Block> LOCKER_BLOCK = BLOCKS.register("locker", () -> new net.votmdevs.voicesofthemines.block.LockerBlock(BlockBehaviour.Properties.copy(Blocks.NETHERITE_BLOCK).strength(2.0F).requiresCorrectToolForDrops().noOcclusion()));
+    public static final RegistryObject<Item> LOCKER_ITEM = ITEMS.register("locker",
+            () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
+                    LOCKER_BLOCK.get(),
+                    new Item.Properties(),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "geo/locker.geo.json"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/locker.png"),
+                    ResourceLocation.fromNamespaceAndPath(MODID, "animations/locker.animation.json")
+            ));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.LockerBlockEntity>> LOCKER_BE = BLOCK_ENTITIES.register("locker", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.LockerBlockEntity::new, LOCKER_BLOCK.get()).build(null));
+
+
     // TAPE RECORDER
     public static final RegistryObject<Block> TAPE_RECORDER_BLOCK = BLOCKS.register("tape_recorder",
             () -> new net.votmdevs.voicesofthemines.block.TapeRecorderBlock(
@@ -1212,6 +1404,21 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(VoicesOfTheMines.FIRE_BARREL_BE.get(), net.votmdevs.voicesofthemines.client.FireBarrelRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.TRASH_CRATE_BE.get(), net.votmdevs.voicesofthemines.client.TrashCrateRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.TELESCOPE_BE.get(), net.votmdevs.voicesofthemines.client.TelescopeRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.CRATE_BE.get(), net.votmdevs.voicesofthemines.client.CrateRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.STREET_LAMP_BE.get(), net.votmdevs.voicesofthemines.client.StreetLampRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.WET_SIGN_BE.get(), net.votmdevs.voicesofthemines.client.WetSignRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.WET_PUDDLE_BE.get(), net.votmdevs.voicesofthemines.client.WetPuddleRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.CAMERA_WALL_BE.get(), net.votmdevs.voicesofthemines.client.CameraWallRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.LOCKER_BE.get(), net.votmdevs.voicesofthemines.client.LockerRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.DAP_SIGN_BE.get(), net.votmdevs.voicesofthemines.client.DapSignRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.ASO_SIGN_BE.get(), net.votmdevs.voicesofthemines.client.AsoSignRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.CONE_BE.get(), net.votmdevs.voicesofthemines.client.ConeRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.SHELF_BE.get(), net.votmdevs.voicesofthemines.client.ShelfRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.EXTING_BE.get(), net.votmdevs.voicesofthemines.client.ExtingRenderer::new);
+                event.registerBlockEntityRenderer(VoicesOfTheMines.POSTAL_BOX_BE.get(), net.votmdevs.voicesofthemines.client.PostalBoxRenderer::new);
                 event.registerEntityRenderer(CENSOR_GUY.get(), net.votmdevs.voicesofthemines.client.CensorGuyRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.RADAR_BE.get(), net.votmdevs.voicesofthemines.client.RadarRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.TAPE_RECORDER_BE.get(), net.votmdevs.voicesofthemines.client.TapeRecorderRenderer::new);

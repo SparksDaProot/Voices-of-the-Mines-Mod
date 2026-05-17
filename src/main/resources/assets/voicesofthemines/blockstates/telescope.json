@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "voicesofthemines:block/telescope" },
+    "facing=south": { "model": "voicesofthemines:block/telescope", "y": 180 },
+    "facing=west":  { "model": "voicesofthemines:block/telescope", "y": 270 },
+    "facing=east":  { "model": "voicesofthemines:block/telescope", "y": 90 }
+  }
+}

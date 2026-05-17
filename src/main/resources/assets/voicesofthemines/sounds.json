@@ -207,6 +207,10 @@
 
   "transform": { "sounds": [ "voicesofthemines:transform" ] },
 
+  "locker_open": { "sounds": [ "voicesofthemines:locker_open" ] },
+  "locker_close": { "sounds": [ "voicesofthemines:locker_close" ] },
+
+
   "camera": { "sounds": [ "voicesofthemines:camera" ] },
   "zoom": { "sounds": [ "voicesofthemines:zoom" ] },
   "kavattack": { "sounds": [ "voicesofthemines:kavattack" ] },

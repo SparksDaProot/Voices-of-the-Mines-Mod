@@ -31,7 +31,11 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> ROAR = registerSoundEvent("roar");
     public static final RegistryObject<SoundEvent> ROAR_PC = registerSoundEvent("roar_pc");
 
-// <CLEANING> sounds
+    public static final RegistryObject<SoundEvent> LOCKER_OPEN = registerSoundEvent("locker_open");
+    public static final RegistryObject<SoundEvent> LOCKER_CLOSE = registerSoundEvent("locker_close");
+
+
+    // <CLEANING> sounds
     public static final RegistryObject<SoundEvent> WATER_SPLASH = registerSoundEvent("water_splash");
     public static final RegistryObject<SoundEvent> SPLAT1 = registerSoundEvent("splat1");
     public static final RegistryObject<SoundEvent> SPLAT2 = registerSoundEvent("splat2");

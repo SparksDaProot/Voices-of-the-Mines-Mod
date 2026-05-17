@@ -45,6 +45,7 @@ public class ClientInputHandler {
 
     public static int scoutStunTicks = 0;
     public static int scoutFlashTicks = 0;
+    public static int telescopeTicks = 0;
 
     public static boolean IS_CENSOR_EVENT_ACTIVE = false;
     public static boolean isCensorShaking = false;
@@ -158,6 +159,7 @@ public class ClientInputHandler {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
 
+        if (telescopeTicks > 0) telescopeTicks--;
         if (scoutStunTicks > 0) scoutStunTicks--;
         if (scoutFlashTicks > 0) scoutFlashTicks--;
 
@@ -784,6 +786,26 @@ public class ClientInputHandler {
                 com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
 
                 event.getGuiGraphics().blit(PURPLE_OVERLAY, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
+
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
+                com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+            }
+            // TELESCOPE VIEW
+            if (telescopeTicks > 0) {
+                ResourceLocation TELESCOPE_OVERLAY = new ResourceLocation(VoicesOfTheMines.MODID, "textures/gui/telescope_view.png");
+
+                com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
+                com.mojang.blaze3d.systems.RenderSystem.depthMask(false);
+                com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+                com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
+
+                // smooth
+                float alpha = telescopeTicks > 10 ? 1.0f : telescopeTicks / 10.0f;
+                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
+
+                event.getGuiGraphics().blit(TELESCOPE_OVERLAY, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
 
                 com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 com.mojang.blaze3d.systems.RenderSystem.depthMask(true);
