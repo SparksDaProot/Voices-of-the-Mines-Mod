@@ -35,6 +35,8 @@ public class TrashCrateBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide) {
+            level.playSound(null, pos, net.votmdevs.voicesofthemines.VotmSounds.TRASH_OPEN.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+
             level.blockEvent(pos, this, 1, 0);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
@@ -56,8 +58,12 @@ public class TrashCrateBlock extends BaseEntityBlock {
                 level.setBlock(targetPos, state, 3);
                 level.removeBlock(pos, false);
                 level.blockEvent(targetPos, this, 2, 0);
+
+                level.playSound(null, targetPos, net.votmdevs.voicesofthemines.VotmSounds.CRATE_IMPACT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
             } else {
                 level.blockEvent(pos, this, 2, 0);
+
+                level.playSound(null, pos, net.votmdevs.voicesofthemines.VotmSounds.CRATE_IMPACT.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }
         super.attack(state, level, pos, player);

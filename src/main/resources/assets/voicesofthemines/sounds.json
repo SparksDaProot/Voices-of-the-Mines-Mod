@@ -195,6 +195,9 @@
   "roar": { "sounds": [ "voicesofthemines:roar" ] },
   "roar_pc": { "sounds": [ "voicesofthemines:roar_pc" ] },
 
+  "trash_open": { "sounds": [ "voicesofthemines:trash_open" ] },
+  "crate_impact": { "sounds": [ "voicesofthemines:crate_impact" ] },
+
   "rozitalship_ambience": { "sounds": [ "voicesofthemines:rozitalship_ambience" ] },
 
   "piramid_step_close1": { "sounds": [ "voicesofthemines:piramid_step_close1" ] },

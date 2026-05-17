@@ -34,6 +34,10 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> LOCKER_OPEN = registerSoundEvent("locker_open");
     public static final RegistryObject<SoundEvent> LOCKER_CLOSE = registerSoundEvent("locker_close");
 
+    public static final RegistryObject<SoundEvent> CRATE_IMPACT = registerSoundEvent("crate_impact");
+    public static final RegistryObject<SoundEvent> TRASH_OPEN = registerSoundEvent("trash_open");
+
+
 
     // <CLEANING> sounds
     public static final RegistryObject<SoundEvent> WATER_SPLASH = registerSoundEvent("water_splash");
