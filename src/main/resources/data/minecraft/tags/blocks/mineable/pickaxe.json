@@ -3,6 +3,8 @@
   "values": [
     "voicesofthemines:keypad",
     "voicesofthemines:wall",
+    "voicesofthemines:radar",
+    "voicesofthemines:safe_block",
     "voicesofthemines:wall_lines",
     "voicesofthemines:wall_down",
     "voicesofthemines:greywall_up",
@@ -29,6 +31,7 @@
     "voicesofthemines:terminal_calibrate",
     "voicesofthemines:terminal_processing",
     "voicesofthemines:table",
+    "voicesofthemines:transformer_block",
     "voicesofthemines:terminal_check",
     "voicesofthemines:terminal_find",
     "voicesofthemines:wall_behind",

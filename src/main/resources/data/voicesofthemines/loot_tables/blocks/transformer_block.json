@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "voicesofthemines:keypad_item"
+          "name": "voicesofthemines:transformer_block"
         }
       ],
       "conditions": [

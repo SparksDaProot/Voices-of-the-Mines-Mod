@@ -133,16 +133,16 @@ public class VoicesOfTheMines {
 
     // WALL
     public static final RegistryObject<Block> WALL_BEHIND = BLOCKS.register("wall_behind",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
-                    Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 14.0D, 16.0D), // North (Теперь вытянут по оси X)
-                    Block.box(0.0D, 0.0D, -16.0D, 16.0D, 14.0D, 32.0D), // East (Теперь вытянут по оси Z)
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(3.0f).requiresCorrectToolForDrops().noOcclusion(),
+                    Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 14.0D, 16.0D), // North
+                    Block.box(0.0D, 0.0D, -16.0D, 16.0D, 14.0D, 32.0D), // East
                     Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 14.0D, 16.0D), // South
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 14.0D, 32.0D)  // West
             ));
 
     // TERMINAL FIND
     public static final RegistryObject<Block> TERMINAL_FIND = BLOCKS.register("terminal_find",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(3.0f).requiresCorrectToolForDrops().noOcclusion(),
                     Block.box(0.0D, 0.0D, -4.0D, 16.0D, 37.0D, 32.0D), // North
                     Block.box(-4.0D, 0.0D, 0.0D, 32.0D, 37.0D, 16.0D), // East
                     Block.box(0.0D, 0.0D, -4.0D, 16.0D, 37.0D, 32.0D), // South
@@ -151,7 +151,7 @@ public class VoicesOfTheMines {
 
     // TERMINAL CHECK
     public static final RegistryObject<Block> TERMINAL_CHECK = BLOCKS.register("terminal_check",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(3.0f).requiresCorrectToolForDrops().noOcclusion(),
                     Block.box(0.0D, 0.0D, -4.0D, 16.0D, 37.0D, 32.0D), // North
                     Block.box(-4.0D, 0.0D, 0.0D, 32.0D, 37.0D, 16.0D), // East
                     Block.box(0.0D, 0.0D, -4.0D, 16.0D, 37.0D, 32.0D), // South
@@ -160,16 +160,16 @@ public class VoicesOfTheMines {
 
     // Table?
     public static final RegistryObject<Block> TABLE = BLOCKS.register("table",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
-                    Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 14.0D, 16.0D), // North (Теперь вытянут по оси X)
-                    Block.box(0.0D, 0.0D, -16.0D, 16.0D, 14.0D, 32.0D), // East (Теперь вытянут по оси Z)
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(3.0f).requiresCorrectToolForDrops().noOcclusion(),
+                    Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 14.0D, 16.0D), // North
+                    Block.box(0.0D, 0.0D, -16.0D, 16.0D, 14.0D, 32.0D), // East
                     Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 14.0D, 16.0D), // South
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 14.0D, 32.0D)  // West
             ));
 
     // hitboxes
     public static final RegistryObject<Block> TERMINAL_PROCESSING = BLOCKS.register("terminal_processing",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(3.0f).requiresCorrectToolForDrops().noOcclusion(),
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 37.0D, 32.0D), // North
                     Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 37.0D, 16.0D), // East
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 37.0D, 32.0D), // South
@@ -177,7 +177,7 @@ public class VoicesOfTheMines {
             ));
 
     public static final RegistryObject<Block> TERMINAL_CALIBRATE = BLOCKS.register("terminal_calibrate",
-            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion(),
+            () -> new net.votmdevs.voicesofthemines.block.VotvTerminalBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(3.0f).requiresCorrectToolForDrops().noOcclusion(),
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 37.0D, 32.0D), // North
                     Block.box(-16.0D, 0.0D, 0.0D, 32.0D, 37.0D, 16.0D), // East
                     Block.box(0.0D, 0.0D, -16.0D, 16.0D, 37.0D, 32.0D), // South
@@ -284,7 +284,7 @@ public class VoicesOfTheMines {
             () -> new net.votmdevs.voicesofthemines.block.PosterBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).instabreak().noCollission().noOcclusion()));
 
     public static final RegistryObject<Block> KEYPAD = BLOCKS.register("keypad",
-            () -> new net.votmdevs.voicesofthemines.block.KeypadBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.KeypadBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(0.5f).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> KEYPAD_ITEM = ITEMS.register("keypad_item",
             () -> new BlockItem(KEYPAD.get(), new Item.Properties()));
@@ -296,7 +296,7 @@ public class VoicesOfTheMines {
             () -> new BlockItem(KERFUR_WORKBENCH.get(), new Item.Properties()));
 
     public static final RegistryObject<Block> VOTV_DOOR = BLOCKS.register("votv_door",
-            () -> new net.votmdevs.voicesofthemines.block.VotvDoorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.VotvDoorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(3.0f).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> VOTV_DOOR_ITEM = ITEMS.register("votv_door",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -597,7 +597,7 @@ public class VoicesOfTheMines {
             () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Block> SERVER_BLOCK = BLOCKS.register("server_block",
-            () -> new net.votmdevs.voicesofthemines.block.ServerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.ServerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(1.0f).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> SERVER_BLOCK_ITEM = ITEMS.register("server_block",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -627,7 +627,7 @@ public class VoicesOfTheMines {
             () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.ConsoleBlockEntity::new, CONSOLE_BLOCK.get()).build(null));
 
     public static final RegistryObject<Block> COMPUTER_CHAIR = BLOCKS.register("computer_chair",
-            () -> new ChairBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
+            () -> new ChairBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(0.5f).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<BlockEntityType<ChairBlockEntity>> CHAIR_BE = BLOCK_ENTITIES.register("chair_be",
             () -> BlockEntityType.Builder.of(ChairBlockEntity::new, COMPUTER_CHAIR.get()).build(null));
@@ -725,7 +725,7 @@ public class VoicesOfTheMines {
             () -> new BlockItem(DRONE_TARGET.get(), new Item.Properties()));
 
     public static final RegistryObject<Block> DRONE_PANEL = BLOCKS.register("drone_panel",
-            () -> new net.votmdevs.voicesofthemines.block.DronePanelBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.DronePanelBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(1.0f).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> DRONE_PANEL_ITEM = ITEMS.register("drone_panel",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -830,7 +830,7 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Block> RADAR_BLOCK = BLOCKS.register("radar",
             () -> new net.votmdevs.voicesofthemines.block.RadarBlock(
                     net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
-                            .strength(3.0F).noOcclusion()
+                            .strength(2.0F).requiresCorrectToolForDrops().noOcclusion()
             ));
 
     public static final RegistryObject<Item> RADAR_ITEM = ITEMS.register("radar",
@@ -844,9 +844,9 @@ public class VoicesOfTheMines {
     // TAPE RECORDER
     public static final RegistryObject<Block> TAPE_RECORDER_BLOCK = BLOCKS.register("tape_recorder",
             () -> new net.votmdevs.voicesofthemines.block.TapeRecorderBlock(
-                    net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
-                            .strength(3.0F)
-                            .noOcclusion() // Чтобы модель была прозрачной (не рендерила X-Ray пустоты)
+                    net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)
+                            .strength(0.5F)
+                            .noOcclusion()
             ));
 
     // cassette
@@ -891,7 +891,7 @@ public class VoicesOfTheMines {
 
     // SAFE
     public static final RegistryObject<Block> SAFE_BLOCK = BLOCKS.register("safe_block",
-            () -> new net.votmdevs.voicesofthemines.block.SafeBlock(BlockBehaviour.Properties.copy(Blocks.ANVIL).strength(5.0F, 1200.0F).requiresCorrectToolForDrops().noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.SafeBlock(BlockBehaviour.Properties.copy(Blocks.NETHERITE_BLOCK).strength(5.0F, 1200.0F).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> SAFE_ITEM = ITEMS.register("safe_block",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -911,7 +911,7 @@ public class VoicesOfTheMines {
     //RADIO
 
     public static final RegistryObject<Block> RADIO_BLOCK = BLOCKS.register("radio_block",
-            () -> new net.votmdevs.voicesofthemines.block.RadioBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.RadioBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(1.0f).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> RADIO_BLOCK_ITEM = ITEMS.register("radio_block",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(
@@ -927,7 +927,7 @@ public class VoicesOfTheMines {
 
 
     public static final RegistryObject<Block> TRANSFORMER_BLOCK = BLOCKS.register("transformer_block",
-            () -> new net.votmdevs.voicesofthemines.block.TransformerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(3.0F, 6.0F).requiresCorrectToolForDrops().noOcclusion()));
+            () -> new net.votmdevs.voicesofthemines.block.TransformerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(10.0F, 6.0F).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final RegistryObject<Item> TRANSFORMER_ITEM = ITEMS.register("transformer_block",
             () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(

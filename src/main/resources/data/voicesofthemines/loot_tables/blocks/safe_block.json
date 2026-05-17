@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "voicesofthemines:keypad_item"
+          "name": "voicesofthemines:safe_block"
         }
       ],
       "conditions": [
