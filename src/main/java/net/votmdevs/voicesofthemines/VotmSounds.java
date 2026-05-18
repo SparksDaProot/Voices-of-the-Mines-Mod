@@ -162,6 +162,36 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> SIGNAL_WHITEDWARF = registerSoundEvent("signal_whitedwarf");
     public static final RegistryObject<SoundEvent> SIGNAL_PIRAMID = registerSoundEvent("signal_piramid");
 
+    public static final RegistryObject<SoundEvent> SIGNAL_RED_DWARF = registerSoundEvent("signal_red_dwarf");
+    public static final RegistryObject<SoundEvent> SIGNAL_RED_GIANT = registerSoundEvent("signal_red_giant");
+    public static final RegistryObject<SoundEvent> SIGNAL_BROWN_DWARF = registerSoundEvent("signal_brown_dwarf");
+    public static final RegistryObject<SoundEvent> SIGNAL_LIFE_CRYSTAL = registerSoundEvent("signal_life_crystal");
+    public static final RegistryObject<SoundEvent> SIGNAL_UAP = registerSoundEvent("signal_uap");
+    public static final RegistryObject<SoundEvent> SIGNAL_COFFIN = registerSoundEvent("signal_coffin");
+    public static final RegistryObject<SoundEvent> SIGNAL_COMET = registerSoundEvent("signal_comet");
+    public static final RegistryObject<SoundEvent> SIGNAL_TARDIS = registerSoundEvent("signal_tardis");
+    public static final RegistryObject<SoundEvent> SIGNAL_OVALIUS = registerSoundEvent("signal_ovalius");
+    public static final RegistryObject<SoundEvent> SIGNAL_MREOWS = registerSoundEvent("signal_mreows");
+    public static final RegistryObject<SoundEvent> SIGNAL_OBSERVER = registerSoundEvent("signal_observer");
+
+    public static final RegistryObject<SoundEvent> SIGNAL_HA = registerSoundEvent("signal_ha");
+    public static final RegistryObject<SoundEvent> SIGNAL_DNOOSE = registerSoundEvent("signal_dnoose");
+    public static final RegistryObject<SoundEvent> SIGNAL_WOOSHES = registerSoundEvent("signal_wooshes");
+    public static final RegistryObject<SoundEvent> SIGNAL_CRISPS = registerSoundEvent("signal_crisps");
+    public static final RegistryObject<SoundEvent> SIGNAL_GARGLE = registerSoundEvent("signal_gargle");
+    public static final RegistryObject<SoundEvent> SIGNAL_HISSES = registerSoundEvent("signal_hisses");
+    public static final RegistryObject<SoundEvent> SIGNAL_BASSER = registerSoundEvent("signal_basser");
+    public static final RegistryObject<SoundEvent> SIGNAL_SHIFFLER = registerSoundEvent("signal_shiffler");
+    public static final RegistryObject<SoundEvent> SIGNAL_BIRBIES = registerSoundEvent("signal_birbies");
+    public static final RegistryObject<SoundEvent> SIGNAL_WOO = registerSoundEvent("signal_woo");
+    public static final RegistryObject<SoundEvent> SIGNAL_FLESH = registerSoundEvent("signal_flesh");
+    public static final RegistryObject<SoundEvent> SIGNAL_POEM = registerSoundEvent("signal_poem");
+    public static final RegistryObject<SoundEvent> SIGNAL_CORPSE = registerSoundEvent("signal_corpse");
+    public static final RegistryObject<SoundEvent> SIGNAL_KER = registerSoundEvent("signal_ker");
+    public static final RegistryObject<SoundEvent> SIGNAL_AAA = registerSoundEvent("signal_aaa");
+    public static final RegistryObject<SoundEvent> SIGNAL_FUNNY = registerSoundEvent("signal_funny");
+    public static final RegistryObject<SoundEvent> SIGNAL_ARZY = registerSoundEvent("signal_arzy");
+
     public static final RegistryObject<SoundEvent> SIGNAL_TULPAR = registerSoundEvent("signal_tulpar");
     public static final RegistryObject<SoundEvent> SIGNAL_HATEFULSTAR = registerSoundEvent("signal_hatefulstar");
 
