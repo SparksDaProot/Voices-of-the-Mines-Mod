@@ -363,7 +363,7 @@ public class SignalManager extends SavedData {
                 float randX = (float) ((Math.random() - 0.5) * 10000); float randY = (float) ((Math.random() - 0.5) * 10000);
                 float tLine = (float) (Math.random() * 300); float tWave = (float) (Math.random() * 300);
 
-                SignalType type = SignalType.getRandomSignal(Math.random() * 100);
+                SignalType type = SignalType.getRandomSignal();
 
                 activeSignals.add(new VotvSignal(UUID.randomUUID().toString(), randX, randY, type.getId(), false, false, false, tLine, tWave));
                 setDirty();

@@ -175,8 +175,30 @@ public enum SignalType {
         return UNKNOWN;
     }
 
-    public static SignalType getRandomSignal(double roll) {
-        Rarity targetRarity = roll < 60 ? Rarity.COMMON : roll < 85 ? Rarity.RARE : roll < 95 ? Rarity.RARER : Rarity.VERY_RARE;
+    public static SignalType getRandomSignal() {
+        int common = net.votmdevs.voicesofthemines.config.VotmConfig.getCommonWeight();
+        int rare = net.votmdevs.voicesofthemines.config.VotmConfig.getRareWeight();
+        int rarer = net.votmdevs.voicesofthemines.config.VotmConfig.getRarerWeight();
+        int veryRare = net.votmdevs.voicesofthemines.config.VotmConfig.getVeryRareWeight();
+
+        int totalWeight = common + rare + rarer + veryRare;
+
+        // Защита от краша: если игрок случайно поставит все значения на 0 в конфиге
+        if (totalWeight <= 0) return UNKNOWN;
+
+        int roll = new Random().nextInt(totalWeight);
+        Rarity targetRarity;
+
+        if (roll < common) {
+            targetRarity = Rarity.COMMON;
+        } else if (roll < common + rare) {
+            targetRarity = Rarity.RARE;
+        } else if (roll < common + rare + rarer) {
+            targetRarity = Rarity.RARER;
+        } else {
+            targetRarity = Rarity.VERY_RARE;
+        }
+
         List<SignalType> valid = Arrays.stream(values()).filter(s -> s.rarity == targetRarity).toList();
         return valid.isEmpty() ? UNKNOWN : valid.get(new Random().nextInt(valid.size()));
     }

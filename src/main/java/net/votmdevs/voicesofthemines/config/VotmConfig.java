@@ -10,6 +10,10 @@ public class VotmConfig {
     public static final ForgeConfigSpec.DoubleValue RECENTLY_FIXED_PROTECTION_MINUTES;
     public static final ForgeConfigSpec.BooleanValue DEBUG_SIGNAL_BREAKS;
     public static final ForgeConfigSpec.DoubleValue TERMINAL_PUNCH_DAMAGE;
+    public static final ForgeConfigSpec.IntValue COMMON_WEIGHT;
+    public static final ForgeConfigSpec.IntValue RARE_WEIGHT;
+    public static final ForgeConfigSpec.IntValue RARER_WEIGHT;
+    public static final ForgeConfigSpec.IntValue VERY_RARE_WEIGHT;
 
     public static final ForgeConfigSpec.IntValue PYRAMID_KILL_QUOTA;
 
@@ -25,6 +29,23 @@ public class VotmConfig {
                 "For timer options, 0 disables that feature."
         );
         builder.push("signals");
+
+        // Signal rare config
+        COMMON_WEIGHT = builder
+                .comment("Weight for COMMON signals to spawn (higher value = spawns more often). Default: 60")
+                .defineInRange("commonSignalWeight", 50, 0, 10000);
+
+        RARE_WEIGHT = builder
+                .comment("Weight for RARE signals to spawn. Default: 25")
+                .defineInRange("rareSignalWeight", 25, 0, 10000);
+
+        RARER_WEIGHT = builder
+                .comment("Weight for RARER signals to spawn. Default: 10")
+                .defineInRange("rarerSignalWeight", 10, 0, 10000);
+
+        VERY_RARE_WEIGHT = builder
+                .comment("Weight for VERY RARE signals to spawn. Default: 5")
+                .defineInRange("veryRareSignalWeight", 5, 0, 10000);
 
         SERVER_BREAK_INTERVAL_MINUTES = builder
                 .comment("How often one random server/satellite loses calibration.")
@@ -70,6 +91,14 @@ public class VotmConfig {
     public static boolean debugSignalBreaks() {
         return DEBUG_SIGNAL_BREAKS.get();
     }
+
+    public static int getCommonWeight() { return COMMON_WEIGHT.get(); }
+
+    public static int getRareWeight() { return RARE_WEIGHT.get(); }
+
+    public static int getRarerWeight() { return RARER_WEIGHT.get(); }
+
+    public static int getVeryRareWeight() { return VERY_RARE_WEIGHT.get(); }
 
     public static int getPyramidKillQuota() {
         return PYRAMID_KILL_QUOTA.get();
