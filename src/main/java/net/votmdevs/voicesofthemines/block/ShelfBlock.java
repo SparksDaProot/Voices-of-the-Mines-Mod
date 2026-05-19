@@ -15,10 +15,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-
 public class ShelfBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    private static final VoxelShape SHAPE = Block.box(-8.5D, 0.0D, 0.0D, 24.5D, 31.0D, 16.0D);
+
+    private static final VoxelShape SHAPE_NS = Block.box(-8.5D, 0.0D, 0.0D, 24.5D, 31.0D, 16.0D);
+
+    private static final VoxelShape SHAPE_EW = Block.box(0.0D, 0.0D, -8.5D, 16.0D, 31.0D, 24.5D);
 
     public ShelfBlock(Properties properties) {
         super(properties);
@@ -26,7 +28,12 @@ public class ShelfBlock extends BaseEntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) { return SHAPE; }
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(FACING)) {
+            case EAST, WEST -> SHAPE_EW;
+            default -> SHAPE_NS;
+        };
+    }
 
     @Override
     public RenderShape getRenderShape(BlockState state) { return RenderShape.ENTITYBLOCK_ANIMATED; }
