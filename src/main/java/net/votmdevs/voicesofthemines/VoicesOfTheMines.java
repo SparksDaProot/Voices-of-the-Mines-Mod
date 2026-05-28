@@ -841,6 +841,10 @@ public class VoicesOfTheMines {
                     net.votmdevs.voicesofthemines.block.RadarBlockEntity::new, RADAR_BLOCK.get()
             ).build(null));
 
+    // GARAGE DOOR (ГАРАЖНАЯ ДВЕРЬ)
+    public static final RegistryObject<Block> GARAGE_DOOR_BLOCK = BLOCKS.register("garage_door", () -> new net.votmdevs.voicesofthemines.block.GarageDoorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).strength(3.0F).noOcclusion()));
+    public static final RegistryObject<Item> GARAGE_DOOR_ITEM = ITEMS.register("garage_door", () -> new net.votmdevs.voicesofthemines.item.GeoBlockItem(GARAGE_DOOR_BLOCK.get(), new Item.Properties(), ResourceLocation.fromNamespaceAndPath(MODID, "geo/garage.geo.json"), ResourceLocation.fromNamespaceAndPath(MODID, "textures/block/garage.png"), ResourceLocation.fromNamespaceAndPath(MODID, "animations/garage.animation.json")));
+    public static final RegistryObject<net.minecraft.world.level.block.entity.BlockEntityType<net.votmdevs.voicesofthemines.block.GarageDoorBlockEntity>> GARAGE_DOOR_BE = BLOCK_ENTITIES.register("garage_door", () -> net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(net.votmdevs.voicesofthemines.block.GarageDoorBlockEntity::new, GARAGE_DOOR_BLOCK.get()).build(null));
 
     // CRATE
     public static final RegistryObject<Block> CRATE_BLOCK = BLOCKS.register("crate", () -> new net.votmdevs.voicesofthemines.block.CrateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).strength(1.0F).noOcclusion()));
@@ -1404,6 +1408,7 @@ public class VoicesOfTheMines {
 
             @SubscribeEvent
             public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+                event.registerBlockEntityRenderer(VoicesOfTheMines.GARAGE_DOOR_BE.get(), GarageDoorRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.FIRE_BARREL_BE.get(), net.votmdevs.voicesofthemines.client.FireBarrelRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.TRASH_CRATE_BE.get(), net.votmdevs.voicesofthemines.client.TrashCrateRenderer::new);
                 event.registerBlockEntityRenderer(VoicesOfTheMines.TELESCOPE_BE.get(), net.votmdevs.voicesofthemines.client.TelescopeRenderer::new);

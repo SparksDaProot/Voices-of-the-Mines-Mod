@@ -1,0 +1,99 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 512,
+				"texture_height": 512,
+				"visible_bounds_width": 11,
+				"visible_bounds_height": 6.5,
+				"visible_bounds_offset": [0, 2.75, 0]
+			},
+			"bones": [
+				{
+					"name": "gdoor",
+					"pivot": [0, 45.28571, -3.28571]
+				},
+				{
+					"name": "bone",
+					"parent": "gdoor",
+					"pivot": [-74, 58.5, -12.75],
+					"cubes": [
+						{"origin": [-76, 74, -50], "size": [4, 6, 48], "uv": [0, 21]},
+						{"origin": [-76, 0, -2], "size": [4, 80, 5], "uv": [0, 75]}
+					]
+				},
+				{
+					"name": "garage_door",
+					"parent": "gdoor",
+					"pivot": [0, 40, 0.5]
+				},
+				{
+					"name": "gp",
+					"parent": "garage_door",
+					"pivot": [0, 0, 0.5],
+					"cubes": [
+						{"origin": [-72, 0, -2], "size": [144, 16, 5], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "gbp",
+					"parent": "garage_door",
+					"pivot": [0, 17, 0.5]
+				},
+				{
+					"name": "gbp2",
+					"parent": "gbp",
+					"pivot": [0, 33, 0.5]
+				},
+				{
+					"name": "gbp3",
+					"parent": "gbp2",
+					"pivot": [0, 48, 0.5]
+				},
+				{
+					"name": "gp4",
+					"parent": "gbp3",
+					"pivot": [0, 48, 0.5],
+					"cubes": [
+						{"origin": [-72, 48, -2], "size": [144, 16, 5], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "gp5",
+					"parent": "gbp3",
+					"pivot": [0, 64, 0.5],
+					"cubes": [
+						{"origin": [-72, 64, -2], "size": [144, 16, 5], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "gp3",
+					"parent": "gbp2",
+					"pivot": [0, 32, 0.5],
+					"cubes": [
+						{"origin": [-72, 32, -2], "size": [144, 16, 5], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "gp2",
+					"parent": "gbp",
+					"pivot": [0, 16, 0.5],
+					"cubes": [
+						{"origin": [-72, 16, -2], "size": [144, 16, 5], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "bone2",
+					"parent": "gdoor",
+					"pivot": [74, 58.5, -12.75],
+					"cubes": [
+						{"origin": [72, 74, -50], "size": [4, 6, 48], "uv": [0, 21], "mirror": true},
+						{"origin": [72, 0, -2], "size": [4, 80, 5], "uv": [0, 75], "mirror": true}
+					]
+				}
+			]
+		}
+	]
+}

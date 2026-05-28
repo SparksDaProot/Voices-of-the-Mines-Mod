@@ -372,6 +372,9 @@ public class VotmSounds {
     public static final RegistryObject<SoundEvent> PYRAMID_GRAB = registerSoundEvent("pyramid_grab");
     public static final RegistryObject<SoundEvent> PYRAMID_HOLD = registerSoundEvent("pyramid_hold");
 
+    public static final RegistryObject<SoundEvent> GARAGE_OPEN = registerSoundEvent("garage_open");
+    public static final RegistryObject<SoundEvent> GARAGE_CLOSE = registerSoundEvent("garage_close");
+
     // Flesh
     public static final RegistryObject<SoundEvent> FLESH_GRAB = registerSoundEvent("flesh_grab");
     public static final RegistryObject<SoundEvent> FLESH_DROP = registerSoundEvent("flesh_drop");

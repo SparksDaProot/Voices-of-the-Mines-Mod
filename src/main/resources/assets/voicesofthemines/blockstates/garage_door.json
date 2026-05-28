@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "facing=north,open=false": { "model": "voicesofthemines:block/garage_door" },
+    "facing=north,open=true":  { "model": "voicesofthemines:block/garage_door" },
+
+    "facing=east,open=false":  { "model": "voicesofthemines:block/garage_door", "y": 90 },
+    "facing=east,open=true":   { "model": "voicesofthemines:block/garage_door", "y": 90 },
+
+    "facing=south,open=false": { "model": "voicesofthemines:block/garage_door", "y": 180 },
+    "facing=south,open=true":  { "model": "voicesofthemines:block/garage_door", "y": 180 },
+
+    "facing=west,open=false":  { "model": "voicesofthemines:block/garage_door", "y": 270 },
+    "facing=west,open=true":   { "model": "voicesofthemines:block/garage_door", "y": 270 }
+  }
+}
