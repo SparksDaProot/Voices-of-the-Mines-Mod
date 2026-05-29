@@ -18,79 +18,81 @@
 				{
 					"name": "bone",
 					"parent": "gdoor",
-					"pivot": [-74, 58.5, -12.75],
+					"pivot": [-54, 58.5, -12.75],
 					"cubes": [
-						{"origin": [-76, 74, -50], "size": [4, 6, 48], "uv": [0, 21]},
-						{"origin": [-76, 0, -2], "size": [4, 80, 5], "uv": [0, 75]}
+						{"origin": [-56, 58, -50], "size": [4, 6, 48], "uv": [0, 21]},
+						{"origin": [-56, 0, -2], "size": [4, 64, 5], "uv": [0, 75]}
 					]
 				},
 				{
-					"name": "garage_door",
+					"name": "gad",
 					"parent": "gdoor",
 					"pivot": [0, 40, 0.5]
 				},
 				{
-					"name": "gp",
-					"parent": "garage_door",
-					"pivot": [0, 0, 0.5],
-					"cubes": [
-						{"origin": [-72, 0, -2], "size": [144, 16, 5], "uv": [0, 0]}
-					]
+					"name": "garage_door",
+					"parent": "gad",
+					"pivot": [0, 40, 0.5]
 				},
 				{
 					"name": "gbp",
 					"parent": "garage_door",
-					"pivot": [0, 17, 0.5]
+					"pivot": [0, 0, 0.5]
+				},
+				{
+					"name": "gp",
+					"parent": "gbp",
+					"pivot": [0, 0, 0.5],
+					"cubes": [
+						{"origin": [-52, 0, -2], "size": [104, 16, 5], "uv": [20, 0]}
+					]
 				},
 				{
 					"name": "gbp2",
 					"parent": "gbp",
-					"pivot": [0, 33, 0.5]
+					"pivot": [0, 16, 0.5]
+				},
+				{
+					"name": "gp2",
+					"parent": "gbp2",
+					"pivot": [0, 16, 0.5],
+					"cubes": [
+						{"origin": [-52, 16, -2], "size": [104, 16, 5], "uv": [20, 0]}
+					]
 				},
 				{
 					"name": "gbp3",
 					"parent": "gbp2",
-					"pivot": [0, 48, 0.5]
+					"pivot": [0, 32, 0.5]
 				},
 				{
 					"name": "gp4",
 					"parent": "gbp3",
 					"pivot": [0, 48, 0.5],
 					"cubes": [
-						{"origin": [-72, 48, -2], "size": [144, 16, 5], "uv": [0, 0]}
+						{"origin": [-52, 48, -2], "size": [104, 16, 5], "uv": [20, 0]}
 					]
 				},
 				{
 					"name": "gp5",
 					"parent": "gbp3",
-					"pivot": [0, 64, 0.5],
-					"cubes": [
-						{"origin": [-72, 64, -2], "size": [144, 16, 5], "uv": [0, 0]}
-					]
+					"pivot": [0, 64, 0.5]
 				},
 				{
 					"name": "gp3",
-					"parent": "gbp2",
+					"parent": "gbp3",
 					"pivot": [0, 32, 0.5],
 					"cubes": [
-						{"origin": [-72, 32, -2], "size": [144, 16, 5], "uv": [0, 0]}
-					]
-				},
-				{
-					"name": "gp2",
-					"parent": "gbp",
-					"pivot": [0, 16, 0.5],
-					"cubes": [
-						{"origin": [-72, 16, -2], "size": [144, 16, 5], "uv": [0, 0]}
+						{"origin": [-52, 32, -2], "size": [104, 16, 5], "uv": [20, 0]}
 					]
 				},
 				{
 					"name": "bone2",
 					"parent": "gdoor",
-					"pivot": [74, 58.5, -12.75],
+					"pivot": [54, 58.5, -12.75],
 					"cubes": [
-						{"origin": [72, 74, -50], "size": [4, 6, 48], "uv": [0, 21], "mirror": true},
-						{"origin": [72, 0, -2], "size": [4, 80, 5], "uv": [0, 75], "mirror": true}
+						{"origin": [52, 58, -50], "size": [4, 6, 48], "uv": [0, 21], "mirror": true},
+						{"origin": [52, 0, -2], "size": [4, 64, 5], "uv": [0, 75], "mirror": true}
 					]
 				}
 			]
