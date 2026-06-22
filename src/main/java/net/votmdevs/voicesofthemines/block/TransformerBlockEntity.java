@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.votmdevs.voicesofthemines.VoicesOfTheMines;
 import net.votmdevs.voicesofthemines.VotmSounds;
+import net.votmdevs.voicesofthemines.config.VotmConfig;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -63,9 +64,14 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
         entity.tickCounter++;
 
         if (entity.currentTicksToDrain <= 0) {
-            double baseDrain = 1200.0 / (1.0 + Math.log1p(deviceCount) * 1.5);
+            double deviceFactor = VotmConfig.TRANSFORMER_DEVICE_FACTOR.get();
+            double baseDrain = VotmConfig.TRANSFORMER_BASE_DRAIN.get()
+                    / (1.0 + Math.log1p(deviceCount) * deviceFactor);
             float randomFactor = 0.7f + (level.random.nextFloat() * 0.6f);
-            entity.currentTicksToDrain = Math.max(40, (int)(baseDrain * randomFactor));
+            entity.currentTicksToDrain = Math.max(
+                    VotmConfig.TRANSFORMER_MIN_TICKS.get(),
+                    (int)(baseDrain * randomFactor)
+            );
         }
 
         if (entity.tickCounter >= entity.currentTicksToDrain) {
@@ -96,7 +102,7 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
         if (isMain && secondaries.size() >= 2) {
             isActive = true;
             needsReboot = false;
-            energy = 40000;
+            energy = VotmConfig.TRANSFORMER_BASE_ENERGY.get();
             isReady = false;
             setChanged();
             if (level != null) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
@@ -146,7 +152,7 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
         isActive = true;
         needsReboot = false;
         isReady = false;
-        energy = 40000;
+        energy = VotmConfig.TRANSFORMER_BASE_ENERGY.get();
         setChanged();
         if (level != null) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
 
@@ -156,7 +162,7 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
                 sec.isNetworkActive = true;
                 sec.needsReboot = false;
                 sec.isReady = false;
-                sec.energy = 40000;
+                sec.energy = VotmConfig.TRANSFORMER_BASE_ENERGY.get();
                 sec.setChanged();
                 level.sendBlockUpdated(secPos, sec.getBlockState(), sec.getBlockState(), 3);
             }
@@ -170,7 +176,7 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
             BlockEntity secBe = level.getBlockEntity(secPos);
             if (secBe instanceof TransformerBlockEntity sec) {
                 sec.isNetworkActive = active;
-                sec.energy = 40000;
+                sec.energy = VotmConfig.TRANSFORMER_BASE_ENERGY.get();
                 if (active) {
                     sec.needsReboot = false;
                     sec.isReady = false;

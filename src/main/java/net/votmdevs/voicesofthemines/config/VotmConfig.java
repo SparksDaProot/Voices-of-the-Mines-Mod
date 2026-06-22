@@ -14,6 +14,11 @@ public class VotmConfig {
     public static final ForgeConfigSpec.IntValue RARE_WEIGHT;
     public static final ForgeConfigSpec.IntValue RARER_WEIGHT;
     public static final ForgeConfigSpec.IntValue VERY_RARE_WEIGHT;
+    public static final ForgeConfigSpec.IntValue TRANSFORMER_BASE_ENERGY;
+    public static final ForgeConfigSpec.DoubleValue TRANSFORMER_BASE_DRAIN;
+    public static final ForgeConfigSpec.DoubleValue TRANSFORMER_DEVICE_FACTOR;
+    public static final ForgeConfigSpec.DoubleValue TRANSFORMER_LOG_MULTIPLIER;
+    public static final ForgeConfigSpec.IntValue TRANSFORMER_MIN_TICKS;
 
     public static final ForgeConfigSpec.IntValue PYRAMID_KILL_QUOTA;
 
@@ -62,6 +67,29 @@ public class VotmConfig {
         TERMINAL_PUNCH_DAMAGE = builder
                 .comment("Damage dealt to players when they punch terminals, servers, or consoles.")
                 .defineInRange("terminalPunchDamage", 5.0D, 0.0D, 100.0D);
+
+        builder.pop();
+
+        builder.push("transformer");
+        TRANSFORMER_BASE_ENERGY = builder
+                .comment("Starting energy of transformer network (ticks worth of operation). 36000 = 30 min")
+                .defineInRange("baseEnergy", 40000, 1000, 1000000);
+
+        TRANSFORMER_BASE_DRAIN = builder
+                .comment("Base drain time before device scaling. Higher = slower energy usage")
+                .defineInRange("baseDrain", 1200.0D, 1.0D, 100000.0D);
+
+        TRANSFORMER_DEVICE_FACTOR = builder
+                .comment("How strongly devices affect drain speed 0.5~100, 0.5 - almost 0 impact")
+                .defineInRange("deviceFactor", 1.5D, 0.0D, 20.0D);
+
+        TRANSFORMER_LOG_MULTIPLIER = builder
+                .comment("Multiplier for log1p(deviceCount)")
+                .defineInRange("logMultiplier", 1.5D, 0.0D, 20.0D);
+
+        TRANSFORMER_MIN_TICKS = builder
+                .comment("Minimum ticks between energy drains")
+                .defineInRange("minTicks", 40, 1, 10000);
 
         builder.pop();
 
