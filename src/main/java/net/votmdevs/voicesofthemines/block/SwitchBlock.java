@@ -102,7 +102,7 @@ public class SwitchBlock extends BaseEntityBlock {
                 // linking
                 else if (tag != null && tag.contains("SelectedLamp")) {
                     BlockPos lampPos = BlockPos.of(tag.getLong("SelectedLamp"));
-                    if (lampPos.distSqr(pos) <= 400) {
+                    if (lampPos.distSqr(pos) <= 10000) {
                         if (be instanceof SwitchBlockEntity switchEnt) {
                             if (switchEnt.linkedLamps.size() < 4) {
                                 if (!switchEnt.linkedLamps.contains(lampPos)) {

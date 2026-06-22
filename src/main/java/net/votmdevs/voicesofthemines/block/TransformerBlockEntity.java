@@ -63,9 +63,9 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
         entity.tickCounter++;
 
         if (entity.currentTicksToDrain <= 0) {
-            float baseDrain = 1200f / (1f + deviceCount * 1.5f);
+            double baseDrain = 1200.0 / (1.0 + Math.log1p(deviceCount) * 1.5);
             float randomFactor = 0.7f + (level.random.nextFloat() * 0.6f);
-            entity.currentTicksToDrain = Math.max(5, (int)(baseDrain * randomFactor));
+            entity.currentTicksToDrain = Math.max(40, (int)(baseDrain * randomFactor));
         }
 
         if (entity.tickCounter >= entity.currentTicksToDrain) {
@@ -74,7 +74,7 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
             entity.energy--;
 
             if (entity.energy <= 0) {
-                entity.energy = 0;
+                entity.energy = -1;
 
                 level.playSound(null, pos, VotmSounds.TURNOFF.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
 
@@ -96,7 +96,7 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
         if (isMain && secondaries.size() >= 2) {
             isActive = true;
             needsReboot = false;
-            energy = 100;
+            energy = 40000;
             isReady = false;
             setChanged();
             if (level != null) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
@@ -146,7 +146,7 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
         isActive = true;
         needsReboot = false;
         isReady = false;
-        energy = 100;
+        energy = 40000;
         setChanged();
         if (level != null) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
 
@@ -156,7 +156,7 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
                 sec.isNetworkActive = true;
                 sec.needsReboot = false;
                 sec.isReady = false;
-                sec.energy = 100;
+                sec.energy = 40000;
                 sec.setChanged();
                 level.sendBlockUpdated(secPos, sec.getBlockState(), sec.getBlockState(), 3);
             }
@@ -170,7 +170,7 @@ public class TransformerBlockEntity extends BlockEntity implements GeoBlockEntit
             BlockEntity secBe = level.getBlockEntity(secPos);
             if (secBe instanceof TransformerBlockEntity sec) {
                 sec.isNetworkActive = active;
-                sec.energy = 100;
+                sec.energy = 40000;
                 if (active) {
                     sec.needsReboot = false;
                     sec.isReady = false;
