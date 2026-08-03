@@ -46,8 +46,17 @@
   "item.voicesofthemines.metal_detector": "Metal Detector",
   "item.voicesofthemines.toolbox": "Toolbox",
   "item.voicesofthemines.cassette": "Cassette",
+  "item.voicesofthemines.fuel_can": "Fuel Can",
+  "item.voicesofthemines.drive": "Drive",
+  "item.voicesofthemines.wash_sponge": "Sponge",
   "item.voicesofthemines.garbage_spawn_egg": "Garbage Bag",
-
+  "item.voicesofthemines.fuel_can_spawn_egg": "Fuel Can Spawn Egg",
+  "item.voicesofthemines.geomoct_spawn_egg": "GeoMoct Spawn Egg",
+  "item.voicesofthemines.blackwisp_spawn_egg": "Black Wisp Spawn Egg",
+  "item.voicesofthemines.pinkwisp_spawn_egg": "Pink Wisp Spawn Egg",
+  "item.voicesofthemines.yellowwisp_spawn_egg": "Yellow Wisp Spawn Egg",
+  "item.voicesofthemines.greenwisp_spawn_egg": "Green Wisp Spawn Egg",
+  "item.voicesofthemines.bluewisp_spawn_egg": "Blue Wisp Spawn Egg",
 
 
   "block.voicesofthemines.kerfur_workbench": "Workbench",
@@ -125,7 +134,6 @@
   "block.voicesofthemines.book_kerfur_recipe": "Kerfur Recipe Book",
   "block.voicesofthemines.drone_panel": "Drone Panel",
   "block.voicesofthemines.target_drone_block": "Drone Target Block",
-
 
   "itemGroup.voicesofthemines": "Voices of the Mines",
 
