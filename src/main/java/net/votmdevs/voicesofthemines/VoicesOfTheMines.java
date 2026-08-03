@@ -14,6 +14,7 @@ import net.votmdevs.voicesofthemines.effect.RadiationEffect;
 import net.votmdevs.voicesofthemines.entity.*;
 import net.votmdevs.voicesofthemines.inventory.KerfurMenu;
 import net.votmdevs.voicesofthemines.item.HazardArmorMaterial;
+import net.votmdevs.voicesofthemines.item.MaidOutfitMaterial;
 import net.votmdevs.voicesofthemines.network.KerfurPacketHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -265,7 +266,7 @@ public class VoicesOfTheMines {
                     ResourceLocation.fromNamespaceAndPath(MODID, "animations/empty.animation.json")
             ));
 
-    public static final RegistryObject<Item> ACCESSORY_MAID = ITEMS.register("maid", () -> new Item(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> ACCESSORY_MAID = ITEMS.register("maid", () -> new ArmorItem(MaidOutfitMaterial.MAID, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> ACCESSORY_RIBBON = ITEMS.register("ribbon", () -> new Item(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> ACCESSORY_GLASSES = ITEMS.register("glasses", () -> new Item(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> ACCESSORY_JACKET = ITEMS.register("jacket", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -591,7 +592,6 @@ public class VoicesOfTheMines {
     public static final RegistryObject<Item> HAZARD_CHESTPLATE = ITEMS.register("hazard_chestplate", () -> new ArmorItem(HazardArmorMaterial.HAZARD, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Item> HAZARD_LEGGINGS = ITEMS.register("hazard_leggings", () -> new ArmorItem(HazardArmorMaterial.HAZARD, ArmorItem.Type.LEGGINGS, new Item.Properties()));
     public static final RegistryObject<Item> HAZARD_BOOTS = ITEMS.register("hazard_boots", () -> new ArmorItem(HazardArmorMaterial.HAZARD, ArmorItem.Type.BOOTS, new Item.Properties()));
-
 
     public static final RegistryObject<Item> DISK_BLUE = ITEMS.register("disk_blue",
             () -> new Item(new Item.Properties()));
